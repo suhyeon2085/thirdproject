@@ -77,9 +77,10 @@
         }
         #content{
             width: 100%;
-            height: 100px;
+            height: 150px;
             resize: none;
             padding: 10px;
+            box-sizing: border-box;
             word-break: keep-all; /* 단어 단위로 줄바꿈 */
             white-space: normal; /* 기본 줄바꿈 허용 */
             overflow-wrap: break-word; /* 긴 단어가 있으면 자동 줄바꿈 */
@@ -90,10 +91,29 @@
         #txtlength {
             position: absolute;
             bottom: 10px;
-            right: 0px;
+            right: 10px;
             font-size: 14px;
             background: white;
             padding: 2px 5px;
+        }
+        #fileWrapper{
+            display: flex;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+        #filename{
+            border: 1px solid gray;
+            flex: 1;
+            padding: 0 15px;
+            align-content: center;
+            color: gray;
+        }
+        #addFileBtn{
+            padding: 10px 15px;
+            font-weight: bold;
+            border: 1px solid black;
+            background-color: rgb(231, 231, 231);
+            font-size: 15px;
         }
         input[type=submit]{
             padding: 10px 15px;
@@ -101,12 +121,16 @@
             border: 1px solid black;
             background-color: rgb(231, 231, 231);
             font-size: 15px;
-            margin: 50px 0;
+            margin: 30px 0;
         }
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body>
+	<div>
+        
+    </div>
     <div id="wrap">
         <div id="row1">
             <h2 id="title">범죄 신고 접수</h2>
@@ -175,7 +199,15 @@
                     <div id="bottomMsg">
                         <span class="red" id="contentErrMsg"></span>
                     </div>
-                    <input type="file" id="file" name="file" multiple>
+                </div>
+                 <div class="infowrap">
+                    <p class="cate">첨부 파일</p>
+                    <div id="fileWrapper">
+                        <div id="filename"></div>
+                        <input type="file" id="filePath" style="display: none;" multiple>
+                        <button type="button" id="addFileBtn">추가</button>
+                    </div>
+                    <div id="files"></div>
                 </div>
                 <div id="submitBtn">
                     <input type="submit" value="제출">
@@ -216,6 +248,53 @@
                 }
             }
         });
+
+        // 첨부 파일 추가
+        let selectedFiles = [];
+
+        $("#addFileBtn").on("click", function () {
+            $("#filePath").click(); // 숨겨진 파일 입력창 클릭
+        });
+
+        $("#filePath").on("change", function (e) {
+            const files = Array.from(e.target.files);
+
+            for (let file of files) {
+                // 파일 이름 중복 방지
+                if (!selectedFiles.find(f => f.name === file.name)) {
+                    selectedFiles.push(file);
+                }
+            }
+
+            renderFileList();
+            $("#filePath").val(""); // 동일 파일 다시 선택 가능하도록 초기화
+        });
+
+        function renderFileList() {
+            // filename: 마지막 선택된 파일 이름
+            if (selectedFiles.length > 0) {
+                $("#filename").text(selectedFiles[selectedFiles.length - 1].name);
+            }
+
+            // files: 전체 목록 출력
+            $("#files").html(""); // 초기화
+            selectedFiles.forEach((file, index) => {
+                $("#files").append(`
+                    <div class="file-item">
+                        \${file.name}
+                        <i class="bi bi-x-square file-remove" data-index="${index}" style="cursor:pointer; margin-left:5px;"></i>
+                    </div>
+                `);
+            });
+        }
+
+        // x 버튼 클릭 시 파일 제거
+        $(document).on("click", ".file-remove", function () {
+            const index = $(this).data("index");
+            selectedFiles.splice(index, 1);
+            renderFileList();
+        });
+
 
         // 폼 제출 시 유효성 검사
         $("form").on("submit", function (e) {
