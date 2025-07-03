@@ -148,8 +148,7 @@
                     <select name="crimeType" id="crimeType">
                         <option value="none">선택</option>
                         <option value="살인">살인</option>
-                        <option value="강간">강간</option>
-                        <option value="추행">추행</option>
+                        <option value="성범죄">성범죄</option>
                         <option value="절도/강도">절도/강도</option>
                         <option value="상해/폭행">상해/폭행</option>
                         <option value="약취/유인">약취/유인</option>
