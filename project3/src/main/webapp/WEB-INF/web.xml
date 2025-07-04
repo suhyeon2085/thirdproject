@@ -25,6 +25,7 @@
 		<load-on-startup>1</load-on-startup>
 		
 			    <multipart-config>
+
 	        <!-- 단일 파일/전체 요청 제한 (byte) -->
 	        <max-file-size>52428800</max-file-size>
 	        <max-request-size>52428800</max-request-size>
@@ -37,5 +38,19 @@
 		<servlet-name>appServlet</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
+	
+			<filter>
+		<filter-name>encoding</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>encoding</filter-name>
+		<servlet-name>appServlet</servlet-name>
+	</filter-mapping>
 
 </web-app>

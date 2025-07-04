@@ -248,7 +248,7 @@
                         <input type="radio" name="locationYn" value="O" checked>입력
                         <input type="radio" name="locationYn" value="X">입력X(기억나지 않습니다)
                     </div>
-                    <input class="inp" type="text" id="location">
+                    <input class="inp" type="text" id="location" name="location">
                     <span class="red" id="locationErrMsg"></span>
                 </div>
                 <div class="infowrap">
