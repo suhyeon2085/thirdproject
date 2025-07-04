@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,21 +8,78 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>범죄 신고</title>
     <style>
+        @font-face {
+            font-family: 'GongGothicMedium';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicMedium.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
         body{
             margin: 0;
+            font-family: 'GongGothicMedium';
+        }
+        header{
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            padding: 0 20%;
+            height: 130px;
+            border-bottom: 1px solid rgb(224, 224, 224);
+            background: linear-gradient(45deg, white, whitesmoke);
+        }
+        ul{
+            margin: 0;
+        }
+        a{
+            text-decoration: none;
+        }
+        header a{
+            padding-right: 5%;
+        }
+        .txtmenu{
+            color: black;
+            font-size: 20px;
+            position: relative;
+        }
+        .txtmenu::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 4px;
+            width: 5px;
+            height: 5px;
+            background-color: black;
+            border-radius: 50%;
+            font-size: 20px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .txtmenu:hover::before {
+            opacity: 1;
+        }
+        #logo{
+            width: 100px;
         }
         #wrap{
             padding: 5% 20%;
         }
-        #title{
+        #pageTitle{
             border-bottom: 1px solid black;
             padding-bottom: 10px;
+            font-size: 25px;
         }
         #notice{
             border: 1px solid black;
-            padding: 10px;
+            /* padding: 15px;
+            padding-right: 20px; */
             background-color: rgb(231, 231, 231);
-            font-weight: bold;
+            word-break: keep-all; /* 단어 단위로 줄바꿈 */
+            white-space: normal; /* 기본 줄바꿈 허용 */
+            overflow-wrap: break-word; /* 긴 단어가 있으면 자동 줄바꿈 */
+        }
+        #notice ul{
+            padding: 20px 5%;
         }
         #notice li{
             padding: 3px 0;
@@ -33,7 +91,6 @@
             color: red;
         }
         .cate{
-            font-weight: bold;
             font-size: 15px;
             margin: 5px 0;
         }
@@ -47,7 +104,7 @@
             margin-top: 60px;
             margin-bottom: 30px;
         }
-        .infoT h4{
+        .title{
             border: 1px solid black;
             padding: 10px;
             margin-bottom: 0;
@@ -74,6 +131,7 @@
         }
         #check{
             margin-bottom: 10px;
+            font-size: 15px;
         }
         #content{
             width: 100%;
@@ -110,14 +168,14 @@
         }
         #addFileBtn{
             padding: 10px 15px;
-            font-weight: bold;
+            font-family: 'GongGothicMedium';
             border: 1px solid black;
             background-color: rgb(231, 231, 231);
             font-size: 15px;
         }
         input[type=submit]{
             padding: 10px 15px;
-            font-weight: bold;
+            font-family: 'GongGothicMedium';
             border: 1px solid black;
             background-color: rgb(231, 231, 231);
             font-size: 15px;
@@ -128,12 +186,15 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body>
-	<div>
-        
-    </div>
+	<header>
+        <a href=""><img id="logo" src="/resources/img/crimelogo.png" alt="로고"></a>
+        <a class="txtmenu" href="">범죄 예측</a>
+        <a class="txtmenu" href="receipt">범죄 신고</a>
+        <a class="txtmenu" href="">신고 조회</a>
+    </header>
     <div id="wrap">
         <div id="row1">
-            <h2 id="title">범죄 신고 접수</h2>
+            <p id="pageTitle">범죄 신고 접수</p>
             <div id="notice">
                 <ul>
                     <li>전자민원은 행정기관 민원서비스 통합에 따라 국민권익위원회에서 운영 (전화:국번없이 110)하는 국민신문고 (www.epeople.go.kr)를 통하여 관리되고 있습니다.</li>
@@ -147,7 +208,7 @@
         <div id="row2">
             <form action="" method="post">
                 <div class="infoT">
-                    <h4>신청인 기본 정보</h4>
+                    <p class="title">신고인 기본 정보</p>
                     <p class="blue">아래에 대한 정보를 통해 이후 조회페이지에서 조회하실 수 있습니다.</p>
                 </div>
                 <div class="infowrap">
@@ -165,7 +226,7 @@
                     </p>
                 </div>
                 <div class="infoT">
-                    <h4>신고 내용</h4>
+                    <p class="title">신고 내용</p>
                 </div>
                 <div class="infowrap">
                     <p class="cate">범죄 유형<span class="redStar">*</span></p>
@@ -282,7 +343,7 @@
                 $("#files").append(`
                     <div class="file-item">
                         \${file.name}
-                        <i class="bi bi-x-square file-remove" data-index="${index}" style="cursor:pointer; margin-left:5px;"></i>
+                        <i class="bi bi-x-square file-remove" data-index="${index}" style="cursor:pointer; margin-left:10px;"></i>
                     </div>
                 `);
             });
