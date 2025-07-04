@@ -49,6 +49,14 @@
         .txtmenu:hover::before {
             opacity: 1;
         }
+        #admin{
+            font-size: 14px;
+            color: gray;
+            position: absolute;
+            top: 10px;
+            right: 20%;
+            padding: 0;
+        }
         #logo{
             width: 100px;
         }

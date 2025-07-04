@@ -1,3 +1,4 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -10,9 +11,14 @@
         #wrap{
             padding: 5% 20%;
         }
-        #pageTitle{
+        #row1{
             border-bottom: 1px solid black;
             padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+        }
+        #pageTitle{
             font-size: 25px;
         }
         .title{
@@ -36,12 +42,17 @@
             text-align: center;
             width: 10%;
         }
+        #bottomBtn{
+        	display: flex;
+        	gap: 5px;
+        }
         .btn{
             padding: 10px 15px;
             font-family: 'GongGothicMedium';
             border: 1px solid black;
             background-color: rgb(231, 231, 231);
             font-size: 15px;
+            cursor: pointer;
         }
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -51,9 +62,12 @@
 <jsp:include page="/WEB-INF/views/menu.jsp" />
     <div id="wrap">
         <div id="row1">
-            <p id="pageTitle">신고 조회</p>
+            <span id="pageTitle">신고 조회</span>
+            <span id="datetime">날짜</span><!-- 임시 -->
+            <!--<span id="datetime"><fmt:formatDate value="" pattern="yyyy-MM-dd hh:mm"/></span> 백엔드에서 값이 넘어와야 사용 가능! -->
         </div>
         <div id="row2">
+        	<input type="text" name="id" value=""> <!-- 값 확인 후 hidden으로 바꿀 예정 -->
             <p class="title">| 신고인 기본 정보</p>
             <table>
                 <tr>
@@ -87,8 +101,11 @@
         </div>
         <div id="bottomBtn">
             <a href=""><button class="btn">수정</button></a>
-            <a href=""><button class="btn">삭제</button></a>
+            <form action="" method="post" onsubmit="return confirm('정말 취소하시겠습니까?')">
+            	<input type="hidden" name="id" value="" />
+            	<button class="btn">삭제</button>
+            </form>
         </div>
-    </div>  
+    </div> 
 </body>
 </html>
