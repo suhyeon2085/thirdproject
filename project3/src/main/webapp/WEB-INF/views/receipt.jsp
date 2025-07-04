@@ -298,7 +298,7 @@
         })
 
         // 위치X면 위치입력 숨기기
-        $("input[name='location']").on("change", function () {
+        $("input[name='locationYn']").on("change", function () {
             if ($(this).val() === "X" && $(this).is(":checked")) {
                 $("#location").hide();
                 $("#locationErrMsg").html(""); // 위치 입력 안 해도 되므로 메시지 제거
@@ -363,7 +363,7 @@
             let name = $("#name").val().trim();
             let phone = $("#phone").val().trim();
             let selectedType = $("#crimeType").val();
-            let selectedlocation = $("input[name='location']:checked").val();
+            let selectedlocation = $("input[name='locationYn']:checked").val();
             let locationValue = $("#location").val().trim();
             let content = $("#content").val().trim();
             let textLength = content.length;
