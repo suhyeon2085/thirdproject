@@ -48,4 +48,11 @@ public class ReportController {
         reportService.submitReport(dto);
         return "redirect:/report/success";
     }
+    
+    @GetMapping("/view")
+    public String redirectViewGet() {
+        // 필요하면 "report/form" 같은 신고 작성 페이지로 변경
+        return "/view";
+    }
+    
 }
