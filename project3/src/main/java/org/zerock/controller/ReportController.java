@@ -30,23 +30,36 @@ public class ReportController {
 
     @PostMapping("/receipt")
     public String submitReport(@ModelAttribute ReportDTO dto,
-                               @RequestParam("file") MultipartFile file,
+                               @RequestParam("files") MultipartFile[] files,
                                HttpServletRequest request) throws Exception {
-    	System.out.println("== DTO 확인 ==" + dto);   // ⚡ 콘솔에 찍어 보기
+        System.out.println("== DTO 확인 ==" + dto);
+        
+        String uploadDir = request.getServletContext().getRealPath("/uploads/");
+        File dir = new File(uploadDir);
+        if (!dir.exists()) dir.mkdirs();
 
-        // 파일 저장 처리
-        if (!file.isEmpty()) {
-            String uploadDir = request.getServletContext().getRealPath("/uploads/");
-            File dir = new File(uploadDir);
-            if (!dir.exists()) dir.mkdirs();
+        StringBuilder filePaths = new StringBuilder();
 
-            String filePath = uploadDir + file.getOriginalFilename();
-            file.transferTo(new File(filePath));
-            dto.setFilePath("/uploads/" + file.getOriginalFilename());
+        for (MultipartFile file : files) {
+            if (!file.isEmpty()) {
+                String originalFilename = file.getOriginalFilename();
+                String filePath = uploadDir + originalFilename;
+                file.transferTo(new File(filePath));
+                filePaths.append("/uploads/").append(originalFilename).append(";");
+                System.out.println("업로드 파일: " + originalFilename);
+            }
+        }
+
+        if (filePaths.length() > 0) {
+            // 마지막 세미콜론 제거
+            filePaths.setLength(filePaths.length() - 1);
+            dto.setFilePath(filePaths.toString());
+        } else {
+            dto.setFilePath(null);
         }
 
         reportService.submitReport(dto);
-        return "redirect:/report/success";
+        return "redirect:/view";
     }
     
     @GetMapping("/view")
