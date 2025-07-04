@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.zerock.mapper.ReportMapper">
+
+  <!-- 컬럼 ↔ DTO 필드명이 다르면 resultMap 작성 -->
+  <resultMap id="reportMap" type="org.zerock.domain.ReportDTO">
+    <id     property="id"        column="id"/>
+    <result property="name"      column="name"/>
+    <result property="phone"     column="phone"/>
+    <result property="location"  column="location"/>
+    <result property="crimeType" column="crime_type"/>
+    <result property="content"   column="content"/>
+    <result property="filePath"  column="file_path"/>
+    <result property="createdAt" column="created_at"/>
+  </resultMap>
+
+  <!-- 1) INSERT -->
+  <insert id="insertReport" parameterType="org.zerock.domain.ReportDTO">
+    INSERT INTO report
+      (name, phone, location, crime_type, content, file_path)
+    VALUES
+      (#{name}, #{phone}, #{location}, #{crimeType},
+       #{content}, #{filePath})
+  </insert>
+
+  <!-- 2) 개인 조회 -->
+  <select id="findByNameAndPhone" resultMap="reportMap">
+    SELECT * FROM report
+    WHERE name = #{param1} AND phone = #{param2}
+    ORDER BY created_at DESC
+  </select>
+
+  <!-- 3) 관리자 필터 조회 (city, district, crimeType 동적) -->
+  <select id="findByFilter" resultMap="reportMap">
+    SELECT * FROM report
+    <where>
+      <if test="city != null and city != ''">
+        AND location LIKE CONCAT(#{city}, '%')
+      </if>
+      <if test="district != null and district != ''">
+        AND location LIKE CONCAT('%', #{district}, '%')
+      </if>
+      <if test="crimeType != null and crimeType != ''">
+        AND crime_type = #{crimeType}
+      </if>
+    </where>
+    ORDER BY created_at DESC
+  </select>
+
+  <!-- 4) 상세 -->
+  <select id="findById" resultMap="reportMap">
+    SELECT * FROM report WHERE id = #{id}
+  </select>
+
+</mapper>

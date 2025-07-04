@@ -206,19 +206,19 @@
             </div>
         </div>
         <div id="row2">
-            <form action="" method="post">
+            <form action="${pageContext.request.contextPath}/receipt" method="post" enctype="multipart/form-data">
                 <div class="infoT">
                     <p class="title">신고인 기본 정보</p>
                     <p class="blue">아래에 대한 정보를 통해 이후 조회페이지에서 조회하실 수 있습니다.</p>
                 </div>
                 <div class="infowrap">
                     <p class="cate">이름<span class="redStar">*</span></p>
-                    <input class="inp" type="text" id="name">
+                    <input class="inp" type="text" id="name" name="name">
                     <p class="red" id="nameErrMsg"></p>
                 </div>
                 <div class="infowrap">
                     <p class="cate">전화번호<span class="redStar">*</span></p>
-                    <input class="inp" type="text" id="phone">
+                    <input class="inp" type="text" id="phone" name="phone">
                     <p class="red" id="phoneErrMsg"></p>
                     <p class="blue">
                         숫자만 입력해 주십시오.<br>
@@ -245,8 +245,8 @@
                 <div class="infowrap">
                     <p class="cate">위치<span class="redStar">*</span></p>
                     <div id="check">
-                        <input type="radio" name="location" value="O" checked>입력
-                        <input type="radio" name="location" value="X">입력X(기억나지 않습니다)
+                        <input type="radio" name="locationYn" value="O" checked>입력
+                        <input type="radio" name="locationYn" value="X">입력X(기억나지 않습니다)
                     </div>
                     <input class="inp" type="text" id="location">
                     <span class="red" id="locationErrMsg"></span>
@@ -265,7 +265,7 @@
                     <p class="cate">첨부 파일</p>
                     <div id="fileWrapper">
                         <div id="filename"></div>
-                        <input type="file" id="filePath" style="display: none;" multiple>
+                        <input type="file" id="filePath" name="file" style="display: none;" multiple>
                         <button type="button" id="addFileBtn">추가</button>
                     </div>
                     <div id="files"></div>
