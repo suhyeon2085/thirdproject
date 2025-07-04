@@ -8,59 +8,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>범죄 신고</title>
     <style>
-        @font-face {
-            font-family: 'GongGothicMedium';
-            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicMedium.woff') format('woff');
-            font-weight: normal;
-            font-style: normal;
-        }
-        body{
-            margin: 0;
-            font-family: 'GongGothicMedium';
-        }
-        header{
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            padding: 0 20%;
-            height: 130px;
-            border-bottom: 1px solid rgb(224, 224, 224);
-            background: linear-gradient(45deg, white, whitesmoke);
-        }
-        ul{
-            margin: 0;
-        }
-        a{
-            text-decoration: none;
-        }
-        header a{
-            padding-right: 5%;
-        }
-        .txtmenu{
-            color: black;
-            font-size: 20px;
-            position: relative;
-        }
-        .txtmenu::before {
-            content: '';
-            position: absolute;
-            top: -10px;
-            left: 4px;
-            width: 5px;
-            height: 5px;
-            background-color: black;
-            border-radius: 50%;
-            font-size: 20px;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-
-        .txtmenu:hover::before {
-            opacity: 1;
-        }
-        #logo{
-            width: 100px;
-        }
         #wrap{
             padding: 5% 20%;
         }
@@ -184,14 +131,10 @@
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="resources/css/menu.css">
 </head>
 <body>
-	<header>
-        <a href=""><img id="logo" src="/resources/img/crimelogo.png" alt="로고"></a>
-        <a class="txtmenu" href="">범죄 예측</a>
-        <a class="txtmenu" href="receipt">범죄 신고</a>
-        <a class="txtmenu" href="">신고 조회</a>
-    </header>
+	<jsp:include page="/WEB-INF/views/menu.jsp" />
     <div id="wrap">
         <div id="row1">
             <p id="pageTitle">범죄 신고 접수</p>
@@ -304,8 +247,10 @@
                 $("#locationErrMsg").html(""); // 위치 입력 안 해도 되므로 메시지 제거
             } else {
                 $("#location").show();
-                if ($("#location").val().trim() !== "") {
+                if ($("#location").val().trim() === "") {
                     $("#locationErrMsg").html("위치를 입력해 주십시오."); // 보이게 되면 다시 값 검사
+                } else {
+                    $("#locationErrMsg").html("");
                 }
             }
         });

@@ -1,0 +1,54 @@
+@charset "UTF-8";
+		@font-face {
+            font-family: 'GongGothicMedium';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicMedium.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+        body{
+            margin: 0;
+            font-family: 'GongGothicMedium';
+        }
+        header{
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            padding: 0 20%;
+            height: 130px;
+            border-bottom: 1px solid rgb(224, 224, 224);
+            background: linear-gradient(45deg, white, whitesmoke);
+        }
+        ul{
+            margin: 0;
+        }
+        a{
+            text-decoration: none;
+        }
+        header a{
+            padding-right: 5%;
+        }
+        .txtmenu{
+            color: black;
+            font-size: 20px;
+            position: relative;
+        }
+        .txtmenu::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 4px;
+            width: 5px;
+            height: 5px;
+            background-color: black;
+            border-radius: 50%;
+            font-size: 20px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .txtmenu:hover::before {
+            opacity: 1;
+        }
+        #logo{
+            width: 100px;
+        }

@@ -7,16 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>신고 조회</title>
     <style>
-        @font-face {
-            font-family: 'GongGothicMedium';
-            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicMedium.woff') format('woff');
-            font-weight: normal;
-            font-style: normal;
-        }
-        body{
-            margin: 0;
-            font-family: 'GongGothicMedium';
-        }
         #wrap{
             padding: 5% 20%;
         }
@@ -55,8 +45,10 @@
         }
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="resources/css/menu.css">
 </head>
 <body>
+<jsp:include page="/WEB-INF/views/menu.jsp" />
     <div id="wrap">
         <div id="row1">
             <p id="pageTitle">신고 조회</p>
