@@ -34,7 +34,7 @@ public class ReportController {
                                HttpServletRequest request) throws Exception {
         System.out.println("== DTO 확인 ==" + dto);
         
-        String uploadDir = request.getServletContext().getRealPath("/uploads/");
+        String uploadDir = "C:\\upload\\temp\\";
         File dir = new File(uploadDir);
         if (!dir.exists()) dir.mkdirs();
 
@@ -45,7 +45,7 @@ public class ReportController {
                 String originalFilename = file.getOriginalFilename();
                 String filePath = uploadDir + originalFilename;
                 file.transferTo(new File(filePath));
-                filePaths.append("/uploads/").append(originalFilename).append(";");
+                filePaths.append("/resources/uploads/").append(originalFilename).append(";");
                 System.out.println("업로드 파일: " + originalFilename);
             }
         }
@@ -64,8 +64,19 @@ public class ReportController {
     
     @GetMapping("/view")
     public String redirectViewGet() {
-        // 필요하면 "report/form" 같은 신고 작성 페이지로 변경
+        
         return "/view";
     }
     
+    @GetMapping("/list")
+    public String redirecListGet() {
+        
+        return "/list";
+    }
+    
+    @GetMapping("/modify")
+    public String redirecModifyGet() {
+        
+        return "/modify";
+    }
 }

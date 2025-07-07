@@ -27,6 +27,9 @@
         #row2, #row3{
             margin-bottom: 50px;
         }
+        #state{
+            border: none;
+        }
         table{
             border: 1px solid black;
             border-collapse: collapse;
@@ -67,7 +70,8 @@
             <!--<span id="datetime"><fmt:formatDate value="" pattern="yyyy-MM-dd hh:mm"/></span> 백엔드에서 값이 넘어와야 사용 가능! -->
         </div>
         <div id="row2">
-        	<input type="text" name="id" value=""> <!-- 값 확인 후 hidden으로 바꿀 예정 -->
+        	<input type="text" name="id" value=""><br> <!-- 값 확인 후 hidden으로 바꿀 예정 -->
+        	<span id="stateTxt">확인 상태: </span><input type="text" name="state" id="state" value="">
             <p class="title">| 신고인 기본 정보</p>
             <table>
                 <tr>
@@ -100,7 +104,7 @@
             </table>
         </div>
         <div id="bottomBtn">
-            <a href=""><button class="btn">수정</button></a>
+            <a href="modify"><button class="btn">수정</button></a>
             <form action="" method="post" onsubmit="return confirm('정말 취소하시겠습니까?')">
             	<input type="hidden" name="id" value="" />
             	<button class="btn">삭제</button>

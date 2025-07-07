@@ -5,6 +5,6 @@
         <a href=""><img id="logo" src="/resources/img/crimelogo.png" alt="로고"></a>
         <a class="txtmenu" href="">범죄 예측</a>
         <a class="txtmenu" href="receipt">범죄 신고</a>
-        <a class="txtmenu" href="">신고 조회</a>
-        <a href="" id="admin">관리자</a>
+        <a class="txtmenu" href="list">신고 조회</a>
+        <a href="login" id="admin">관리자</a>
     </header>

@@ -1,12 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>범죄 신고</title>
+    <title>범죄 신고 | 수정</title>
     <style>
         #wrap{
             padding: 5% 20%;
@@ -152,6 +153,7 @@
         </div>
         <div id="row2">
             <form id="reportForm">
+            	<input type="text" name="id" value="">
                 <div class="infoT">
                     <p class="title">신고인 기본 정보</p>
                     <p class="blue">아래에 대한 정보를 통해 이후 조회페이지에서 조회하실 수 있습니다.</p>
@@ -213,7 +215,19 @@
                         <input type="file" id="filePath" name="files" style="display: none;" multiple>
                         <button type="button" id="addFileBtn">추가</button>
                     </div>
+                    <div id="existingFiles">
+			            <c:if test="${not empty dto.filePath}">
+			                <c:forEach var="fileName" items="${fn:split(dto.filePath, ';')}">
+			                    <div class="file-item old-file">
+			                        ${fileName}
+			                        <i class="bi bi-x-square old-file-remove" data-filename="${fileName}" style="cursor:pointer;"></i>
+			                    </div>
+			                </c:forEach>
+			            </c:if>
+			        </div>
                     <div id="files"></div>
+                    <!-- 삭제된 기존 파일 이름들 담기 -->
+    				<input type="hidden" id="removedFiles" name="removedFiles" value="">
                 </div>
                 <div id="submitBtn">
                     <button type="button" id="submitReportBtn">제출</button>
@@ -223,6 +237,13 @@
     </div>
 <script>
     $(document).ready(function(){
+    	// 수정 이전 값 받아오기
+    	const beforeTypeValue = "";
+	    $("#crimeType").val(beforeTypeValue);
+	    
+	    const beforeLocValue = "";
+	    $('input[name="locationYn"][value="' + beforeLocValue + '"]').prop("checked", true);
+    	
         // 숫자만 입력되도록 처리
         $("#phone").on("input", function () {
             this.value = this.value.replace(/[^0-9]/g, "");
@@ -255,6 +276,15 @@
                     $("#locationErrMsg").html("");
                 }
             }
+        });
+        
+     	// 기존 파일 제거 시
+        $(document).on("click", ".old-file-remove", function () {
+            const fileName = $(this).data("filename");
+            $(this).parent().remove();
+
+            const current = $("#removedFiles").val();
+            $("#removedFiles").val(current + ";" + fileName);
         });
 
         // 첨부 파일 추가
@@ -385,23 +415,24 @@
             formData.append("crimeType", selectedType);
             formData.append("location", locationValue);
             formData.append("content", content);
+            formData.append("removedFiles", $("#removedFiles").val());
 
             for (let i = 0; i < selectedFiles.length; i++) {
                 formData.append("files", selectedFiles[i]); // input name="files"에 맞춤
             }
 
             $.ajax({
-                url: "/receipt",
+                url: "/update",
                 type: "POST",
                 data: formData,
                 contentType: false,
                 processData: false,
                 success: function () {
-                    //alert("제출되었습니다.");
+                    //alert("수정되었습니다.");
                     window.location.href = "/view";
                 },
                 error: function () {
-                    //alert("제출에 실패했습니다. 관리자에게 문의하세요.");
+                    //alert("수정에 실패했습니다. 관리자에게 문의하세요.");
                 }
             });
         });
