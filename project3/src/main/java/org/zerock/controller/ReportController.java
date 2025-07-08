@@ -34,7 +34,7 @@ public class ReportController {
                                HttpServletRequest request) throws Exception {
         System.out.println("== DTO 확인 ==" + dto);
         
-        String uploadDir = "C:\\upload\\temp\\";
+        String uploadDir = "\\\\Des67\\02-공유폴더\\20250223KDT반\\LiveAir\\image\\";
         File dir = new File(uploadDir);
         if (!dir.exists()) dir.mkdirs();
 
@@ -45,7 +45,7 @@ public class ReportController {
                 String originalFilename = file.getOriginalFilename();
                 String filePath = uploadDir + originalFilename;
                 file.transferTo(new File(filePath));
-                filePaths.append("/resources/uploads/").append(originalFilename).append(";");
+                filePaths.append("\\\\Des67\\02-공유폴더\\20250223KDT반\\LiveAir\\image\\").append(originalFilename).append(";");
                 System.out.println("업로드 파일: " + originalFilename);
             }
         }
