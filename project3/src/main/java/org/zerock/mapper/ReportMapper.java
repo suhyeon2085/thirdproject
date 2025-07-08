@@ -11,6 +11,8 @@ public interface ReportMapper {
 
     // INSERT
     int insertReport(ReportDTO dto);
+    
+    int delete(int id);  // ReportMapper 인터페이스
 
     // 이름+전화번호로 개인 조회
     List<ReportDTO> findByNameAndPhone(String name, String phone);

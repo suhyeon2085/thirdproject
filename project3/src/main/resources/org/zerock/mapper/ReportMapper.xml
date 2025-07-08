@@ -32,6 +32,10 @@
   VALUES (#{name}, #{phone}, #{location}, #{crimeType}, #{content},
           #{storedName}, #{origName}, #{filePath}, NOW())
   </insert>
+  
+  <delete id="delete" parameterType="int">
+    DELETE FROM report WHERE id = #{id}
+</delete>
 
   <!-- 2) 개인 조회 -->
   <select id="findByNameAndPhone" resultMap="reportMap">
