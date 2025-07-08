@@ -28,6 +28,8 @@
 	
 	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver"></beans:bean>
 	
+	<resources mapping="/image/**"
+               location="file:\\\\Des67\\02-공유폴더\\20250223KDT반\\LiveAir\\image\\" />
 	
 	
 	<resources mapping="/img/**" location="/resources/img/" />

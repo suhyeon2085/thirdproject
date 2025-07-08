@@ -107,9 +107,15 @@
                     <td class="infoT">첨부 파일</td>
                     <td>
                     <c:forEach var="uuid" items="${fn:split(report.storedName, ';')}" varStatus="i">
-        <c:set var="orig" value="${fn:split(report.origName, ';')[i.index]}" />
-        <a href="/download?uuid=${uuid}&name=${orig}">${orig}</a><br/>
+        			<c:set var="orig" value="${fn:split(report.origName, ';')[i.index]}" />
+        			
+        			<img src="/image/${uuid}" width="600" height="400" style="object-fit:cover; border:1px solid #ccc;" 
+         				onerror="this.style.display='none';" alt="${orig}" title="${orig}" />
+        			
+        			<a href="/download?uuid=${uuid}&name=${orig}">${orig}</a><br/>
       </c:forEach>
+      
+      
                     </td>
                 </tr>
             </table>
