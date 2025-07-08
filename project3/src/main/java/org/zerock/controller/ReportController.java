@@ -30,33 +30,45 @@ public class ReportController {
 
     @PostMapping("/receipt")
     public String submitReport(@ModelAttribute ReportDTO dto,
-                               @RequestParam("files") MultipartFile[] files,
-                               HttpServletRequest request) throws Exception {
-        System.out.println("== DTO 확인 ==" + dto);
-        
+                               @RequestParam("files") MultipartFile[] files) throws Exception {
+
         String uploadDir = "\\\\Des67\\02-공유폴더\\20250223KDT반\\LiveAir\\image\\";
         File dir = new File(uploadDir);
         if (!dir.exists()) dir.mkdirs();
 
-        StringBuilder filePaths = new StringBuilder();
+        StringBuilder storedNames = new StringBuilder();  // UUID 저장명
+        StringBuilder origNames   = new StringBuilder();  // 원본 이름
+        StringBuilder filePaths   = new StringBuilder();  // 경로+UUID (옵션)
 
         for (MultipartFile file : files) {
-            if (!file.isEmpty()) {
-                String originalFilename = file.getOriginalFilename();
-                String filePath = uploadDir + originalFilename;
-                file.transferTo(new File(filePath));
-                filePaths.append("\\\\Des67\\02-공유폴더\\20250223KDT반\\LiveAir\\image\\").append(originalFilename).append(";");
-                System.out.println("업로드 파일: " + originalFilename);
-            }
+            if (file.isEmpty()) continue;
+
+            String originalFilename = file.getOriginalFilename();
+            String ext = "";
+            int dotIdx = originalFilename.lastIndexOf('.');
+            if (dotIdx != -1) ext = originalFilename.substring(dotIdx);
+
+            String storedFilename = java.util.UUID.randomUUID() + ext; // UUID.jpg
+            File dest = new File(uploadDir, storedFilename);
+            file.transferTo(dest);
+
+            storedNames.append(storedFilename).append(';');          // UUID.jpg;
+            origNames.append(originalFilename).append(';');          // 사진.jpg;
+            filePaths.append(dest.getAbsolutePath()).append(';');    // \\Des67\...\UUID.jpg;
+
+            System.out.println("업로드 완료 → " + originalFilename
+                             + " ▶ 저장명 " + storedFilename);
         }
 
-        if (filePaths.length() > 0) {
-            // 마지막 세미콜론 제거
-            filePaths.setLength(filePaths.length() - 1);
-            dto.setFilePath(filePaths.toString());
-        } else {
-            dto.setFilePath(null);
-        }
+        // 마지막 ; 제거
+        if (storedNames.length() > 0) storedNames.setLength(storedNames.length() - 1);
+        if (origNames.length()   > 0) origNames.setLength(origNames.length()   - 1);
+        if (filePaths.length()   > 0) filePaths.setLength(filePaths.length()   - 1);
+
+        // DTO 세팅
+        dto.setStoredName(storedNames.toString()); // UUID 목록
+        dto.setOrigName(origNames.toString());     // 원본 이름 목록
+        dto.setFilePath(filePaths.toString());     // 경로+UUID 목록  ← 추가!!
 
         reportService.submitReport(dto);
         return "redirect:/view";
