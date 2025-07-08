@@ -79,4 +79,10 @@ public class ReportController {
         
         return "/modify";
     }
+    
+    @GetMapping("/login")
+    public String redirecLoginGet() {
+        
+        return "/login";
+    }
 }
