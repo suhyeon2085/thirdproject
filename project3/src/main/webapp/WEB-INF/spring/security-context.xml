@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<security:http use-expressions="true">
+		<security:intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" />
+        <security:form-login login-page="/login" default-target-url="/admin/main"
+                    authentication-failure-url="/login?error=true"
+                    username-parameter="username" password-parameter="password" />
+        <security:logout logout-url="/logout" logout-success-url="/login?logout=true"/>
+        <security:csrf disabled="true"/>
+	</security:http>
+	
+	<!-- JDBC 기반 인증 -->
+	<security:authentication-manager>
+		<security:authentication-provider>
+			<security:password-encoder hash="bcrypt" />
+            <security:jdbc-user-service data-source-ref="dataSource"
+                users-by-username-query="SELECT username, password, true as enabled FROM admin WHERE username = ?"
+                authorities-by-username-query="SELECT username, role FROM admin WHERE username = ?" />
+        </security:authentication-provider>
+	</security:authentication-manager>
+</beans>

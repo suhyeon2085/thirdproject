@@ -1,3 +1,4 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -105,13 +106,20 @@
     <link rel="stylesheet" type="text/css" href="resources/css/menu.css">
 </head>
 <body>
+<!-- 로그인 실패 시 alert 출력 -->
+    <c:if test="${param.error == 'true'}">
+        <script>
+            alert('로그인에 실패하셨습니다.');
+        </script>
+    </c:if>
+    
 <jsp:include page="/WEB-INF/views/menu.jsp" />
     <div id="wrap">
         <div id="row1">
             <p id="pageTitle">관리자 로그인</p>
         </div>
         <div id="row2">
-            <form action="" method="post">
+            <form action="<c:url value='/login' />" method="post">
                 <div id="loginBox">
                     <div id="idBox">
                         <input type="text" class="inp" id="username" name="username" placeholder=" " >

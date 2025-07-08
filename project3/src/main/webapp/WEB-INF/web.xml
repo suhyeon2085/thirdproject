@@ -25,7 +25,7 @@
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 		
-			    <multipart-config>
+		<multipart-config>
 			<location>C:\upload\temp</location>	
 	        <!-- 단일 파일/전체 요청 제한 (byte) -->
 	        <max-file-size>52428800</max-file-size>
@@ -40,7 +40,7 @@
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 	
-			<filter>
+	<filter>
 		<filter-name>encoding</filter-name>
 		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
 		<init-param>
@@ -53,5 +53,20 @@
 		<filter-name>encoding</filter-name>
 		<servlet-name>appServlet</servlet-name>
 	</filter-mapping>
-
+	
+	<filter>
+	    <filter-name>springSecurityFilterChain</filter-name>
+	    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+	    <filter-name>springSecurityFilterChain</filter-name>
+	    <url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/spring/root-context.xml
+		/WEB-INF/spring/security-context.xml
+		</param-value>
+	</context-param>
 </web-app>
