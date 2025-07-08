@@ -1,12 +1,15 @@
 package org.zerock.controller;
 
 import java.io.File;
-
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,8 +32,9 @@ public class ReportController {
     }
 
     @PostMapping("/receipt")
-    public String submitReport(@ModelAttribute ReportDTO dto,
-                               @RequestParam("files") MultipartFile[] files) throws Exception {
+    @ResponseBody               // JSON 직렬화
+    public Map<String, Object> submitReport(@ModelAttribute ReportDTO dto,
+                                            @RequestParam("files") MultipartFile[] files) throws Exception {
 
         String uploadDir = "\\\\Des67\\02-공유폴더\\20250223KDT반\\LiveAir\\image\\";
         File dir = new File(uploadDir);
@@ -70,15 +74,30 @@ public class ReportController {
         dto.setOrigName(origNames.toString());     // 원본 이름 목록
         dto.setFilePath(filePaths.toString());     // 경로+UUID 목록  ← 추가!!
 
-        reportService.submitReport(dto);
-        return "redirect:/view";
+        Integer id = reportService.submitReport(dto); // ★ PK 받기
+        return Map.of("id", id); // { "id": 123 }           // 상세 페이지로 이동
     }
     
     @GetMapping("/view")
-    public String redirectViewGet() {
-        
-        return "/view";
+    public String view(@RequestParam("id") Integer id, Model model) {
+
+        // 1) 상세 가져오기
+        ReportDTO dto = reportService.getReport(id);
+        model.addAttribute("report", dto);   // 기존 그대로
+
+        // 2) LocalDateTime → Date 변환해서 별도 전달
+        if (dto.getCreatedAt() != null) {
+            Date createdDate = Date.from(
+                    dto.getCreatedAt()
+                       .atZone(ZoneId.systemDefault())
+                       .toInstant());
+            model.addAttribute("createdDate", createdDate);
+        }
+
+        return "view";
     }
+    
+
     
     @GetMapping("/list")
     public String redirecListGet() {

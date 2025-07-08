@@ -1,4 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -66,19 +69,22 @@
     <div id="wrap">
         <div id="row1">
             <span id="pageTitle">신고 조회</span>
-            <span id="datetime">날짜</span><!-- 임시 -->
-            <!--<span id="datetime"><fmt:formatDate value="" pattern="yyyy-MM-dd hh:mm"/></span> 백엔드에서 값이 넘어와야 사용 가능! -->
+            
+<span id="datetime">
+  <fmt:formatDate value="${createdDate}" pattern="yyyy-MM-dd HH:mm"/>
+</span>
+
         </div>
         <div id="row2">
-        	<input type="text" name="id" value=""><br> <!-- 값 확인 후 hidden으로 바꿀 예정 -->
+        	<input type="hidden" name="id" value="${report.id}" />
         	<span id="stateTxt">확인 상태: </span><input type="text" name="state" id="state" value="">
             <p class="title">| 신고인 기본 정보</p>
             <table>
                 <tr>
                     <td class="infoT">이름</td>
-                    <td></td>
+                    <td>${report.name}</td>
                     <td class="infoT">전화번호</td>
-                    <td></td>
+                    <td>${report.phone}</td>
                 </tr>
             </table>
         </div>
@@ -87,28 +93,33 @@
             <table>
                 <tr>
                     <td class="infoT">범죄 유형</td>
-                    <td></td>
+                    <td>${report.crimeType}</td>
                 </tr>
                 <tr>
                     <td class="infoT">위치</td>
-                    <td></td>
+                    <td>${report.location}</td>
                 </tr>
                 <tr>
                     <td class="infoT">상세 내용</td>
-                    <td></td>
+                    <td>${report.content}</td>
                 </tr>
                 <tr>
                     <td class="infoT">첨부 파일</td>
-                    <td></td>
+                    <td>
+                    <c:forEach var="uuid" items="${fn:split(report.storedName, ';')}" varStatus="i">
+        <c:set var="orig" value="${fn:split(report.origName, ';')[i.index]}" />
+        <a href="/download?uuid=${uuid}&name=${orig}">${orig}</a><br/>
+      </c:forEach>
+                    </td>
                 </tr>
             </table>
         </div>
         <div id="bottomBtn">
             <a href="modify"><button class="btn">수정</button></a>
-            <form action="" method="post" onsubmit="return confirm('정말 취소하시겠습니까?')">
-            	<input type="hidden" name="id" value="" />
-            	<button class="btn">삭제</button>
-            </form>
+            <form action="/delete" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?')">
+  <input type="hidden" name="id" value="${report.id}" />
+  <button class="btn">삭제</button>
+</form>
         </div>
     </div> 
 </body>

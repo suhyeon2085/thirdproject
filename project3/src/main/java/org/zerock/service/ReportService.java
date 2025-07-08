@@ -17,10 +17,13 @@ public class ReportService {
 	@Autowired
     private ReportMapper reportMapper;
 
-    public void submitReport(ReportDTO dto) {
+    public Integer submitReport(ReportDTO dto) {
     	int row = reportMapper.insertReport(dto); // ② 성공 행수 체크
         if (row == 0) throw new RuntimeException("Insert 실패");
+        return dto.getId();
     }
+    
+    
 
     public List<ReportDTO> getMyReports(String name, String phone) {
         return reportMapper.findByNameAndPhone(name, phone);

@@ -7,23 +7,30 @@
 
   <!-- 컬럼 ↔ DTO 필드명이 다르면 resultMap 작성 -->
   <resultMap id="reportMap" type="org.zerock.domain.ReportDTO">
-    <id     property="id"        column="id"/>
-    <result property="name"      column="name"/>
-    <result property="phone"     column="phone"/>
-    <result property="location"  column="location"/>
-    <result property="crimeType" column="crime_type"/>
-    <result property="content"   column="content"/>
-    <result property="filePath"  column="file_path"/>
-    <result property="createdAt" column="created_at"/>
-  </resultMap>
+  <id     property="id"         column="id"/>
+  <result property="name"       column="name"/>
+  <result property="phone"      column="phone"/>
+  <result property="location"   column="location"/>
+  <result property="crimeType"  column="crime_type"/>
+  <result property="content"    column="content"/>
+  <result property="filePath"   column="file_path"/>
+  <result property="storedName" column="stored_name"/>  <!-- ★ -->
+  <result property="origName"   column="orig_name"/>    <!-- ★ -->
+  <result property="createdAt"  column="created_at"/>
+</resultMap>
 
   <!-- 1) INSERT -->
-  <insert id="insertReport" parameterType="org.zerock.domain.ReportDTO">
+  <insert id="insertReport" 
+  	parameterType="org.zerock.domain.ReportDTO"
+  	useGeneratedKeys="true"
+  	keyProperty="id">
+  	
+  	
     INSERT INTO report
-      (name, phone, location, crime_type, content, file_path)
-    VALUES
-      (#{name}, #{phone}, #{location}, #{crimeType},
-       #{content}, #{filePath})
+        (name, phone, location, crime_type, content,
+         stored_name, orig_name, file_path, created_at)
+  VALUES (#{name}, #{phone}, #{location}, #{crimeType}, #{content},
+          #{storedName}, #{origName}, #{filePath}, NOW())
   </insert>
 
   <!-- 2) 개인 조회 -->

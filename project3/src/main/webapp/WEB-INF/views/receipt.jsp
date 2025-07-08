@@ -396,12 +396,14 @@
                 data: formData,
                 contentType: false,
                 processData: false,
-                success: function () {
-                    //alert("제출되었습니다.");
-                    window.location.href = "/view";
+                dataType: "json",
+                success: function (res) {
+                	console.log(res);
+                    // res.id를 받아서 상세 페이지로 이동
+                    window.location.href = "/view?id=" + res.id;
                 },
                 error: function () {
-                    //alert("제출에 실패했습니다. 관리자에게 문의하세요.");
+                    alert("제출에 실패했습니다. 관리자에게 문의하세요.");  // 필요하면 복구
                 }
             });
         });
