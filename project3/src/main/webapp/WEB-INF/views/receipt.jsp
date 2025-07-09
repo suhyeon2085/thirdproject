@@ -405,6 +405,8 @@
             formData.append("crimeType", selectedType);
             formData.append("location", locationValue);
             formData.append("content", content);
+            
+            formData.append("password", password);
 
             for (let i = 0; i < selectedFiles.length; i++) {
                 formData.append("files", selectedFiles[i]); // input name="files"에 맞춤

@@ -15,5 +15,7 @@ public class ReportDTO {
     private LocalDateTime createdAt; // 작성 일시
     
     private String storedName; // UUID로 변환된 실제 저장 파일명들
-    private String origName;   // 사용자가 올린 원본 이름들     
+    private String origName;   // 사용자가 올린 원본 이름들   
+    
+    private String password;	// 비밀번호
 }

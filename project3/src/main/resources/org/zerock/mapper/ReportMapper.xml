@@ -17,6 +17,8 @@
   <result property="storedName" column="stored_name"/>  <!-- ★ -->
   <result property="origName"   column="orig_name"/>    <!-- ★ -->
   <result property="createdAt"  column="created_at"/>
+  
+  <result property="password"      column="password"/>
 </resultMap>
 
   <!-- 1) INSERT -->
@@ -28,9 +30,9 @@
   	
     INSERT INTO report
         (name, phone, location, crime_type, content,
-         stored_name, orig_name, file_path, created_at)
+         stored_name, orig_name, file_path, password)
   VALUES (#{name}, #{phone}, #{location}, #{crimeType}, #{content},
-          #{storedName}, #{origName}, #{filePath}, NOW())
+          #{storedName}, #{origName}, #{filePath}, #{password})
   </insert>
   
   <delete id="delete" parameterType="int">
