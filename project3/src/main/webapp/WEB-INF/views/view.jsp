@@ -32,6 +32,7 @@
         }
         #state{
             border: none;
+            margin-top: 15px;
         }
         table{
             border: 1px solid black;
@@ -40,6 +41,7 @@
         }
         td{
             border: 1px solid black;
+            padding: 10px;
         }
         .infoT{
             background-color: rgb(231, 231, 231);
@@ -97,6 +99,10 @@
                 </tr>
                 <tr>
                     <td class="infoT">위치</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="infoT">상세 위치</td>
                     <td>${report.location}</td>
                 </tr>
                 <tr>
