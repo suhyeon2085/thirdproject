@@ -231,7 +231,7 @@
                         <option value="전라남도">전라남도</option>
                         <option value="경상북도">경상북도</option>
                         <option value="경상남도">경상남도</option>
-                        <option value="기타/외국">기타/외국</option>
+                        <option value="기타">기타</option>
                     </select>
                     <select name="gu" id="gu"></select>
                     <p class="red" id="siguErrMsg"></p>
@@ -331,31 +331,53 @@
     	    }
     	});
 
-    	// 시/군/구 선택 시 에러 제거
-    	$("#si, #gu").on("change", function () {
-    		if ($("#si").val() === "none" && $("#gu").val() === "none") {
-    	        $("#siguErrMsg").html("시/도를 선택해 주십시오.");
-    	    } else if ($("#si").val() !== "none" && $("#gu").val() === "none") {
-    	        $("#siguErrMsg").html("시/군/구를 선택해 주십시오.");
-    	    } else {
-    	        $("#siguErrMsg").html("");
-    	    }
-    	});
+    	const skipGuSiList = ["세종특별자치시", "기타"];
 
-    	// 위치X면 위치 입력 숨기기
-    	$("input[name='locationYn']").on("change", function () {
-    	    const isLocationX = $(this).val() === "X" && $(this).is(":checked");
-
-    	    $("#location, #si, #gu").toggle(!isLocationX);
-
-    	    if (isLocationX) {
-    	        $("#locationErrMsg, #siguErrMsg").html("");
-    	    } else {
-    	        if ($("#location").val().trim() === "") {
-    	            $("#locationErrMsg").html("상세 위치를 입력해 주십시오.");
-    	        }
-    	    }
-    	});
+		function validateSigu() {
+		    const siVal = $("#si").val();
+		    const guVal = $("#gu").val();
+		
+		    if (siVal === "none") {
+		        $("#siguErrMsg").html("시/도를 선택해 주십시오.");
+		    } else if (!skipGuSiList.includes(siVal) && guVal === "none") {
+		        $("#siguErrMsg").html("시/군/구를 선택해 주십시오.");
+		    } else {
+		        $("#siguErrMsg").html("");
+		    }
+		}
+		
+		// 시 선택 시 gu 비활성화/활성화
+		$("#si").on("change", function () {
+		    const siVal = $(this).val();
+		
+		    if (skipGuSiList.includes(siVal)) {
+		        $("#gu").prop("disabled", true).val("none");
+		        $("#siguErrMsg").html("");
+		    } else {
+		        $("#gu").prop("disabled", false);
+		    }
+		
+		    validateSigu();
+		});
+		
+		// gu 선택 시에도 validate
+		$("#gu").on("change", validateSigu);
+		
+		// 위치X면 위치 입력 숨기기
+		$("input[name='locationYn']").on("change", function () {
+		    const isLocationX = $(this).val() === "X";
+		
+		    $("#location, #si, #gu").toggle(!isLocationX);
+		
+		    if (isLocationX) {
+		        $("#locationErrMsg, #siguErrMsg").html("");
+		    } else {
+		        if ($("#location").val().trim() === "") {
+		            $("#locationErrMsg").html("상세 위치를 입력해 주십시오.");
+		        }
+		        validateSigu();
+		    }
+		});
         
      	// 시구 select
         const $si = $('#si');
@@ -764,7 +786,7 @@
                 if (siType === "none") {
                     $("#siguErrMsg").html("시/도를 선택해 주십시오.");
                     isValid = false;
-                } else if (guType === "none") {
+                } else if (!skipGuSiList.includes(siType) && guType === "none") {
                     $("#siguErrMsg").html("시/군/구를 선택해 주십시오.");
                     isValid = false;
                 }
