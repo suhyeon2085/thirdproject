@@ -202,6 +202,29 @@
                         <input type="radio" name="locationYn" value="O" checked>입력
                         <input type="radio" name="locationYn" value="X">입력X(기억나지 않습니다)
                     </div>
+                    <select name="si" id="si">
+                        <option value="none">시/도</option>
+                        <option value="서울특별시">서울</option>
+                        <option value="부산광역시">부산</option>
+                        <option value="대구광역시">대구</option>
+                        <option value="인천광역시">인천</option>
+                        <option value="광주광역시">광주</option>
+                        <option value="대전광역시">대전</option>
+                        <option value="울산광역시">울산</option>
+                        <option value="세종특별자치시">세종</option>
+                        <option value="제주특별자치도">제주</option>
+                        <option value="경기도">경기도</option>
+                        <option value="강원도">강원도</option>
+                        <option value="충청북도">충청북도</option>
+                        <option value="충청남도">충청남도</option>
+                        <option value="전라북도">전라북도</option>
+                        <option value="전라남도">전라남도</option>
+                        <option value="경상북도">경상북도</option>
+                        <option value="경상남도">경상남도</option>
+                        <option value="기타/외국">기타/외국</option>
+                    </select>
+                    <select name="gu" id="gu"></select>
+                    <p class="red" id="siguErrMsg"></p>
                     <input class="inp" type="text" id="location" name="location">
                     <span class="red" id="locationErrMsg"></span>
                 </div>
