@@ -18,4 +18,7 @@ public class ReportDTO {
     private String origName;   // 사용자가 올린 원본 이름들   
     
     private String password;	// 비밀번호 
+    
+    private String si;  // 시/도
+    private String gu;	// 시/군/구
 }

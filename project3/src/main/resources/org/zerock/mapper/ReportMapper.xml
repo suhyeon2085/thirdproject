@@ -30,9 +30,9 @@
   	
     INSERT INTO report
         (name, phone, location, crime_type, content,
-         stored_name, orig_name, file_path, password)
+         stored_name, orig_name, file_path, password, si, gu)
   VALUES (#{name}, #{phone}, #{location}, #{crimeType}, #{content},
-          #{storedName}, #{origName}, #{filePath}, #{password})
+          #{storedName}, #{origName}, #{filePath}, #{password}, #{si}, #{gu})
   </insert>
   
   <delete id="delete" parameterType="int">

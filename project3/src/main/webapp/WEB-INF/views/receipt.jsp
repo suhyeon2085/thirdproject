@@ -780,6 +780,9 @@
             formData.append("content", content);
             
             formData.append("password", password); 
+            
+            formData.append("si", siType);
+            formData.append("gu", guType);
 
             for (let i = 0; i < selectedFiles.length; i++) {
                 formData.append("files", selectedFiles[i]); // input name="files"에 맞춤
