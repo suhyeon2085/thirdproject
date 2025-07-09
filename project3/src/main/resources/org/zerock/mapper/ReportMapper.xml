@@ -25,7 +25,7 @@
   <insert id="insertReport" 
   	parameterType="org.zerock.domain.ReportDTO"
   	useGeneratedKeys="true"
-  	keyProperty="id">
+  	keyProperty="id"> 
   	
   	
     INSERT INTO report
