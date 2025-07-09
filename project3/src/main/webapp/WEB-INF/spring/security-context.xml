@@ -7,10 +7,10 @@
 
 	<security:http use-expressions="true">
 		<security:intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" />
-        <security:form-login login-page="/login" default-target-url="/admin/main"
+        <security:form-login login-page="/login" default-target-url="/admin/mainA"
                     authentication-failure-url="/login?error=true"
                     username-parameter="username" password-parameter="password" />
-        <security:logout logout-url="/logout" logout-success-url="/login?logout=true"/>
+        <security:logout logout-url="/logout" logout-success-url="/mainU"/>
         <security:csrf disabled="true"/>
 	</security:http>
 	

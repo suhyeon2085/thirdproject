@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/admin/*")
 public class AdminController {
-	@GetMapping("/main")
+	@GetMapping("/mainA")
     public String redirectAdminMainGet() {
         
-        return "/admin/main";
+        return "/admin/mainA";
     }
 }

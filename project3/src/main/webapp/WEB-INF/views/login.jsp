@@ -100,6 +100,7 @@
             background-color: rgb(24, 6, 104);
             font-size: 18px;
             color: rgb(241, 217, 75);
+            margin-top: 35px;
         }
     </style>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
@@ -131,7 +132,7 @@
                         <i class="bi bi-eye-slash eye-icon" onclick="togglePassword()"></i>
                     </div>
                 </div>
-                <input type="checkbox" id="loginSave" name="loginSave"><label for="loginSave" id="loginSaveTxt">로그인 정보 저장</label>
+                <!-- <input type="checkbox" id="loginSave" name="loginSave"><label for="loginSave" id="loginSaveTxt">로그인 정보 저장</label> -->
                 <input type="submit" value="로그인">
             </form>
         </div>

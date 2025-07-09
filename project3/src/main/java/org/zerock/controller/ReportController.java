@@ -134,6 +134,12 @@ public class ReportController {
         return "/login";
     }
     
+    @GetMapping("/mainU")
+    public String redirecMainUGet() {
+        
+        return "/mainU";
+    }
+    
     @GetMapping("/download")
     @ResponseBody
     public ResponseEntity<Resource> download(@RequestParam String uuid,
