@@ -12,4 +12,10 @@ public class AdminController {
         
         return "/admin/mainA";
     }
+	
+	@GetMapping("/listA")
+    public String redirectAdminListGet() {
+        
+        return "/admin/listA";
+    }
 }
