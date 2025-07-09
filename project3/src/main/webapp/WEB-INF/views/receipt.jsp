@@ -154,7 +154,10 @@
             <form id="reportForm">
                 <div class="infoT">
                     <p class="title">신고인 기본 정보</p>
-                    <p class="blue">아래에 대한 정보를 통해 이후 조회페이지에서 조회하실 수 있습니다.</p>
+                    <p class="blue">
+                    	아래에 대한 정보를 통해 이후 조회페이지에서 조회하실 수 있습니다.<br>
+                        필요 시, 사전 연락 메시지 이후 전화가 갈 수도 있습니다.
+                    </p>
                 </div>
                 <div class="infowrap">
                     <p class="cate">이름<span class="redStar">*</span></p>
@@ -166,9 +169,13 @@
                     <input class="inp" type="text" id="phone" name="phone">
                     <p class="red" id="phoneErrMsg"></p>
                     <p class="blue">
-                        숫자만 입력해 주십시오.<br>
-                        필요 시, 사전 연락 메시지 이후 전화가 갈 수도 있습니다.
+                        숫자만 입력해 주십시오.
                     </p>
+                </div>
+                <div class="infowrap">
+                    <p class="cate">비밀번호<span class="redStar">*</span></p>
+                    <input class="inp" type="password" id="password" name="password">
+                    <p class="red" id="passwordErrMsg"></p>
                 </div>
                 <div class="infoT">
                     <p class="title">신고 내용</p>
@@ -311,6 +318,7 @@
             let isValid = true;
             let name = $("#name").val().trim();
             let phone = $("#phone").val().trim();
+            let password = $("#password").val().trim();
             let selectedType = $("#crimeType").val();
             let selectedlocation = $("input[name='locationYn']:checked").val();
             let locationValue = $("#location").val().trim();
@@ -329,6 +337,11 @@
                 isValid = false;
             } else if (!/^\d{8,11}$/.test(phone)) {
                 $("#phoneErrMsg").html("전화번호는 숫자만 8~11자리 입력해 주십시오.");
+                isValid = false;
+            }
+            
+            if (!password) {
+                $("#passwordErrMsg").html("비밀번호를 입력해 주십시오.");
                 isValid = false;
             }
 
@@ -359,6 +372,13 @@
                 this.value = this.value.replace(/[^0-9]/g, ""); // 숫자만 허용
                 if (/^\d{8,11}$/.test(this.value)) {
                     $("#phoneErrMsg").html("");
+                }
+            });
+            
+         	// 비밀번호 입력 시 에러 메시지 제거
+            $("#password").on("input", function () {
+                if ($(this).val().trim() !== "") {
+                    $("#passwordErrMsg").html("");
                 }
             });
 

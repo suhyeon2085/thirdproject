@@ -97,6 +97,11 @@
                 <input class="inp" type="text" id="phone" name="phone">
                 <span class="red" id="phoneErrMsg"></span>
             </div>
+            <div class="infowrap">
+                <span class="cate">비밀번호</span>
+                <input class="inp" type="password" id="password" name="password">
+                <span class="red" id="passwordErrMsg"></span>
+            </div>
             <div id="btnBox">
                 <button id="searchBtn">조회</button>
             </div>
@@ -126,6 +131,7 @@
 			let isValid = true;
 		    let name = $.trim($("#name").val());
 		    let phone = $.trim($("#phone").val());
+		    let password = $.trim($("#password").val());
 
 		    $("#nameErrMsg, #phoneErrMsg").html("");
 
@@ -142,6 +148,11 @@
                 isValid = false;
             }
             
+            if (!password) {
+                $("#passwordErrMsg").html("비밀번호를 입력해 주십시오.");
+                isValid = false;
+            }
+            
          	// 이름 입력 시 에러 메시지 제거
             $("#name").on("input", function () {
                 if ($(this).val().trim() !== "") {
@@ -154,6 +165,13 @@
                 this.value = this.value.replace(/[^0-9]/g, ""); // 숫자만 허용
                 if (/^\d{8,11}$/.test(this.value)) {
                     $("#phoneErrMsg").html("");
+                }
+            });
+            
+         	// 비밀번호 입력 시 에러 메시지 제거
+            $("#password").on("input", function () {
+                if ($(this).val().trim() !== "") {
+                    $("#passwordErrMsg").html("");
                 }
             });
             
