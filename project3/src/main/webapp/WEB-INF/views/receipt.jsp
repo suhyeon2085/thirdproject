@@ -325,7 +325,7 @@
     	        $("#locationErrMsg, #siguErrMsg").html("");
     	    } else {
     	        if ($("#location").val().trim() === "") {
-    	            $("#locationErrMsg").html("");
+    	            $("#locationErrMsg").html("상세 위치를 입력해 주십시오.");
     	        }
     	    }
     	});

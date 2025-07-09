@@ -81,6 +81,16 @@
             margin-bottom: 10px;
             font-size: 15px;
         }
+        #si, #gu{
+            font-size: 14px;
+            border: none;
+            border-bottom: 1px solid gray;
+            padding: 10px 0px;
+            width: 25%;
+        }
+        #location{
+            margin-top: 10px;
+        }
         #content{
             width: 100%;
             height: 150px;
@@ -268,7 +278,7 @@
 <script>
     $(document).ready(function(){
     	// 수정 이전 값 받아오기
-    	const beforeTypeValue = "";
+    	/*const beforeTypeValue = "";
 	    $("#crimeType").val(beforeTypeValue);
 	    
 	    const beforeLocValue = "";
@@ -278,7 +288,7 @@
 	    $("#si").val(beforeSiValue);
 	    
 	    const beforeGuValue = "";
-	    $("#gu").val(beforeGuValue);
+	    $("#gu").val(beforeGuValue);*/
 	    
 	 	// 숫자만 입력되도록 처리 및 에러 제거
     	$("#phone").on("input", function () {
@@ -342,7 +352,7 @@
     	        $("#locationErrMsg, #siguErrMsg").html("");
     	    } else {
     	        if ($("#location").val().trim() === "") {
-    	            $("#locationErrMsg").html("");
+    	            $("#locationErrMsg").html("상세 위치를 입력해 주십시오.");
     	        }
     	    }
     	});
