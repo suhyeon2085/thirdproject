@@ -9,16 +9,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>신고 조회 목록</title>
     <style>
-        @font-face {
-            font-family: 'GongGothicMedium';
-            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicMedium.woff') format('woff');
-            font-weight: normal;
-            font-style: normal;
-        }
-        body{
-            margin: 0;
-            font-family: 'GongGothicMedium';
-        }
         #wrap{
             padding: 5% 20%;
         }
