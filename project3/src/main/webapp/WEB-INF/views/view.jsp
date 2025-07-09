@@ -99,7 +99,10 @@
                 </tr>
                 <tr>
                     <td class="infoT">위치</td>
-                    <td></td>
+                    <td>
+				    ${report.si}
+				    <c:if test="${not empty report.gu and report.gu ne 'null'}"> ${report.gu}</c:if>
+				  	</td>
                 </tr>
                 <tr>
                     <td class="infoT">상세 위치</td>
