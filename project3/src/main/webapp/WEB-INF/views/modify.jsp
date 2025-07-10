@@ -163,7 +163,7 @@
         </div>
         <div id="row2">
             <form id="reportForm">
-            	<input type="text" name="id" value="">
+            	<input type="hidden" name="id" value="${dto.id}">
                 <div class="infoT">
                     <p class="title">신고인 기본 정보</p>
                     <p class="blue">
@@ -173,12 +173,12 @@
                 </div>
                 <div class="infowrap">
                     <p class="cate">이름<span class="redStar">*</span></p>
-                    <input class="inp" type="text" id="name" name="name">
+                    <input class="inp" type="text" id="name" name="name" value="${dto.name}">
                     <p class="red" id="nameErrMsg"></p>
                 </div>
                 <div class="infowrap">
                     <p class="cate">전화번호<span class="redStar">*</span></p>
-                    <input class="inp" type="text" id="phone" name="phone">
+                    <input class="inp" type="text" id="phone" name="phone" value="${dto.phone}">
                     <p class="red" id="phoneErrMsg"></p>
                     <p class="blue">
                         숫자만 입력해 주십시오.
@@ -186,7 +186,7 @@
                 </div>
                 <div class="infowrap">
                     <p class="cate">비밀번호<span class="redStar">*</span></p>
-                    <input class="inp" type="password" id="password" name="password">
+                    <input class="inp" type="password" id="password" name="password" value="${dto.password}">
                     <p class="red" id="passwordErrMsg"></p>
                 </div>
                 <div class="infoT">
@@ -195,22 +195,22 @@
                 <div class="infowrap">
                     <p class="cate">범죄 유형<span class="redStar">*</span></p>
                     <select name="crimeType" id="crimeType">
-                        <option value="none">선택</option>
-                        <option value="살인">살인</option>
-                        <option value="성범죄">성범죄</option>
-                        <option value="절도/강도">절도/강도</option>
-                        <option value="상해/폭행">상해/폭행</option>
-                        <option value="약취/유인">약취/유인</option>
-                        <option value="교통범죄">교통범죄</option>
-                        <option value="기타">기타</option>
+                        <option value="none" ${dto.crimeType == 'none' ? 'selected' : ''}>선택</option>
+                        <option value="살인" ${dto.crimeType == '살인' ? 'selected' : ''}>살인</option>
+                        <option value="성범죄" ${dto.crimeType == '성범죄' ? 'selected' : ''}>성범죄</option>
+                        <option value="절도/강도" ${dto.crimeType == '절도/강도' ? 'selected' : ''}>절도/강도</option>
+                        <option value="상해/폭행" ${dto.crimeType == '상해/폭행' ? 'selected' : ''}>상해/폭행</option>
+                        <option value="약취/유인" ${dto.crimeType == '약취/유인' ? 'selected' : ''}>약취/유인</option>
+                        <option value="교통범죄" ${dto.crimeType == '교통범죄' ? 'selected' : ''}>교통범죄</option>
+                        <option value="기타" ${dto.crimeType == '기타' ? 'selected' : ''}>기타</option>
                     </select>
                     <p class="red" id="sltErrMsg"></p>
                 </div>
                 <div class="infowrap">
                     <p class="cate">위치<span class="redStar">*</span></p>
                     <div id="check">
-                        <input type="radio" name="locationYn" value="O" checked>입력
-                        <input type="radio" name="locationYn" value="X">입력X(기억나지 않습니다)
+                        <input type="radio" name="locationYn" value="O" ${empty dto.location ? '' : 'checked'}>입력
+                        <input type="radio" name="locationYn" value="X" ${empty dto.location ? 'checked' : ''}>입력X(기억나지 않습니다)
                     </div>
                     <select name="si" id="si">
                         <option value="none">시/도</option>
@@ -235,13 +235,13 @@
                     </select>
                     <select name="gu" id="gu"></select>
                     <p class="red" id="siguErrMsg"></p>
-                    <input class="inp" type="text" id="location" name="location">
+                    <input class="inp" type="text" id="location" name="location" value="${dto.location}">
                     <span class="red" id="locationErrMsg"></span>
                 </div>
                 <div class="infowrap">
                     <p class="cate">상세 내용<span class="redStar">*</span></p>
                     <div id="contentWrapper">
-                        <textarea name="content" id="content" placeholder="범죄 피해/목격 사실에 대해 입력해 주십시오."></textarea>
+                        <textarea name="content" id="content" placeholder="범죄 피해/목격 사실에 대해 입력해 주십시오.">${dto.content}</textarea>
                         <span id="txtlength"><strong id="letters">0</strong>글자</span>
                     </div>
                     <div id="bottomMsg">
@@ -282,13 +282,11 @@
 	    $("#crimeType").val(beforeTypeValue);
 	    
 	    const beforeLocValue = "";
-	    $('input[name="locationYn"][value="' + beforeLocValue + '"]').prop("checked", true);
+	    $('input[name="locationYn"][value="' + beforeLocValue + '"]').prop("checked", true);*/
 	    
-	    const beforeSiValue = "";
+	    const beforeSiValue = "${dto.si}";
 	    $("#si").val(beforeSiValue);
 	    
-	    const beforeGuValue = "";
-	    $("#gu").val(beforeGuValue);*/
 	    
 	 	// 숫자만 입력되도록 처리 및 에러 제거
     	$("#phone").on("input", function () {
@@ -684,6 +682,9 @@
 
         // 초기화
         updateGu();
+        
+	    const beforeGuValue = "${dto.gu}";
+	    $("#gu").val(beforeGuValue);
         
      	// 기존 파일 제거 시
         $(document).on("click", ".old-file-remove", function () {

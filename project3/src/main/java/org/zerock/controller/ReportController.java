@@ -122,10 +122,11 @@ public class ReportController {
         return "/list";
     }
     
-    @GetMapping("/modify")
-    public String redirecModifyGet() {
-        
-        return "/modify";
+    @PostMapping("/modify")
+    public String modifyPost(@RequestParam("id") int id, Model model) {
+        ReportDTO report = reportService.getReport(id); // DB 조회
+        model.addAttribute("dto", report);
+        return "modify";
     }
     
     @GetMapping("/login")
