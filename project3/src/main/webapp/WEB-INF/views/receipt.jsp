@@ -45,7 +45,8 @@
             width: 100%;
             border: none;
             border-bottom: 1px solid gray;
-            padding: 10px 0px;
+            padding: 10px;
+            box-sizing: border-box;
         }
         .infoT{
             margin-top: 60px;
@@ -68,6 +69,16 @@
             font-size: 14px;
             margin-top: 5px;
             margin-bottom: 0;
+        }
+        #pwBox{
+        	position: relative;
+        }
+        .eye-icon {
+            cursor: pointer;
+            position: absolute;
+            bottom: 6px;
+            right: 15px;
+            font-size: 18px;
         }
         #crimeType{
             font-size: 14px;
@@ -184,7 +195,10 @@
                 </div>
                 <div class="infowrap">
                     <p class="cate">비밀번호<span class="redStar">*</span></p>
-                    <input class="inp" type="password" id="password" name="password">
+                    <div id="pwBox">
+	                    <input class="inp" type="password" id="password" name="password">
+	                    <i class="bi bi-eye-slash eye-icon" onclick="togglePassword()"></i>
+                    </div>
                     <p class="red" id="passwordErrMsg"></p>
                 </div>
                 <div class="infoT">
@@ -262,6 +276,20 @@
         </div>
     </div>
 <script>
+function togglePassword() {
+    const input = document.getElementById("password");
+    const icon = document.querySelector(".eye-icon");
+    if (input.type === "password") {
+        input.type = "text";
+        icon.classList.remove("bi-eye-slash");
+        icon.classList.add("bi-eye");
+    } else {
+        input.type = "password";
+        icon.classList.remove("bi-eye");
+        icon.classList.add("bi-eye-slash");
+    }
+}
+
     $(document).ready(function(){
     	// 숫자만 입력되도록 처리 및 에러 제거
     	$("#phone").on("input", function () {
