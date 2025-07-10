@@ -287,8 +287,6 @@
 	    const beforeSiValue = "${dto.si}";
 	    $("#si").val(beforeSiValue);
 	    
-	    const beforeGuValue = "${dto.gu}";
-	    $("#gu").val(beforeGuValue);
 	    
 	 	// 숫자만 입력되도록 처리 및 에러 제거
     	$("#phone").on("input", function () {
@@ -684,6 +682,9 @@
 
         // 초기화
         updateGu();
+        
+	    const beforeGuValue = "${dto.gu}";
+	    $("#gu").val(beforeGuValue);
         
      	// 기존 파일 제거 시
         $(document).on("click", ".old-file-remove", function () {
