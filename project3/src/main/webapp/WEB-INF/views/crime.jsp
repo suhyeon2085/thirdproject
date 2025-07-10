@@ -294,7 +294,7 @@
 
     <!-- 시간/요일별 통계 영역 -->
 	<div id="time">
-	<span class="time_day">요일별 5대 범죄 발생율 추세</span>
+	<span class="time_day">요일별 5대 범죄 발생율 추이</span>
 		<div id="time-multi-charts" style="display: flex; flex-wrap: wrap; gap: 20px;">
 		  <canvas id="timechart-살인" ></canvas>
 		  <canvas id="timechart-강간및추행" ></canvas>
@@ -303,7 +303,7 @@
 		  <canvas id="timechart-강도및절도" ></canvas>
 		</div>
 	</div>
-
+ 
 
     <!-- 5대 범죄 예측 라인차트 영역 -->
 	<div id="five">
@@ -316,7 +316,7 @@
 	      <span class="crime-tab" data-crime="강도 및 절도">강도 및 절도</span>
 	      
 		  <div class="tooltip-container" style="margin-left: 10px;">
-		  <img src="resources/img/alert.png" alt="알림" class="info-icon2">
+		  <img src="resources/img/alert2.png" alt="알림" class="info-icon2">
 		  <span class="tooltiptext2">2024년 범죄 통계는 관계기관의 집계 일정에 따라 2025년 8월에 공표될 예정이며,<br> 현재 데이터는 제공되지 않습니다.</span>
 		  </div>
 	    </div>
@@ -685,6 +685,7 @@ function createBarChartLocal(labels, data) {
 }
 
 //------------------ 예측 차트 ------------------ //
+
 document.addEventListener('DOMContentLoaded', () => {
   initForecastChart();
 });
@@ -694,42 +695,54 @@ function initForecastChart() {
     .then(res => res.json())
     .then(data => {
       const ctx = document.getElementById('forecastChart').getContext('2d');
-      const years = [...new Set(Object.values(data).flatMap(arr => arr.map(d => d.year)))].sort();
       let chart;
 
       function updateChart(crimeType) {
         const real = data[crimeType]?.filter(d => d.type === '실제') || [];
-        const predict = data[crimeType]?.filter(d => d.type === '예측') || [];
+        const predictOnly = data[crimeType]?.filter(d => d.type === '예측') || [];
 
-        const datasets = [
-          {
-            label: `${crimeType} (실제)`,
-            data: real.map(d => ({ x: d.year, y: d.count })),
-            borderColor: getColor(crimeType),
-            borderWidth: 2,
-            tension: 0
-          },
-          { 
-            label: `${crimeType} (예측)`,
-            data: predict.map(d => ({ x: d.year, y: d.count })),
-            borderColor: getColor(crimeType),
-            borderDash: [5, 5],
-            borderWidth: 2,
-            tension: 0
-          }  
-        ]; 
+        // 예측 dataset에도 실제값(2018~2023) 포함
+        const predict = [...real, ...predictOnly];
 
         if (chart) chart.destroy();
+
         chart = new Chart(ctx, {
           type: 'line',
-          data: { labels: years, datasets },
+          data: {
+            labels: predict.map(d => d.year),
+            datasets: [
+            	  {
+            	    label: `${crimeType} (실제)`,
+            	    data: real.map(d => ({ x: d.year, y: d.count })),
+            	    borderColor: getColor(crimeType),
+            	    borderWidth: 2,
+            	    tension: 0,
+            	    pointRadius: 4,
+            	    pointBackgroundColor: getColor(crimeType),
+            	    pointBorderColor: getColor(crimeType),
+            	  },
+            	  {
+            	    label: `${crimeType} (예측)`,
+            	    data: predict.map(d => ({ x: d.year, y: d.count })),
+            	    borderColor: getColor(crimeType),
+            	    borderDash: [5, 5],
+            	    borderWidth: 2,
+            	    tension: 0,
+            	    pointRadius: 4,
+            	    pointBackgroundColor: 'white', // 예측은 점 내부 색을 흰색으로
+            	    pointBorderColor: getColor(crimeType),
+            	  }
+            	]
+
+          },
           options: {
             plugins: {
               title: {
                 display: true,
-                text: `5대 범죄 발생건수 연도별 추이 (2024~2025 예측)`,
-                font: { size: 22, weight: 'bold' },
-                color: 'rgb(0, 51, 153)'
+                text: `5대 범죄 발생건수 연도별 추세`,
+                font: { size: 20, weight: 'bold' },
+                color: 'rgb(0, 51, 153)',
+                padding: { top: 15, bottom: 15 }
               },
               legend: {
                 labels: {
@@ -772,6 +785,7 @@ function initForecastChart() {
         return map[crime] || 'gray';
       }
 
+      // 탭 클릭 이벤트 설정
       document.querySelectorAll('.crime-tab').forEach(tab => {
         tab.addEventListener('click', () => {
           const selected = tab.getAttribute('data-crime');
@@ -781,9 +795,11 @@ function initForecastChart() {
         });
       });
 
+      // 초기 표시: 교통 범죄
       updateChart('교통 범죄');
     });
 }
+
 
 
 //------------------ 시간/요일 선형 차트 ------------------ //
