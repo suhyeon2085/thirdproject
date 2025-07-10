@@ -43,6 +43,7 @@
         flex: 1;
         border: 3px solid rgb(255, 204, 0);
         background: rgb(245, 247, 250);
+        
         display: flex;
         align-items: center;
         gap: 20px;
@@ -74,62 +75,117 @@
 
     /* 예측 차트 */
     #forecastChart {
-        width: 870px !important;
-        height: 484px !important;
-        background: rgb(245, 247, 250);
+        background: rgb(245, 247, 250, 0.9);
+        width: 1300px;  /* 또는 원하는 값으로 조절 */
+    	height: 600px;
     }
 
-    /* 시간 / 요일 / 예측 영역 */
-    #time {
-        display: block;
-        width: 100%;
-        margin-top: 20px;
-        border: 3px solid rgb(255, 204, 0);
-        padding: 10px;
-        background: rgb(245, 247, 250);
-        clear: both;
-    }
-    
-	#five {
-	  display: flex;              
-	  justify-content: center;    
-	  align-items: center;         
+	/*  시간/요일 차트  */
+	#time-multi-charts canvas {
+	  max-width: 400px;
+	  max-height: 300px;
 	  width: 100%;
-	  height: 490px;               
+	  height: auto;
+	}
+
+    /* 시간 / 요일 / 예측 영역 */
+	#time {
+	  position: relative;
+	  display: flex;
+	  flex-direction: column;
+	  align-items: center;      /* 가로 중앙 */
+	  justify-content: center;  /* 세로 중앙 */
+	  width: 100%;
+	  height: 450px;            /* 높이 지정해서 세로 중앙 효과 */
 	  margin-top: 20px;
- 	  background: 
-      linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,1)), /* 반투명 흰색 오버레이 */
-      url('resources/img/p.png');
-      background-repeat: repeat;
-	  background-position: center center;
-	  background-size: calc(100% / 3);
 	  border: 3px solid rgb(255, 204, 0);
-/* 	  padding: 20px; */
-/* 	  background: rgb(245, 247, 250); */
+	  padding-top: 80px;
+	  background: rgb(245, 247, 250);
 	  box-sizing: border-box;
+	}
+	    
+	.time_day {
+	  position: absolute;
+	  top: 15px;                    /* 위쪽 여백 살짝 늘림 */
+	  left: 50%;                   /* 가로 중앙 */
+	  transform: translateX(-50%);
+	  
+	  font-weight: 700;
+	  font-size: 28px;
+	  color: rgb(0, 51, 153);
+	  
+	  padding: 6px 20px;
+	  border: 3px solid rgb(255, 204, 0);
+	  box-sizing: border-box;
+	  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	  z-index: 10;
+	}
+
+	
+	/* 제5대 범죄 예측차트 */
+	#five {
+	  display: flex;
+	  justify-content: center;
+	  align-items: center;
+	  width: 100%;
+	  
+	  height: 650px;
+	  margin-top: 20px;
+	  background: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,1)),
+	              url('resources/img/crimelogo.png');
+	  background-repeat: repeat;
+	  background-position: center center;
+	  background-size: calc(100% / 3) 700px;
+	  border: 3px solid rgb(255, 204, 0);
+	  box-sizing: border-box;
+	  flex-direction: column;
+	}
+	
+	.forecast-wrapper {
+	  width: 1100px;
+	  display: flex;
+	  flex-direction: column;
+	  align-items: center;
+	}
+	
+	.tab-bar {
+	  display: flex;
+	  justify-content: center;
+	  flex-wrap: wrap;
+	  margin-bottom: 5px;
+	  margin-top: 1px;
+	}
+	
+	.crime-tab {
+	  cursor: pointer;
+	  margin: 0 10px;
+	  font-weight: bold;
+	  font-size: 18px;
+	  color: rgb(0, 51, 153);
+	  padding: 6px 10px;
+	  border-bottom: 3px solid transparent;
+	  transition: all 0.3s;
+	  margin-bottom: 10px;
+	  background: rgba(255,255,255,0.5);
+	  width: 120px;
+	  height: 25px;
+	  
+	  display: flex;                /* ⭐ Flexbox 사용 */
+	  justify-content: center;      /* 가로 중앙 정렬 */
+	  align-items: center;   
+	}
+	
+	.crime-tab:hover {
+	  color: white;
+	  
+	}
+	
+	.crime-tab.active {
+	  border-bottom: 3px solid rgb(255, 204, 0);
 	}
 	
 
-/* 먼가 박스 크기랑 똑같아지고 싶다면 아래 css 적용 후 위에 css 제거*/
-/* #five {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  max-width: 820px; 
-  height: 510px;
-  margin: 20px auto 0; 
-  border: 3px solid rgb(255, 204, 0);
-  padding: 10px;
-  background: rgb(245, 247, 250);
-  box-sizing: border-box; 
-} 
- */
-
-
-
-
-    /* 툴팁 스타일 */
+   /* 툴팁 스타일 */
     .tooltip-container {
         position: relative;
         display: inline-block;
@@ -165,20 +221,20 @@
 
     /* 경찰 마크 이미지 */
     #police {
-        width: 250px;
-        height: 60px;
+        width: 100px;
+        height: 100px;
         margin: 0;
         padding: 0;
     }
+    
+
+
 </style>
 
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 </head>
 <body>
 
-<img src="resources/img/police.png" id="police">
+<img src="resources/img/crimelogo.png" id="police">
 
 <div class="container">
     <!-- 지도 영역 -->
@@ -188,8 +244,7 @@
 
     <!-- 오른쪽 차트 영역 -->
     <div class="right">
-    
-    <div class="tooltip-container" style="position: absolute; top: 105px; left: 61%;">
+    <div class="tooltip-container" style="position: absolute; top: 137px; left: 65%;">
     <img src="resources/img/guide.png" alt="Info" class="info-icon">
     <span class="tooltiptext">0%의 범죄는 나타나지 않음</span>
 </div>
@@ -208,17 +263,39 @@
     </div>
 
     <!-- 시간/요일별 통계 영역 -->
-    <div id="time">
-        <div>시간 / 요일 통계를 기반으로 특정 시간대의 범죄 발생율 예측 차트</div>
-    </div>
+	<div id="time">
+	<span class="time_day">요일별 5대 범죄 발생율 추세</span>
+		<div id="time-multi-charts" style="display: flex; flex-wrap: wrap; gap: 20px;">
+		  <canvas id="timechart-살인" ></canvas>
+		  <canvas id="timechart-강간및추행" ></canvas>
+		  <canvas id="timechart-상해및폭행" ></canvas>
+		  <canvas id="timechart-교통범죄"  ></canvas>
+		  <canvas id="timechart-강도및절도" ></canvas>
+		</div>
+	</div>
+
 
     <!-- 5대 범죄 예측 라인차트 영역 -->
-    <div id="five">
-        <canvas id="forecastChart"></canvas>
-    </div>
+	<div id="five">
+	  <div class="forecast-wrapper">
+	    <div class="tab-bar">
+	      <span class="crime-tab active" data-crime="교통 범죄">교통 범죄</span>
+	      <span class="crime-tab" data-crime="살인">살인</span>
+	      <span class="crime-tab" data-crime="강간 및 추행">강간 및 추행</span>
+	      <span class="crime-tab" data-crime="상해 및 폭행">상해 및 폭행</span>
+	      <span class="crime-tab" data-crime="강도 및 절도">강도 및 절도</span>
+	    </div>
+	    <canvas id="forecastChart" <%-- width="1100px" height="600px" --%>></canvas>
+	  </div>
+	</div>
+
+
+
 </div> 
-
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@4.3.0/dist/chartjs-chart-matrix.min.js"></script>
 <script>
 Chart.register(ChartDataLabels);
 
@@ -289,7 +366,7 @@ function createDonutChart(labels, data) {
                  text: '연도별 5대 범죄 발생 비율 (%)',
                  color: 'rgb(0, 51, 153)',
                  font: { size: 19, weight: 'bold' },
-                 padding: { top: 10, bottom: 20 }
+                 padding: { top: 20, bottom: 20 }
              },
              datalabels: { display: false }
          },
@@ -400,7 +477,7 @@ function updateBarChart(data, crimeName) {
 
 //------------------ 현위치 차트 ------------------ //
 const crimesLocal = ["살인", "강간 및 추행", "상해 및 폭행", "교통범죄", "강도 및 절도"];
-const donutColors2 = donutColors; // 동일한 색상 사용
+const donutColors2 = donutColors;
 
 let donutChart1;
 let barChart1;
@@ -562,135 +639,222 @@ function createBarChartLocal(labels, data) {
 }
 
 //------------------ 예측 차트 ------------------ //
-fetch('<c:url value="/resources/data/crime_forecast.json"/>')
-.then(res => res.json())
-.then(data => {
-  // 모든 연도 추출 및 정렬
-  const allYears = [...new Set(Object.values(data).flatMap(arr => arr.map(d => d.year)))];
-  allYears.sort((a, b) => a - b);
-
-  const datasets = [];
-
-  // 각 범죄별 실제/예측 데이터 분리 후 datasets 생성
-  Object.entries(data).forEach(([crime, records]) => {
-    const realData = records.filter(d => d.type === '실제');
-    const predictData = records.filter(d => d.type === '예측');
-
-    if (realData.length) {
-      datasets.push({
-        label: crime + ' (실제)',
-        data: realData.map(d => ({ x: d.year, y: d.count })),
-        borderColor: getColor(crime),
-        backgroundColor: getColor(crime),
-        tension: 0.4,
-        borderWidth: 2,
-        fill: false
-      });
-    }
-
-    if (predictData.length) {
-      datasets.push({
-        label: crime + ' (예측)',
-        data: predictData.map(d => ({ x: d.year, y: d.count })),
-        borderColor: getColor(crime),
-    /*     backgroundColor: getColor(crime), */
-        tension: 0.4,
-        borderDash: [5, 5],
-        borderWidth: 2,
-        fill: false
-      });
-    }
-  });
-
-  // 차트 생성
-  const ctx = document.getElementById('forecastChart').getContext('2d');
-
-  new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: allYears,
-      datasets: datasets
-    },
-    options: {
-      interaction: {
-        mode: 'nearest',
-        intersect: true
-      },
-      plugins: {
-        title: {
-          display: true,
-          text: '5대 범죄 발생건수 연도별 추이 (2024~2025 예측값)',
-          font: { size: 22, weight: 'bold'},
-          padding: { top: 15, bottom: 10 },
-          color: 'rgb(0, 51, 153)' // 제목 파란색 유지
-        },
-        datalabels: {
-          display: false
-        },
-        tooltip: {
-          enabled: true,
-          bodyColor: 'white',
-          titleColor: 'white',
-          callbacks: {
-            /*  label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y.toLocaleString()}건`  */
-          }
-        },
-        legend: {
-          labels: {
-            color: 'black',
-            font: { size: 14, weight: 'bold' }
-          }
-        }
-      },
-      scales: {
-        y: {
-          type: 'logarithmic',
-          beginAtZero: false,
-          title: {
-            display: true,
-            text: '발생 건수',
-            color: 'black',
-            font: { size: 14, weight: 'bold' }
-          },
-          ticks: {
-            color: 'black',
-            font: { size: 14, weight: 'bold' }
-          }
-        },
-        x: {
-          type: 'linear',
-          title: {
-            display: true,
-            text: '연(년)도',
-            color: 'black',
-            font: { size: 14, weight: 'bold' }
-          },
-          ticks: {
-            color: 'black',
-            font: { size: 14, weight: 'bold' },
-            callback: val => val
-          }
-        }
-      }
-    }
-  });
-
-  // 범죄별 색상 지정 함수
-  function getColor(crime) {
-    const colorMap = {
-      '살인': 'red',
-      '강간 및 추행': 'purple',
-      '상해 및 폭행': 'orange',
-      '교통 범죄': 'blue',
-      '강도 및 절도': 'green'
-    };
-    return colorMap[crime] || 'gray';
-  }
+document.addEventListener('DOMContentLoaded', () => {
+  initForecastChart();
 });
 
+function initForecastChart() {
+  fetch('<c:url value="/resources/data/crime_forecast.json"/>')
+    .then(res => res.json())
+    .then(data => {
+      const ctx = document.getElementById('forecastChart').getContext('2d');
+      const years = [...new Set(Object.values(data).flatMap(arr => arr.map(d => d.year)))].sort();
+      let chart;
+
+      function updateChart(crimeType) {
+        const real = data[crimeType]?.filter(d => d.type === '실제') || [];
+        const predict = data[crimeType]?.filter(d => d.type === '예측') || [];
+
+        const datasets = [
+          {
+            label: `${crimeType} (실제)`,
+            data: real.map(d => ({ x: d.year, y: d.count })),
+            borderColor: getColor(crimeType),
+            borderWidth: 2,
+            tension: 0.4
+          },
+          {
+            label: `${crimeType} (예측)`,
+            data: predict.map(d => ({ x: d.year, y: d.count })),
+            borderColor: getColor(crimeType),
+            borderDash: [5, 5],
+            borderWidth: 2,
+            tension: 0.4
+          }
+        ];
+
+        if (chart) chart.destroy();
+        chart = new Chart(ctx, {
+          type: 'line',
+          data: { labels: years, datasets },
+          options: {
+            plugins: {
+              title: {
+                display: true,
+                text: `5대 범죄 발생건수 연도별 추이 (2024~2025 예측)`,
+                font: { size: 22, weight: 'bold' },
+                color: 'rgb(0, 51, 153)'
+              },
+              legend: {
+                labels: {
+                  color: 'black',
+                  font: { size: 14, weight: 'bold' }
+                }
+              },
+              tooltip: { enabled: true },
+              datalabels: { display: false }
+            },
+            scales: {
+              y: {
+                type: 'logarithmic',
+                ticks: {
+                  color: 'black',
+                  font: { size: 14, weight: 'bold' }
+                }
+              },
+              x: {
+                type: 'linear',
+                ticks: {
+                  callback: val => val.toString(),
+                  color: 'black',
+                  font: { size: 14, weight: 'bold' }
+                }
+              }
+            }
+          }
+        });
+      }
+
+      function getColor(crime) {
+        const map = {
+          '살인': 'red',
+          '강간 및 추행': 'purple',
+          '상해 및 폭행': 'orange',
+          '교통 범죄': 'blue',
+          '강도 및 절도': 'green'
+        };
+        return map[crime] || 'gray';
+      }
+
+      document.querySelectorAll('.crime-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          const selected = tab.getAttribute('data-crime');
+          updateChart(selected);
+          document.querySelectorAll('.crime-tab').forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+        });
+      });
+
+      updateChart('교통 범죄');
+    });
+}
+
+//------------------ 시간/요일 선형 차트 ------------------ //
+document.addEventListener('DOMContentLoaded', () => {
+  const crimes2 = ['살인', '강간 및 추행', '상해 및 폭행', '교통 범죄', '강도 및 절도'];
+  const labels = ["일", "월", "화", "수", "목", "금", "토"];
+  const colors = [
+    "rgba(255, 99, 132, 1)",
+    "rgba(54, 162, 235, 1)",
+    "rgba(255, 206, 86, 1)",
+    "rgba(75, 192, 192, 1)",
+    "rgba(153, 102, 255, 1)"
+  ];
+
+  const charts = {};
+
+  fetch('<c:url value="/resources/data/crime_time_day.json"/>')
+    .then(res => res.json())
+    .then(data => {
+      crimes2.forEach((crime2, idx) => {
+        const safeCrimeId = crime2.replace(/\s/g, '');
+        const sums = Array(7).fill(0);
+
+        data.forEach(item => {
+          if (item["중분류그룹"] === crime2) {
+            labels.forEach((day, i) => {
+              sums[i] += parseFloat(item[day]) || 0;
+            });
+          }
+        });
+
+        var timechart = "timechart-" + safeCrimeId;
+        const canvas = document.getElementById(timechart);
+
+        if (!canvas) {
+          console.warn(`Canvas element 'timechart-${safeCrimeId}' 가 없습니다.`);
+          return;
+        }
+
+        const isEmpty = sums.every(v => v === 0);
+        if (isEmpty) {
+          canvas.style.display = 'none';
+          return;
+        } else {
+          canvas.style.display = 'block';
+        }
+
+        const ctx = canvas.getContext('2d');
+        if (charts[timechart]) charts[timechart].destroy();
+       
+        charts[timechart] = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels,
+            datasets: [{
+              label: crime2,
+              data: sums,
+              borderColor: colors[idx],
+              backgroundColor: colors[idx].replace('1)', '0.15)'),
+              fill: true,
+              tension: 0.4,
+              borderWidth: 3,
+              pointRadius: 5,
+              pointHoverRadius: 7,
+              pointBackgroundColor: colors[idx],
+              pointBorderColor: "#fff"
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              title: {
+                display: true,
+                text: crime2 ,
+
+                font: { size: 20, weight: 'bold' },
+                color: 'rgb(0, 51, 153)',
+                padding: { top: 5, bottom: 15 }
+              },
+              legend: { display: false },
+              tooltip: {
+            	  enabled: true,
+
+                callbacks: {
+//                   label: ctx => `${ctx.parsed.y.toFixed(1)} 건`
+                }
+              },
+              datalabels: { display: false }
+            },
+            scales: {
+            	  y: {
+            	    beginAtZero: true,
+            	    ticks: {
+            	      color: 'black',
+            	      font: { size: 15, weight: 'bold' }
+            	    },
+            	    grid: {
+            	      color: '#adadad'  // y축 격자선 색상 (연한 검정)
+            	    }
+            	  },
+            	  x: {
+            	    ticks: {
+            	      color: 'black',
+            	      font: { size: 15, weight: 'bold' }
+            	    },
+            	    grid: {
+            	      color: '#adadad'  // x축 격자선 색상
+            	    }
+            	  }
+            	}
+
+          },
+          plugins: [ChartDataLabels]
+        });
+      });
+    });
+});
 </script>
-
-
-
 </body>
 </html>
