@@ -717,7 +717,7 @@ function initForecastChart() {
             borderWidth: 2,
             tension: 0
           }  
-        ];
+        ]; 
 
         if (chart) chart.destroy();
         chart = new Chart(ctx, {
