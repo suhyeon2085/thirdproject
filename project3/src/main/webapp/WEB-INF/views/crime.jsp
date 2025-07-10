@@ -213,11 +213,41 @@
         visibility: visible;
     }
 
+    .tooltip-container:hover .tooltiptext2 {
+        visibility: visible;
+    }
+    
     .info-icon {
         width: 30px;
         height: 30px;
         cursor: pointer;
     }
+    
+    
+    .info-icon2{
+        width: 32px;
+        height: 30px;
+        cursor: pointer;
+    }
+    
+    .tooltiptext2 {
+    visibility: hidden;
+    width: 320px;
+    background-color: white;
+    color: black;
+    text-align: center;
+    border: 1px solid black;
+    border-radius: 2px;
+    padding: 5px;
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    font-size: 14px;
+    margin: 5px;
+	}
+    
 
     /* 경찰 마크 이미지 */
     #police {
@@ -284,7 +314,13 @@
 	      <span class="crime-tab" data-crime="강간 및 추행">강간 및 추행</span>
 	      <span class="crime-tab" data-crime="상해 및 폭행">상해 및 폭행</span>
 	      <span class="crime-tab" data-crime="강도 및 절도">강도 및 절도</span>
+	      
+		  <div class="tooltip-container" style="margin-left: 10px;">
+		  <img src="resources/img/alert.png" alt="알림" class="info-icon2">
+		  <span class="tooltiptext2">2024년 범죄 통계는 관계기관의 집계 일정에 따라 2025년 8월에 공표될 예정이며,<br> 현재 데이터는 제공되지 않습니다.</span>
+		  </div>
 	    </div>
+	    
 	    <canvas id="forecastChart" <%-- width="1100px" height="600px" --%>></canvas>
 	  </div>
 	</div>
@@ -296,6 +332,16 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@4.3.0/dist/chartjs-chart-matrix.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@1.1.0/dist/chartjs-chart-matrix.min.js"></script>
+
+
+
+
+
+
 <script>
 Chart.register(ChartDataLabels);
 
@@ -661,7 +707,7 @@ function initForecastChart() {
             data: real.map(d => ({ x: d.year, y: d.count })),
             borderColor: getColor(crimeType),
             borderWidth: 2,
-            tension: 0.4
+            tension: 0
           },
           {
             label: `${crimeType} (예측)`,
@@ -669,7 +715,7 @@ function initForecastChart() {
             borderColor: getColor(crimeType),
             borderDash: [5, 5],
             borderWidth: 2,
-            tension: 0.4
+            tension: 0
           }
         ];
 
@@ -739,7 +785,12 @@ function initForecastChart() {
     });
 }
 
+
 //------------------ 시간/요일 선형 차트 ------------------ //
+
+
+
+
 document.addEventListener('DOMContentLoaded', () => {
   const crimes2 = ['살인', '강간 및 추행', '상해 및 폭행', '교통 범죄', '강도 및 절도'];
   const labels = ["일", "월", "화", "수", "목", "금", "토"];
@@ -855,6 +906,8 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
 });
-</script>
+
+
+</script> 
 </body>
 </html>
