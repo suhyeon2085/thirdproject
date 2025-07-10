@@ -864,7 +864,7 @@ document.addEventListener('DOMContentLoaded', () => {
               label: crime2,
               data: sums,
               borderColor: colors[idx],
-              backgroundColor: colors[idx].replace('1)', '0.15)'),
+              backgroundColor: colors[idx].replace('1)', '0.30)'),
               fill: true,
               tension: 0.4,
               borderWidth: 3,
