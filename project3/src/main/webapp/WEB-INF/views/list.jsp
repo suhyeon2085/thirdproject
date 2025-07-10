@@ -28,11 +28,27 @@
             width: 70px;
             font-size: 18px;
         }
-        .inp{
+        .inpWrap{
             flex: 0.5;
-            border: none;
             border-bottom: 1px solid gray;
+            box-sizing: border-box;
+        }
+        .inp{
+            box-sizing: border-box;
             padding: 10px;
+            border: none;
+            font-size: 15px;
+            width: 100%;
+        }
+        #pwBox{
+        	position: relative;
+        }
+        .eye-icon {
+            cursor: pointer;
+            position: absolute;
+            bottom: 6px;
+            right: 15px;
+            font-size: 18px;
         }
         #btnBox{
             display: flex;
@@ -54,6 +70,7 @@
         }
         .tTitle{
             background-color: rgb(231, 231, 231);
+            
         }
         td{
             border-bottom: 1px solid black;
@@ -69,6 +86,7 @@
     </style>
     <link rel="stylesheet" type="text/css" href="resources/css/menu.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/menu.jsp" />
@@ -79,17 +97,24 @@
         <div id="row2">
             <div class="infowrap">
                 <span class="cate">이름</span>
-                <input class="inp" type="text" id="name" name="name">
+                <div class="inpWrap">
+                	<input class="inp" type="text" id="name" name="name">
+                </div>
                 <span class="red" id="nameErrMsg"></span>
             </div>
             <div class="infowrap">
                 <span class="cate">전화번호</span>
-                <input class="inp" type="text" id="phone" name="phone">
+                <div class="inpWrap">
+                	<input class="inp" type="text" id="phone" name="phone">
+                </div>
                 <span class="red" id="phoneErrMsg"></span>
             </div>
             <div class="infowrap">
                 <span class="cate">비밀번호</span>
-                <input class="inp" type="password" id="password" name="password">
+                <div class="inpWrap" id="pwBox">
+	                <input class="inp" type="password" id="password" name="password">
+	                <i class="bi bi-eye-slash eye-icon" onclick="togglePassword()"></i>
+                </div>
                 <span class="red" id="passwordErrMsg"></span>
             </div>
             <div id="btnBox">
@@ -114,6 +139,20 @@
         </div>
     </div>
 <script>
+function togglePassword() {
+    const input = document.getElementById("password");
+    const icon = document.querySelector(".eye-icon");
+    if (input.type === "password") {
+        input.type = "text";
+        icon.classList.remove("bi-eye-slash");
+        icon.classList.add("bi-eye");
+    } else {
+        input.type = "password";
+        icon.classList.remove("bi-eye");
+        icon.classList.add("bi-eye-slash");
+    }
+}
+
 	$(document).ready(function(){
 		$("#searchBtn").on("click", function(e) {
 			e.preventDefault();
