@@ -165,7 +165,7 @@
 	  padding: 6px 10px;
 	  border-bottom: 3px solid transparent; 
 	  transition: all 0.3s;
-	  margin-bottom: 10px;  
+	  margin-bottom: 10px;   
 	  background: rgba(255,255,255,0.5);
 	  width: 120px;
 	  height: 25px;
