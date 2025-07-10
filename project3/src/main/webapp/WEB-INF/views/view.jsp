@@ -53,6 +53,7 @@
         #bottomBtn{
         	display: flex;
         	gap: 5px;
+        	justify-content: center;
         }
         .btn{
             padding: 10px 15px;
@@ -61,6 +62,15 @@
             background-color: rgb(231, 231, 231);
             font-size: 15px;
             cursor: pointer;
+            color: whitesmoke;
+        }
+        #update{
+            border: 1px solid rgb(0, 26, 82);
+            background-color: rgb(16, 50, 124);  
+        }
+        #delete{
+            border: 1px solid rgb(80, 4, 4);
+            background-color: rgb(124, 16, 16);
         }
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -71,11 +81,9 @@
     <div id="wrap">
         <div id="row1">
             <span id="pageTitle">신고 조회</span>
-            
-<span id="datetime">
-  <fmt:formatDate value="${createdDate}" pattern="yyyy-MM-dd HH:mm"/>
-</span>
-
+            <span id="datetime">
+			  <fmt:formatDate value="${createdDate}" pattern="yyyy-MM-dd HH:mm"/>
+			</span>
         </div>
         <div id="row2">
         	<input type="hidden" name="id" value="${report.id}" />
@@ -116,15 +124,13 @@
                     <td class="infoT">첨부 파일</td>
                     <td>
                     <c:forEach var="uuid" items="${fn:split(report.storedName, ';')}" varStatus="i">
-        			<c:set var="orig" value="${fn:split(report.origName, ';')[i.index]}" />
-        			
-        			<img src="/image/${uuid}" width="600" height="400" style="object-fit:cover; border:1px solid #ccc;" 
-         				onerror="this.style.display='none';" alt="${orig}" title="${orig}" />
-        			
-        			<a href="/download?uuid=${uuid}&name=${orig}">${orig}</a><br/>
-      </c:forEach>
-      
-      
+	        			<c:set var="orig" value="${fn:split(report.origName, ';')[i.index]}" />
+	        			
+	        			<img src="/image/${uuid}" width="600" height="400" style="object-fit:cover; border:1px solid #ccc;" 
+	         				onerror="this.style.display='none';" alt="${orig}" title="${orig}" />
+	        			
+	        			<a href="/download?uuid=${uuid}&name=${orig}">${orig}</a><br/>
+        			</c:forEach>     
                     </td>
                 </tr>
             </table>
@@ -132,12 +138,12 @@
         <div id="bottomBtn">
             <form action="/modify" method="post">
 			    <input type="hidden" name="id" value="${report.id}" />
-			    <button class="btn">수정</button>
+			    <button class="btn" id="update">수정</button>
 			</form>
             
             <form action="/delete" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?')">
 			  <input type="hidden" name="id" value="${report.id}" />
-			  <button class="btn">삭제</button>
+			  <button class="btn" id="delete">삭제</button>
 			</form>
         </div>
     </div> 
