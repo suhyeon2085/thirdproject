@@ -795,7 +795,7 @@
                 $("#sltErrMsg").html("범죄 유형을 선택해 주십시오.");
                 isValid = false;
             }
-
+  
             if (selectedLocation === "O") {
                 if (siType === "none") {
                     $("#siguErrMsg").html("시/도를 선택해 주십시오.");

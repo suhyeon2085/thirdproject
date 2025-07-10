@@ -113,7 +113,7 @@
 				        </c:if>
 				        <c:if test="${not empty report.gu and fn:trim(report.gu) ne 'none'}">
 				            &nbsp;<c:out value="${report.gu}" />
-				        </c:if>
+				        </c:if>  
 				    </td>
 				</tr>
                 <tr>
