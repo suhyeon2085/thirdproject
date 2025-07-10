@@ -12,6 +12,8 @@ public interface ReportMapper {
     // INSERT
     int insertReport(ReportDTO dto);
     
+    int updateReport(ReportDTO dto);
+    
     int delete(int id);  // ReportMapper 인터페이스
 
     // 이름+전화번호로 개인 조회
@@ -22,4 +24,6 @@ public interface ReportMapper {
 
     // id로 단건 조회
     ReportDTO findById(Integer id);
+
+
 }

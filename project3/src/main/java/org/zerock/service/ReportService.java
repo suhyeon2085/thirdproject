@@ -27,7 +27,9 @@ public class ReportService {
     private static final String UPLOAD_DIR =
             "\\\\Des67\\02-공유폴더\\20250223KDT반\\LiveAir\\image\\";
     
-    
+    public void updateReport(ReportDTO dto) {
+        reportMapper.updateReport(dto);
+    }
     
     
     
@@ -66,4 +68,6 @@ public class ReportService {
         }
         return cnt;          // 1 또는 0
     }
+
+
 }

@@ -39,6 +39,24 @@
     DELETE FROM report WHERE id = #{id}
 </delete>
 
+<update id="updateReport" parameterType="org.zerock.domain.ReportDTO">
+    UPDATE report
+    SET name = #{name},
+        phone = #{phone},
+        crime_type = #{crimeType},
+        location = #{location},
+        content = #{content},
+        password = #{password},
+        si = #{si},
+        gu = #{gu},
+        stored_name = #{storedName},
+        orig_name = #{origName},
+        file_path = #{filePath},
+		created_at = NOW()
+    WHERE id = #{id}
+</update>
+
+
   <!-- 2) 개인 조회 -->
   <select id="findByNameAndPhone" resultMap="reportMap">
     SELECT * FROM report
