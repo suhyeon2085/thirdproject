@@ -709,14 +709,14 @@ function initForecastChart() {
             borderWidth: 2,
             tension: 0
           },
-          {
+          { 
             label: `${crimeType} (예측)`,
             data: predict.map(d => ({ x: d.year, y: d.count })),
             borderColor: getColor(crimeType),
             borderDash: [5, 5],
             borderWidth: 2,
             tension: 0
-          }
+          }  
         ];
 
         if (chart) chart.destroy();
