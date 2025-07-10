@@ -361,6 +361,19 @@
 		// gu 선택 시에도 validate
 		$("#gu").on("change", validateSigu);
 		
+	    const isLocationX = $("input[name='locationYn']:checked").val() === "X";
+	    $("#location, #si, #gu").toggle(!isLocationX);
+
+	    if (isLocationX) {
+	        $("#locationErrMsg, #siguErrMsg").html("");
+	    } else {
+	        if ($("#location").val().trim() === "") {
+	            $("#locationErrMsg").html("상세 위치를 입력해 주십시오.");
+	        }
+	        validateSigu();
+	    }
+		
+		
 		// 위치X면 위치 입력 숨기기
 		$("input[name='locationYn']").on("change", function () {
 		    const isLocationX = $(this).val() === "X";

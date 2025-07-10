@@ -105,13 +105,17 @@
                     <td class="infoT">범죄 유형</td>
                     <td>${report.crimeType}</td>
                 </tr>
-                <tr>
-                    <td class="infoT">위치</td>
-                    <td>
-				    ${report.si}
-				    <c:if test="${not empty report.gu and report.gu ne 'null'}"> ${report.gu}</c:if>
-				  	</td>
-                </tr>
+				<tr>
+				    <td class="infoT">위치</td>
+				    <td>
+				        <c:if test="${not empty report.si and fn:trim(report.si) ne 'none'}">
+				            <c:out value="${report.si}" />
+				        </c:if>
+				        <c:if test="${not empty report.gu and fn:trim(report.gu) ne 'none'}">
+				            &nbsp;<c:out value="${report.gu}" />
+				        </c:if>
+				    </td>
+				</tr>
                 <tr>
                     <td class="infoT">상세 위치</td>
                     <td>${report.location}</td>
