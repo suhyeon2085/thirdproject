@@ -95,17 +95,83 @@ public class ReportController {
         return Map.of("id", id); // { "id": 123 }           // 상세 페이지로 이동
     }
     
+    @PostMapping("/update")
+    @ResponseBody
+    public Map<String, Object> updateReport(@ModelAttribute ReportDTO dto,
+                                            @RequestParam(value = "files", required = false) MultipartFile[] files,
+                                            @RequestParam(value = "removedFiles", required = false) String removedFiles) throws Exception {
+    	
+        System.out.println("수정 id: " + dto.getId());
+        System.out.println("삭제할 파일들: " + removedFiles);
+    	
+    	
+        String uploadDir = "\\\\Des67\\02-공유폴더\\20250223KDT반\\LiveAir\\image\\";
+        File dir = new File(uploadDir);
+        if (!dir.exists()) dir.mkdirs();
+
+        // 1) 삭제할 파일 처리
+        if (removedFiles != null && !removedFiles.isBlank()) {
+            for (String uuid : removedFiles.split(";")) {
+                File file = new File(uploadDir, uuid);
+                if (file.exists()) file.delete();
+            }
+        }
+
+        // 2) 새 파일 처리
+        StringBuilder storedNames = new StringBuilder();
+        StringBuilder origNames = new StringBuilder();
+        StringBuilder filePaths = new StringBuilder();
+
+        if (files != null) {
+            for (MultipartFile file : files) {
+                if (file.isEmpty()) continue;
+
+                String originalFilename = file.getOriginalFilename();
+                String ext = "";
+                int dotIdx = originalFilename.lastIndexOf('.');
+                if (dotIdx != -1) ext = originalFilename.substring(dotIdx);
+
+                String storedFilename = java.util.UUID.randomUUID() + ext;
+                File dest = new File(uploadDir, storedFilename);
+                file.transferTo(dest);
+
+                storedNames.append(storedFilename).append(';');
+                origNames.append(originalFilename).append(';');
+                filePaths.append(dest.getAbsolutePath()).append(';');
+            }
+        }
+
+        // 기존 파일과 합칠 수도 있음 (선택사항)
+
+        // 마지막 ; 제거
+        if (storedNames.length() > 0) storedNames.setLength(storedNames.length() - 1);
+        if (origNames.length() > 0) origNames.setLength(origNames.length() - 1);
+        if (filePaths.length() > 0) filePaths.setLength(filePaths.length() - 1);
+
+        dto.setStoredName(storedNames.toString());
+        dto.setOrigName(origNames.toString());
+        dto.setFilePath(filePaths.toString());
+
+        // 3) DB 업데이트
+        reportService.updateReport(dto);
+
+        // 4) 응답
+        return Map.of("id", dto.getId());  // 수정 후 view로 이동하기 위한 ID 반환
+    }
+    
+    
+    
     @GetMapping("/view")
     public String view(@RequestParam("id") Integer id, Model model) {
 
         // 1) 상세 가져오기
-        ReportDTO dto = reportService.getReport(id);
-        model.addAttribute("report", dto);   // 기존 그대로
+        ReportDTO report = reportService.getReport(id);
+        model.addAttribute("report", report);   // 기존 그대로
 
         // 2) LocalDateTime → Date 변환해서 별도 전달
-        if (dto.getCreatedAt() != null) {
+        if (report.getCreatedAt() != null) {
             Date createdDate = Date.from(
-                    dto.getCreatedAt()
+                    report.getCreatedAt()
                        .atZone(ZoneId.systemDefault())
                        .toInstant());
             model.addAttribute("createdDate", createdDate);
@@ -125,7 +191,7 @@ public class ReportController {
     @PostMapping("/modify")
     public String modifyPost(@RequestParam("id") int id, Model model) {
         ReportDTO report = reportService.getReport(id); // DB 조회
-        model.addAttribute("dto", report);
+        model.addAttribute("report", report);
         return "modify";
     }
     
