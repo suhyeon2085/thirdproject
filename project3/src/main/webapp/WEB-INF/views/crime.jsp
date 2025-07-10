@@ -163,7 +163,7 @@
 	  font-size: 18px;
 	  color: rgb(0, 51, 153);
 	  padding: 6px 10px;
-	  border-bottom: 3px solid transparent;
+	  border-bottom: 3px solid transparent; 
 	  transition: all 0.3s;
 	  margin-bottom: 10px;
 	  background: rgba(255,255,255,0.5);
