@@ -291,7 +291,7 @@
             <canvas id="barChart"></canvas>
         </div>
     </div>
-
+ 
     <!-- 시간/요일별 통계 영역 -->
 	<div id="time">
 	<span class="time_day">요일별 5대 범죄 발생율 추이</span>
