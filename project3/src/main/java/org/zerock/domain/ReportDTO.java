@@ -30,4 +30,6 @@ public class ReportDTO {
     
     private String si;  // 시/도
     private String gu;	// 시/군/구
+    
+    private String locationYn;
 }

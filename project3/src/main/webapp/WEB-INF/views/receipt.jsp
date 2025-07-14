@@ -790,6 +790,11 @@ function togglePassword() {
                     $("#locationErrMsg").html("상세 위치를 입력해 주십시오.");
                     isValid = false;
                 }
+            } else if (selectedLocation === "X") {
+                // locationYn 이 X라면, 위치 관련 값들을 비움
+                $("#si").val("none");
+                $("#gu").val("none");
+                $("#location").val("");
             }
 
             if (content.length < 10) {
@@ -811,6 +816,7 @@ function togglePassword() {
             
             formData.append("si", siType);
             formData.append("gu", guType);
+            formData.append("locationYn", selectedLocation);
 
             for (let i = 0; i < selectedFiles.length; i++) {
                 formData.append("files", selectedFiles[i]); // input name="files"에 맞춤

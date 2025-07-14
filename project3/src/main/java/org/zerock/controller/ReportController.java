@@ -56,6 +56,13 @@ public class ReportController {
     @ResponseBody               // JSON 직렬화
     public Map<String, Object> submitReport(@ModelAttribute ReportDTO dto,
                                             @RequestParam("files") MultipartFile[] files) throws Exception {
+    	
+    	// locationYn 이 X일 때 location/si/gu 무시
+        if ("X".equals(dto.getLocationYn())) {
+            dto.setLocation(null);
+            dto.setSi(null);
+            dto.setGu(null);
+        }
 
         String uploadDir = "\\\\Des67\\02-공유폴더\\20250223KDT반\\LiveAir\\image\\";
         File dir = new File(uploadDir);
@@ -109,6 +116,13 @@ public class ReportController {
 	
 	        System.out.println("수정 id: " + dto.getId());
 	        System.out.println("삭제할 파일들(원본명): " + removedFiles);
+	        
+	        // locationYn 이 X일 때 location/si/gu 무시
+	        if ("X".equals(dto.getLocationYn())) {
+	            dto.setLocation(null);
+	            dto.setSi(null);
+	            dto.setGu(null);
+	        }
 	
 	        String uploadDir = "\\\\Des67\\02-공유폴더\\20250223KDT반\\LiveAir\\image\\";
 	        File dir = new File(uploadDir);
