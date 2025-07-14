@@ -172,7 +172,7 @@
             </div>
         </div>
         <div id="row2">
-            <form id="reportForm">
+            <form id="reportForm" action="/update" method="post" enctype="multipart/form-data">
             	<input type="hidden" id="id" name="id" value="${report.id}">
                 <div class="infoT">
                     <p class="title">신고인 기본 정보</p>
@@ -261,27 +261,37 @@
                         <span class="red" id="contentErrMsg"></span>
                     </div>
                 </div>
-                 <div class="infowrap">
-                    <p class="cate">첨부 파일</p>
-                    <div id="fileWrapper">
-                        <div id="filename"></div>
-                        <input type="file" id="filePath" name="files" style="display: none;" multiple>
-                        <button type="button" id="addFileBtn">추가</button>
-                    </div>
-                    <div id="existingFiles">
-			            <c:if test="${not empty report.filePath}">
-			                <c:forEach var="fileName" items="${fn:split(report.filePath, ';')}">
-			                    <div class="file-item old-file">
-			                        ${fileName}
-			                        <i class="bi bi-x-square old-file-remove" data-filename="${fileName}" style="cursor:pointer;"></i>
-			                    </div>
-			                </c:forEach>
-			            </c:if>
-			        </div>
-                    <div id="files"></div>
-                    <!-- 삭제된 기존 파일 이름들 담기 -->
-    				<input type="hidden" id="removedFiles" name="removedFiles" value="">
-                </div>
+				<div class="infowrap">
+				    <p class="cate">첨부 파일</p>
+				
+				    <div id="fileWrapper">
+				        <div id="filename"></div>
+				        <input type="file" id="filePath" name="files" style="display: none;" multiple>
+				        <button type="button" id="addFileBtn">추가</button>
+				    </div>
+				
+				    <!-- 기존 파일 보여주기 -->
+				    <div id="existingFiles">
+				        <c:if test="${not empty report.filePath}">
+				            <c:forEach var="uuid" items="${fn:split(report.storedName, ';')}" varStatus="i">
+				                <c:set var="orig" value="${fn:split(report.origName, ';')[i.index]}" />
+				                <div class="file-item old-file">
+				                    ${orig}
+				                    <i class="bi bi-x-square old-file-remove" data-filename="${orig}" style="cursor:pointer;"></i>
+				                </div>
+				            </c:forEach>
+				            <!-- 기존 파일 정보 hidden으로 보냄 -->
+				            <input type="hidden" id="existingStoredNames" name="existingStoredNames" value="${report.storedName}" />
+				            <input type="hidden" id="existingOrigNames" name="existingOrigNames" value="${report.origName}" />
+				        </c:if>
+				    </div>
+				
+				    <!-- 새로 추가될 파일 표시 영역 -->
+				    <div id="files"></div>
+				
+				    <!-- 삭제된 기존 파일 이름들 담기 -->
+				    <input type="hidden" id="removedFiles" name="removedFiles" value="">
+				</div>
                 <div id="submitBtn">
                     <button type="button" id="submitReportBtn">제출</button>
                 </div>
@@ -797,6 +807,11 @@ function togglePassword() {
             const guType = $("#gu").val();
             const locationValue = $("#location").val().trim();
             const content = $("#content").val().trim();
+            
+            const remainingOldFiles = [];
+            $("#existingFiles .old-file-remove").each(function () {
+                remainingOldFiles.push($(this).data("filename"));
+            });
 
             // 에러 초기화
             $("#nameErrMsg, #phoneErrMsg, #passwordErrMsg, #sltErrMsg, #locationErrMsg, #siguErrMsg, #contentErrMsg").html("");
@@ -855,6 +870,8 @@ function togglePassword() {
             formData.append("location", locationValue);
             formData.append("content", content);
             formData.append("removedFiles", $("#removedFiles").val());
+            
+            formData.append("remainingOldFiles", remainingOldFiles.join(";"));
             
  			formData.append("password", password); 
             

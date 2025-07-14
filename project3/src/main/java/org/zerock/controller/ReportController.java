@@ -3,9 +3,11 @@ package org.zerock.controller;
 import java.io.File;
 import java.io.IOException;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
-
+import java.util.UUID;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -95,69 +97,78 @@ public class ReportController {
         return Map.of("id", id); // { "id": 123 }           // 상세 페이지로 이동
     }
     
-    @PostMapping("/update")
-    @ResponseBody
-    public Map<String, Object> updateReport(@ModelAttribute ReportDTO dto,
-                                            @RequestParam(value = "files", required = false) MultipartFile[] files,
-                                            @RequestParam(value = "removedFiles", required = false) String removedFiles) throws Exception {
-    	
-        System.out.println("수정 id: " + dto.getId());
-        System.out.println("삭제할 파일들: " + removedFiles);
-    	
-    	
-        String uploadDir = "\\\\Des67\\02-공유폴더\\20250223KDT반\\LiveAir\\image\\";
-        File dir = new File(uploadDir);
-        if (!dir.exists()) dir.mkdirs();
-
-        // 1) 삭제할 파일 처리
-        if (removedFiles != null && !removedFiles.isBlank()) {
-            for (String uuid : removedFiles.split(";")) {
-                File file = new File(uploadDir, uuid);
-                if (file.exists()) file.delete();
-            }
-        }
-
-        // 2) 새 파일 처리
-        StringBuilder storedNames = new StringBuilder();
-        StringBuilder origNames = new StringBuilder();
-        StringBuilder filePaths = new StringBuilder();
-
-        if (files != null) {
-            for (MultipartFile file : files) {
-                if (file.isEmpty()) continue;
-
-                String originalFilename = file.getOriginalFilename();
-                String ext = "";
-                int dotIdx = originalFilename.lastIndexOf('.');
-                if (dotIdx != -1) ext = originalFilename.substring(dotIdx);
-
-                String storedFilename = java.util.UUID.randomUUID() + ext;
-                File dest = new File(uploadDir, storedFilename);
-                file.transferTo(dest);
-
-                storedNames.append(storedFilename).append(';');
-                origNames.append(originalFilename).append(';');
-                filePaths.append(dest.getAbsolutePath()).append(';');
-            }
-        }
-
-        // 기존 파일과 합칠 수도 있음 (선택사항)
-
-        // 마지막 ; 제거
-        if (storedNames.length() > 0) storedNames.setLength(storedNames.length() - 1);
-        if (origNames.length() > 0) origNames.setLength(origNames.length() - 1);
-        if (filePaths.length() > 0) filePaths.setLength(filePaths.length() - 1);
-
-        dto.setStoredName(storedNames.toString());
-        dto.setOrigName(origNames.toString());
-        dto.setFilePath(filePaths.toString());
-
-        // 3) DB 업데이트
-        reportService.updateReport(dto);
-
-        // 4) 응답
-        return Map.of("id", dto.getId());  // 수정 후 view로 이동하기 위한 ID 반환
-    }
+	    @PostMapping("/update")
+	    @ResponseBody
+	    public Map<String, Object> updateReport(@ModelAttribute ReportDTO dto,
+	                                            @RequestParam(value = "files", required = false) MultipartFile[] files,
+	                                            @RequestParam(value = "removedFiles", required = false) String removedFiles,
+	                                            @RequestParam(value = "existingStoredNames", required = false) String existingStoredNames,
+	                                            @RequestParam(value = "existingOrigNames", required = false) String existingOrigNames) throws Exception {
+	
+	        System.out.println("수정 id: " + dto.getId());
+	        System.out.println("삭제할 파일들(원본명): " + removedFiles);
+	
+	        String uploadDir = "\\\\Des67\\02-공유폴더\\20250223KDT반\\LiveAir\\image\\";
+	        File dir = new File(uploadDir);
+	        if (!dir.exists()) dir.mkdirs();
+	
+	        // 기존 파일 유지 리스트
+	        List<String> remainStoredList = new ArrayList<>();
+	        List<String> remainOrigList = new ArrayList<>();
+	        List<String> remainPathList = new ArrayList<>();
+	
+	        // 삭제할 파일이 아닌 것만 남김
+	        if (existingStoredNames != null && existingOrigNames != null) {
+	            String[] storedArr = existingStoredNames.split(";");
+	            String[] origArr = existingOrigNames.split(";");
+	
+	            for (int i = 0; i < storedArr.length; i++) {
+	                String orig = origArr[i];
+	                String stored = storedArr[i];
+	
+	                // 삭제할 파일 이름이 아니면 유지
+	                if (removedFiles == null || !removedFiles.contains(orig)) {
+	                    remainStoredList.add(stored);
+	                    remainOrigList.add(orig);
+	                    remainPathList.add(uploadDir + stored);
+	                } else {
+	                    // 삭제 대상 파일은 실제 삭제
+	                    File file = new File(uploadDir, stored);
+	                    if (file.exists()) file.delete();
+	                }
+	            }
+	        }
+	
+	        // 새로 업로드된 파일 처리
+	        if (files != null) {
+	            for (MultipartFile file : files) {
+	                if (file.isEmpty()) continue;
+	
+	                String originalFilename = file.getOriginalFilename();
+	                String ext = "";
+	                int dotIdx = originalFilename.lastIndexOf('.');
+	                if (dotIdx != -1) ext = originalFilename.substring(dotIdx);
+	
+	                String storedFilename = UUID.randomUUID() + ext;
+	                File dest = new File(uploadDir, storedFilename);
+	                file.transferTo(dest);
+	
+	                remainStoredList.add(storedFilename);
+	                remainOrigList.add(originalFilename);
+	                remainPathList.add(dest.getAbsolutePath());
+	            }
+	        }
+	
+	        // DTO에 최종 파일 목록 설정
+	        dto.setStoredName(String.join(";", remainStoredList));
+	        dto.setOrigName(String.join(";", remainOrigList));
+	        dto.setFilePath(String.join(";", remainPathList));
+	
+	        // DB 업데이트
+	        reportService.updateReport(dto);
+	
+	        return Map.of("id", dto.getId());
+	    }
     
     
     

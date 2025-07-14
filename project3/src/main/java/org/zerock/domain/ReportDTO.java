@@ -14,6 +14,8 @@ public class ReportDTO {
     private String  filePath;     // 첨부파일 실제 경로
     private LocalDateTime createdAt; // 작성 일시
     
+    
+    
     private String storedName; // UUID로 변환된 실제 저장 파일명들
     private String origName;   // 사용자가 올린 원본 이름들   
     
