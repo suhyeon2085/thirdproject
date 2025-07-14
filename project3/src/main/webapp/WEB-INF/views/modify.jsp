@@ -808,10 +808,6 @@ function togglePassword() {
             const locationValue = $("#location").val().trim();
             const content = $("#content").val().trim();
             
-            const remainingOldFiles = [];
-            $("#existingFiles .old-file-remove").each(function () {
-                remainingOldFiles.push($(this).data("filename"));
-            });
 
             // 에러 초기화
             $("#nameErrMsg, #phoneErrMsg, #passwordErrMsg, #sltErrMsg, #locationErrMsg, #siguErrMsg, #contentErrMsg").html("");
@@ -871,8 +867,12 @@ function togglePassword() {
             formData.append("content", content);
             formData.append("removedFiles", $("#removedFiles").val());
             
-            formData.append("remainingOldFiles", remainingOldFiles.join(";"));
-            
+            const existingStoredNames = $("#existingStoredNames").val();
+            const existingOrigNames = $("#existingOrigNames").val();
+
+            formData.append("existingStoredNames", existingStoredNames);
+            formData.append("existingOrigNames", existingOrigNames);
+
  			formData.append("password", password); 
             
             formData.append("si", siType);
