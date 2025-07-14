@@ -152,7 +152,7 @@ function togglePassword() {
         icon.classList.add("bi-eye-slash");
     }
 }
-
+/*
 function formatDate(createdAtObj) {
     const y = createdAtObj.year;
     const m = String(createdAtObj.month).padStart(2, '0');
@@ -160,7 +160,7 @@ function formatDate(createdAtObj) {
     const h = String(createdAtObj.hour).padStart(2, '0');
     const min = String(createdAtObj.minute).padStart(2, '0');
     return `${y}-${m}-${d} ${h}:${min}`;
-}
+}*/
 
 	$(document).ready(function(){
 		$("#searchBtn").on("click", function(e) {
@@ -215,33 +215,6 @@ function formatDate(createdAtObj) {
             
             if (!isValid) return;
             
-            /*$.ajax({
-                url: "${pageContext.request.contextPath}/report/search",
-                type: "get",
-                data: { name: name, phone: phone },
-                dataType: "json",
-                success: function(data) {
-                    var $tbody = $("#reportTableBody");
-                    $tbody.empty(); // 기존 내용 제거
-
-                    if (data.length === 0) {
-                        $tbody.append("<tr><td colspan='4' align='center'>등록된 신고 내용이 없습니다.</td></tr>");
-                    } else {
-                        $.each(data, function(index, report) {
-                            var row = "<tr>" +
-                                "<td>" + (index + 1) + "</td>" +
-                                "<td>" + report.crimeType + "</td>" +
-                                "<td>" + (report.confirmYn === 'Y' ? "확인됨" : report.confirmYn === 'C'? "전화 필요" : "미확인") + "</td>" +
-                                "<td>" + report.createdAt + "</td>" +
-                                "</tr>";
-                            $tbody.append(row);
-                        });
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error("오류 발생:", error);
-                }
-            });*/
             
             $.ajax({
                 url: "${pageContext.request.contextPath}/search",
@@ -260,12 +233,12 @@ function formatDate(createdAtObj) {
                         $tbody.append("<tr><td colspan='4' align='center'>등록된 신고 내용이 없습니다.</td></tr>");
                     } else {
                         $.each(data, function(index, report) {
-                        	const formattedDate = formatDate(report.createdAt);
+                        	var dateOnly = report.createdAt.substring(0, 10); // 앞의 10글자: "2025-07-14"
                             var row = "<tr>" +
                                 "<td>" + (index + 1) + "</td>" +
                                 "<td><a href='${pageContext.request.contextPath}/view?id=" + report.id + "'>" + report.crimeType + "</a></td>" +
-                                "<td>" + (report.state === 'Y' ? "확인됨" : report.state === 'C'? "전화 필요" : "미확인") + "</td>" +
-                                "<td>" + formattedDate + "</td>" +
+                                "<td>" + (report.state === '확인완료' ? "확인완료" : report.state === '확인필요'? "확인필요" : "미확인") + "</td>" +
+                                "<td>" + dateOnly + "</td>" +
                                 "</tr>";
                             $tbody.append(row);
                         });
