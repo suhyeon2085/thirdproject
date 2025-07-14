@@ -323,7 +323,7 @@ function togglePassword() {
 	    $('input[name="locationYn"][value="' + beforeLocValue + '"]').prop("checked", true);*/
 	    
 	    const beforeSiValue = "${report.si}";
-	    $("#si").val(beforeSiValue);
+	    $("#si").val(beforeSiValue || "none");
 	    
 	    
 	 	// 숫자만 입력되도록 처리 및 에러 제거
@@ -735,7 +735,7 @@ function togglePassword() {
         updateGu();
         
 	    const beforeGuValue = "${report.gu}";
-	    $("#gu").val(beforeGuValue);
+	    $("#gu").val(beforeGuValue || "none");
         
      	// 기존 파일 제거 시
         $(document).on("click", ".old-file-remove", function () {

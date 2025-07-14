@@ -157,7 +157,7 @@
 <script>
 $(document).ready(function(){
     // 기본 상태 설정
-    //updateState('확인전');
+    //updateState('미확인');
 
     $('#confirm').on('click', function(){
         changeStateOnServer('확인완료');
