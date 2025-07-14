@@ -4,6 +4,7 @@ package org.zerock.mapper;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.zerock.domain.ReportDTO;
 
 @Mapper      // 또는 @Repository + @MapperScan 사용
@@ -24,6 +25,10 @@ public interface ReportMapper {
 
     // id로 단건 조회
     ReportDTO findById(Integer id);
+
+    boolean existsByNamePhonePassword(@Param("name") String name, 
+            @Param("phone") String phone,
+            @Param("password") String password);
 
 
 }

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import java.nio.file.StandardOpenOption;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
@@ -179,14 +181,14 @@ public class ReportController {
         ReportDTO report = reportService.getReport(id);
         model.addAttribute("report", report);   // 기존 그대로
 
-        // 2) LocalDateTime → Date 변환해서 별도 전달
-        if (report.getCreatedAt() != null) {
-            Date createdDate = Date.from(
-                    report.getCreatedAt()
-                       .atZone(ZoneId.systemDefault())
-                       .toInstant());
-            model.addAttribute("createdDate", createdDate);
-        }
+//        // 2) LocalDateTime → Date 변환해서 별도 전달
+//        if (report.getCreatedAt() != null) {
+//            Date createdDate = Date.from(
+//                    report.getCreatedAt()
+//                       .atZone(ZoneId.systemDefault())
+//                       .toInstant());
+//            model.addAttribute("createdDate", createdDate);
+//        }
 
         return "view";
     }
@@ -198,6 +200,23 @@ public class ReportController {
         
         return "/list";
     }
+    
+    @GetMapping("/search")
+    public ResponseEntity<?> searchReports(
+            @RequestParam String name,
+            @RequestParam String phone,
+            @RequestParam String password) {
+
+        boolean validUser = reportService.checkUser(name, phone, password);
+
+        if (!validUser) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 올바르지 않습니다.");
+        }
+
+        List<ReportDTO> reports = reportService.getMyReports(name, phone);
+        return ResponseEntity.ok(reports);
+    }
+
     
     @PostMapping("/modify")
     public String modifyPost(@RequestParam("id") int id, Model model) {

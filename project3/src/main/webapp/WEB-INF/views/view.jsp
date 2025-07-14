@@ -82,7 +82,7 @@
         <div id="row1">
             <span id="pageTitle">신고 조회</span>
             <span id="datetime">
-			  <fmt:formatDate value="${createdDate}" pattern="yyyy-MM-dd HH:mm"/>
+			  <fmt:formatDate value="${report.createdAt}" pattern="yyyy-MM-dd HH:mm"/>
 			</span>
         </div>
         <div id="row2">

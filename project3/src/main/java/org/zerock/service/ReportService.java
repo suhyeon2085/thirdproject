@@ -70,4 +70,13 @@ public class ReportService {
     }
 
 
+
+
+
+    public boolean checkUser(String name, String phone, String password) {
+        // 예시 : 해당 이름, 전화번호, 비밀번호가 일치하는 신고글이 존재하는지 확인
+        return reportMapper.existsByNamePhonePassword(name, phone, password);
+    }
+
+
 }

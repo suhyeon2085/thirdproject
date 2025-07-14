@@ -153,6 +153,15 @@ function togglePassword() {
     }
 }
 
+function formatDate(createdAtObj) {
+    const y = createdAtObj.year;
+    const m = String(createdAtObj.month).padStart(2, '0');
+    const d = String(createdAtObj.day).padStart(2, '0');
+    const h = String(createdAtObj.hour).padStart(2, '0');
+    const min = String(createdAtObj.minute).padStart(2, '0');
+    return `${y}-${m}-${d} ${h}:${min}`;
+}
+
 	$(document).ready(function(){
 		$("#searchBtn").on("click", function(e) {
 			e.preventDefault();
@@ -233,6 +242,43 @@ function togglePassword() {
                     console.error("오류 발생:", error);
                 }
             });*/
+            
+            $.ajax({
+                url: "${pageContext.request.contextPath}/search",
+                type: "get",
+                data: { 
+                    name: name, 
+                    phone: phone,
+                    password: password
+                },
+                dataType: "json",
+                success: function(data) {
+                    var $tbody = $("#reportTableBody");
+                    $tbody.empty();
+
+                    if (data.length === 0) {
+                        $tbody.append("<tr><td colspan='4' align='center'>등록된 신고 내용이 없습니다.</td></tr>");
+                    } else {
+                        $.each(data, function(index, report) {
+                        	const formattedDate = formatDate(report.createdAt);
+                            var row = "<tr>" +
+                                "<td>" + (index + 1) + "</td>" +
+                                "<td><a href='${pageContext.request.contextPath}/view?id=" + report.id + "'>" + report.crimeType + "</a></td>" +
+                                "<td>" + (report.state === 'Y' ? "확인됨" : report.state === 'C'? "전화 필요" : "미확인") + "</td>" +
+                                "<td>" + formattedDate + "</td>" +
+                                "</tr>";
+                            $tbody.append(row);
+                        });
+                    }
+                },
+                error: function(xhr) {
+                    if(xhr.status === 401){
+                        alert("비밀번호가 올바르지 않습니다.");
+                    } else {
+                        alert("조회 중 오류가 발생했습니다.");
+                    }
+                }
+            });
 		});
 	})
 </script>
