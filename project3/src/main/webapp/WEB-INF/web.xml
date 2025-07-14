@@ -25,8 +25,8 @@
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 		
-		<multipart-config>
-			<location>C:\upload\temp</location>	
+				<multipart-config>
+			<location>\\Des67\02-공유폴더\20250223KDT반\LiveAir\image</location>	
 	        <!-- 단일 파일/전체 요청 제한 (byte) -->
 	        <max-file-size>52428800</max-file-size>
 	        <max-request-size>52428800</max-request-size>
