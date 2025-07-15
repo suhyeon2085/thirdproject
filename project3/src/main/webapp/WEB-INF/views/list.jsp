@@ -70,13 +70,19 @@
         }
         .tTitle{
             background-color: rgb(231, 231, 231);
-            
+            word-break: keep-all; /* 단어 단위로 줄바꿈 */
+            white-space: normal; /* 기본 줄바꿈 허용 */
+            overflow-wrap: break-word; /* 긴 단어가 있으면 자동 줄바꿈 */
+            text-align: center;
         }
         td{
             border-bottom: 1px solid black;
             padding: 10px;
             box-sizing: border-box;
             text-align: center;
+            word-break: keep-all; /* 단어 단위로 줄바꿈 */
+            white-space: normal; /* 기본 줄바꿈 허용 */
+            overflow-wrap: break-word; /* 긴 단어가 있으면 자동 줄바꿈 */
         }
         .red{
             color: red;
@@ -86,6 +92,33 @@
         a{
         	color: black;
         }
+        @media screen and (max-width: 1080px){
+        	#wrap{
+                padding: 5% 15%;
+            }
+            .infowrap{
+            	gap: 15px;
+            }
+		    .cate {
+		        flex: 0 0 auto;
+		        margin-right: 10px; /* 약간 간격 */
+		    }
+		    .inpWrap {
+		        flex: 1 1 auto;     /* 공간 채움 */
+		    }
+		    .red {
+		        flex: 0 0 100%;         /* 무조건 새 줄로 */
+		        order: 2;               /* 항상 마지막에 배치 */
+		    }
+        }
+        @media screen and (max-width: 480px){
+		    #wrap{
+                padding: 5% 10%;
+            }
+            .infowrap{
+                display: block;
+            }            
+		}
     </style>
     <link rel="stylesheet" type="text/css" href="resources/css/menu.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>

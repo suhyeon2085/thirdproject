@@ -42,6 +42,9 @@
         td{
             border: 1px solid black;
             padding: 10px;
+            word-break: keep-all; /* 단어 단위로 줄바꿈 */
+            white-space: normal; /* 기본 줄바꿈 허용 */
+            overflow-wrap: break-word; /* 긴 단어가 있으면 자동 줄바꿈 */
         }
         .infoT{
             background-color: rgb(231, 231, 231);
@@ -54,6 +57,12 @@
         	display: flex;
         	gap: 5px;
         	justify-content: center;
+        }
+        .fileimg{
+        	object-fit: cover;
+        	border: 1px solid #ccc;
+			width: 100%;
+			height: auto;
         }
         .btn{
             padding: 10px 15px;
@@ -72,6 +81,17 @@
             border: 1px solid rgb(80, 4, 4);
             background-color: rgb(124, 16, 16);
         }
+        @media screen and (max-width: 1080px){
+        	#wrap{
+                padding: 5% 15%;
+            }
+        }
+        @media screen and (max-width: 480px){
+		    #wrap{
+                padding: 5% 10%;
+            }
+		}
+		
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="resources/css/menu.css">
@@ -90,12 +110,14 @@
         	<span id="stateTxt">확인 상태: </span><input type="text" name="state" id="state" value="">
             <p class="title">| 신고인 기본 정보</p>
             <table>
-                <tr>
-                    <td class="infoT">이름</td>
-                    <td>${report.name}</td>
-                    <td class="infoT">전화번호</td>
-                    <td>${report.phone}</td>
-                </tr>
+                <tbody id="infoTable">
+			        <tr>
+			            <td class="infoT">이름</td>
+			            <td id="name">${report.name}</td>
+			            <td class="infoT">전화번호</td>
+			            <td id="phone">${report.phone}</td>
+			        </tr>
+			    </tbody>
             </table>
         </div>
         <div id="row3">
@@ -154,7 +176,7 @@
 					        <c:forEach var="uuid" items="${fn:split(report.storedName, ';')}" varStatus="i">
 					            <c:set var="orig" value="${fn:split(report.origName, ';')[i.index]}" />
 					            
-					            <img src="/image/${uuid}" width="600" height="400" style="object-fit:cover; border:1px solid #ccc;" 
+					            <img class="fileimg" src="/image/${uuid}" 
 					                onerror="this.style.display='none';" alt="${orig}" title="${orig}" />
 					            
 					            <a href="/download?uuid=${uuid}&name=${orig}">${orig}</a><br/>
@@ -175,6 +197,50 @@
 			  <button class="btn" id="delete">삭제</button>
 			</form>
         </div>
-    </div> 
+    </div>
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		// 전화번호 형식
+	    const phoneElement = document.getElementById("phone");
+	    const phoneRaw = phoneElement.textContent.trim();
+	    if (phoneRaw.length === 11) {
+	        phoneElement.textContent = phoneRaw.slice(0, 3) + '-' + phoneRaw.slice(3, 7) + '-' + phoneRaw.slice(7);
+	    }
+	    
+	    const tableBody = document.getElementById("infoTable");
+	    const originalHTML = tableBody.innerHTML;  // 원래 구조 저장
+	    
+	    function restructureTable() {
+	        const tableBody = document.getElementById("infoTable");
+	        if (window.innerWidth <= 480) {
+	            if (tableBody.dataset.modified !== "true") {
+	                // 기존 셀에서 값을 가져와서 사용
+	                const name = document.getElementById("name").textContent.trim();
+	                const phone = phoneElement.textContent.trim();
+
+	                tableBody.innerHTML = `
+	                    <tr>
+	                        <td class="infoT">이름</td>
+	                        <td>\${name}</td>
+	                    </tr>
+	                    <tr>
+	                        <td class="infoT">전화번호</td>
+	                        <td>\${phone}</td>
+	                    </tr>
+	                `;
+	                tableBody.dataset.modified = "true";
+	            }
+	        } else {
+	            if (tableBody.dataset.modified === "true") {
+	                tableBody.innerHTML = originalHTML;
+	                tableBody.dataset.modified = "false";
+	            }
+	        }
+	    }
+
+	    restructureTable(); // 첫 로드 시 실행
+	    window.addEventListener("resize", restructureTable); // 화면 크기 변경 시 실행
+	});
+</script>
 </body>
 </html>
