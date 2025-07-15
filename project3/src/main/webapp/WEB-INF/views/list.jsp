@@ -238,7 +238,7 @@ function formatDate(createdAtObj) {
                         $.each(data, function(index, report) {
                         	var dateOnly = report.createdAt.substring(0, 10); // 앞의 10글자: "2025-07-14"
                             var row = "<tr>" +
-                                "<td>" + (index + 1) + "</td>" +
+                            	"<td>" + (data.length - index) + "</td>" +
                                 "<td><a href='${pageContext.request.contextPath}/view?id=" + report.id + "'>" + report.crimeType + "</a></td>" +
                                 "<td>" + (report.state === '확인완료' ? "확인완료" : report.state === '확인필요'? "확인필요" : "미확인") + "</td>" +
                                 "<td>" + dateOnly + "</td>" +

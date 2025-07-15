@@ -52,8 +52,7 @@
         gu = #{gu},
         stored_name = #{storedName},
         orig_name = #{origName},
-        file_path = #{filePath},
-		created_at = NOW()
+        file_path = #{filePath}
     WHERE id = #{id}
 </update>
 
