@@ -49,6 +49,72 @@
         gap: 20px;
         overflow: visible; /* 차트 잘림 방지 */
     }
+    
+	#location {
+	  display: flex;
+	  justify-content: space-between;;
+	  align-items: center;
+	  gap: 1px;  /* 차트 사이 간격 */
+	  width: 100%;
+	  height: 600px;
+	  border: 3px solid rgb(255, 204, 0);
+	  background: rgb(245, 247, 250);
+	  box-sizing: border-box;
+	/*   padding-top: 50px; */
+	  position: relative;
+	  text-align: center; /* span을 중앙에 정렬 */
+	}
+	
+	
+	#stacked {
+	  flex: 2;           /* 기존 3 → 2 (너비 줄임) */
+	  max-width: 40%;    /* 기존 60% → 40% */
+	  height: 100%;
+	  display: flex;
+	  justify-content: center;
+	  align-items: center;
+	}
+	
+	#radar {
+	  flex: 3;           /* 기존 2 → 3 (너비 늘림) */
+	  max-width: 60%;    /* 기존 40% → 60% */
+	  height: 120%;      /* 기존 100% → 120% (높이 늘림) */
+	  display: flex;
+	  justify-content: center;
+	  align-items: center;
+	}
+	
+	
+	#stacked canvas{
+	  width: 100% !important;
+	  height: auto !important;
+	  max-height: 100%;
+	}
+	
+	#crimeTopChart canvas {
+	  width: 100% !important;
+	  height: auto !important;
+	  max-height: 100%;
+	}
+
+
+	  /*신고접수 div*/
+	#declaration{
+	  position: relative;
+	  display: flex;
+	  flex-direction: column;
+	  align-items: center;
+	  justify-content: center;
+	  width: 100%;
+	  height: 450px;
+	  margin-top: 20px;
+	  border: 3px solid rgb(255, 204, 0);
+	  padding-top: 80px;
+	  background: rgb(245, 247, 250);
+	  box-sizing: border-box;
+	  margin-bottom: 20px;
+	}
+	
 
     /* 도넛 차트 */
     #donutChart1 {
@@ -225,8 +291,8 @@
     
     
     .info-icon2{
-        width: 32px;
-        height: 30px;
+        width: 35px;
+        height: 35px;
         cursor: pointer;
     }
     
@@ -257,6 +323,7 @@
         padding: 0;
     }
     
+
 
 
 </style>
@@ -325,22 +392,31 @@
 	  </div>
 	</div>
 
+	<div id="declaration">
+		<canvas id="">112 신고접수</canvas>
+	</div>
 
+
+		<div id="location">
+				<canvas id="stacked"></canvas>
+				<div id="radar">
+				  <canvas id="crimeTopChart"></canvas>
+				</div>
+
+		</div>
 
 </div> 
+
+
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@4.3.0/dist/chartjs-chart-matrix.min.js"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@1.1.0/dist/chartjs-chart-matrix.min.js"></script>
-
-
-
-
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@1.1.0/dist/chartjs-chart-matrix.min.js"></script>
 
 <script>
 Chart.register(ChartDataLabels);
@@ -924,8 +1000,304 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
 });
+// 장소별 ---------------------------------------------------------------------------------------------
+// 전역 변수 선언 (중복 방지)
+let stackedBarData = {};
+
+// 색상 정의
+const colors = {
+    "주거시설": "#FF6B6B",
+    "상업시설": "#b04a0b",
+    "교통시설": "#22aac9",
+    "공공/교육/문화시설": "#96CEB4",
+    "자연/기타시설": "#FFEAA7"
+};
+
+// ✅ JSON 데이터 로드
+async function loadDataFromJSON() {
+    try {
+        const stackedRes = await fetch('resources/data/stacked_bar_chart2.json');
+
+        if (!stackedRes.ok) {
+            throw new Error('stacked_bar_chart2.json 로드 실패');
+        }
+
+        stackedBarData = await stackedRes.json();
+        console.log('✅ stacked_bar_chart2.json 로드 완료');
+    } catch (error) {
+        console.error('❌ JSON 로딩 오류:', error);
+    }
+}
+
+// ✅ 차트 초기화
+async function initializeCharts() {
+    await loadDataFromJSON();
+
+    resizeCanvas('stacked', 400);
+    createStackedBarChart();
+}
+
+// ✅ canvas 크기 조절
+function resizeCanvas(id, height, width) {
+    const canvas = document.getElementById(id);
+    if (canvas) {
+        canvas.style.height = `${height}px`;
+        if (width) canvas.style.width = `${width}px`;
+    }
+}
+
+// ✅ stacked bar chart 생성
+function createStackedBarChart() {
+    const ctx = document.getElementById('stacked').getContext('2d');
+    const years = Object.keys(stackedBarData);
+    const categories = Object.keys(stackedBarData[years[0]]);
+
+    const datasets = categories.map(category => ({
+        label: category,
+        data: years.map(year => stackedBarData[year][category]),
+        backgroundColor: colors[category],
+        borderColor: '#888888',
+        borderWidth: 1,
+        hoverBorderColor: '#454545',
+        hoverBorderWidth: 2,
+        barThickness: 100
+    }));
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: years,
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                datalabels: {
+                    display: false
+                },
+                title: {
+                    display: true,
+                    text: '연도별 범죄 발생건수',
+                    color: '#333', // 글자 색
+                    font: {
+                      size: 20,     // 글자 크기
+                      weight: 'bold',
+                      family: "'Noto Sans KR', sans-serif"
+                    },
+                    padding: {
+                      top: 25,
+                      bottom: 10
+                    },
+                    backgroundColor: 'rgba(255, 204, 0, 0.2)',  // 노란 배경 (반투명)
+                    borderColor: 'rgb(255, 204, 0)',            // 노란 테두리
+                    borderWidth: 3,
+                  },
+                legend: {
+                    position: 'top',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 20,
+                        boxWidth: 12,
+                        color: 'black',
+                        font: {
+                            size: 13,
+                            weight: 'bold',
+                            family: "'Arial', sans-serif"
+                        },
+                        generateLabels: function(chart) {
+                            const datasets = chart.data.datasets;
+                            return datasets.map((dataset, i) => ({
+                                text: dataset.label,
+                                fillStyle: dataset.backgroundColor,
+//                                 strokeStyle: 'black',
+//                                 lineWidth: 2,
+                                hidden: !chart.isDatasetVisible(i),
+                                datasetIndex: i
+                            }));
+                        }
+                    }
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false
+                }
+            },
+            scales: {
+                x: {
+                    stacked: true,
+                    ticks: {
+                        font: {
+                            size: 15,
+                            weight: '600',
+                            family: "'Noto Sans KR', sans-serif"
+                        },
+                        maxRotation: 0,
+                        autoSkip: true,
+                        maxTicksLimit: 10
+                    },
+                    grid: {
+                        color: '#eee',
+                        borderColor: '#ccc'
+                    }
+                },
+                y: {
+                    stacked: true,
+                    ticks: {
+                        color: '#555',
+                        font: {
+                            size: 14,
+                            weight: '600',
+                            family: "'Noto Sans KR', sans-serif"
+                        },
+                        callback: value => value.toLocaleString(),
+                        maxTicksLimit: 7
+                    },
+                    grid: {
+                        color: '#eee',
+                        borderColor: '#ccc'
+                    }
+                }
+            },
+            interaction: {
+                mode: 'nearest',
+                axis: 'x',
+                intersect: false
+            }
+        }
+    });
+}
+
+// ✅ DOM 준비되면 초기화 실행
+document.addEventListener('DOMContentLoaded', initializeCharts);
+window.addEventListener('resize', () => {
+    Chart.getActiveCharts().forEach(chart => chart.resize());
+});
+
+//여기서부터는 장소별 범죄 발생건수 차트 ------------------------------------------------------------------------
+fetch("resources/data/radar_chart_crime6.json")
+  .then(res => res.json())
+  .then(data => {
+    const 장소목록 = Object.keys(data);
+    const 범죄종목목록 = [...new Set(장소목록.flatMap(loc => Object.keys(data[loc])))];
+    
+    const colors = [
+      "rgba(255, 99, 132, 0.7)",
+      "rgba(54, 162, 235, 0.7)",
+      "rgba(255, 206, 86, 0.7)",
+      "rgba(75, 192, 192, 0.7)",
+      "rgba(153, 102, 255, 0.7)",
+      "rgba(255, 159, 64, 0.7)"
+    ];
+
+    const datasets = 범죄종목목록.map((crime, i) => {
+    	  const originalData = 장소목록.map(loc => data[loc][crime] || 0);
+    	  const MIN_VALUE = 1200;
+    	  const adjustedData = originalData.map(v => v + MIN_VALUE);
+
+    	  return {
+    	    label: crime,
+    	    data: adjustedData,
+    	    backgroundColor: colors[i % colors.length],
+    	    stack: 'stack1'
+    	  };
+    	});
 
 
+    new Chart(document.getElementById('crimeTopChart'), {
+        type: 'bar',
+        data: {
+          labels: 장소목록,
+          datasets: datasets
+        },
+        
+        
+        options: {
+        	  indexAxis: 'y',
+        	  responsive: true,
+        	  plugins: {
+        	    legend: { 
+        	      position: 'top',
+        	      labels: {
+        	        color: '#444444',           // 범례 글자 색
+        	        font: {
+        	          size: 14,                 // 글자 크기
+        	          weight: '600',            // 글자 굵기
+        	          family: "'Noto Sans KR', sans-serif"  // 폰트
+        	        },
+        	        padding: 15,                // 범례 글자 좌우 여백
+        	        boxWidth: 18,               // 범례 색상 박스 크기
+        	        usePointStyle: true         // 점 모양으로 표시
+        	      }
+        	    },
+        	    title: {
+        	        display: true,
+        	        text: '장소별 범죄 발생건수',
+        	        color: '#333', // 글자 색
+        	        font: {
+        	          size: 20,     // 글자 크기
+        	          weight: 'bold',
+        	          family: "'Noto Sans KR', sans-serif"
+        	        },
+        	        padding: {
+        	          top: 10,
+        	          bottom: 10
+        	        }
+        	      },
+        	    datalabels: {
+        	      display: false
+        	    }
+        	  },
+        	  // ... 이하 scales 등 옵션 유지
+
+          scales: {
+        	    x: {
+        	      stacked: true,
+        	      max: 125000,
+        	      title: {
+        	        display: true,
+        	        // text: '발생건수',
+        	        color: '#555',  // x축 제목 글자색
+        	        font: {
+        	          size: 14,
+        	          weight: 'bold'
+        	        }
+        	      },
+        	      ticks: {
+        	        color: '#555',  // x축 눈금 글자색 (빨강 예시)
+        	        font: {
+        	          size: 14,
+        	          weight: 'bold'
+        	        }
+        	      }
+        	    },
+        	    y: {
+        	      stacked: true,
+        	      ticks: {
+        	        color: '#555',  // y축 눈금 글자색 (초록 예시)
+        	        font: {
+        	          size: 14,
+        	          weight: 'bold'
+        	        }
+        	      },
+        	      title: {
+        	        display: false,
+        	        // text: '장소',
+        	        color: '#000000',
+        	        font: {
+        	          size: 14
+        	        }
+        	      }
+        	    }
+        	  }
+        	}
+        
+        
+        ,
+        plugins: [ChartDataLabels]  // 플러그인 등록 필수!
+      });
+    });
+  
 </script> 
 </body>
 </html>
