@@ -1,7 +1,9 @@
 package org.zerock.service;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,9 +41,9 @@ public class ReportService {
         return reportMapper.findByNameAndPhone(name, phone);
     }
 
-    public List<ReportDTO> getReportsForAdmin(String city, String district, String crimeType) {
-        return reportMapper.findByFilter(city, district, crimeType);
-    }
+//    public List<ReportDTO> getReportsForAdmin(String city, String district, String crimeType) {
+//        return reportMapper.findByFilter(city, district, crimeType);
+//    }
 
     public ReportDTO getReport(Integer id) {
         return reportMapper.findById(id);
@@ -76,6 +78,14 @@ public class ReportService {
     public boolean checkUser(String name, String phone, String password) {
         // 예시 : 해당 이름, 전화번호, 비밀번호가 일치하는 신고글이 존재하는지 확인
         return reportMapper.existsByNamePhonePassword(name, phone, password);
+    }
+    
+    public List<ReportDTO> findByFilter(String si, String gu, String crimeType) {
+        Map<String, String> params = new HashMap<>();
+        params.put("si", si);
+        params.put("gu", gu);
+        params.put("crimeType", crimeType);
+        return reportMapper.findByFilter(params);
     }
 
 

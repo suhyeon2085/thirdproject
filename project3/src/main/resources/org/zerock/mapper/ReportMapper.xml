@@ -72,7 +72,7 @@
     WHERE name = #{name} AND phone = #{phone} AND password = #{password}
 </select>
 
-  <!-- 3) 관리자 필터 조회 (city, district, crimeType 동적) -->
+  <!-- 3) 관리자 필터 조회 (city, district, crimeType 동적)
   <select id="findByFilter" resultMap="reportMap">
     SELECT * FROM report
     <where>
@@ -87,7 +87,23 @@
       </if>
     </where>
     ORDER BY created_at DESC
-  </select>
+  </select> -->
+  
+  <select id="findByFilter" parameterType="map" resultMap="reportMap">
+    SELECT *
+    FROM report
+    WHERE 1 = 1
+    <if test="si != null and si != 'none'">
+        AND si = #{si}
+    </if>
+    <if test="gu != null and gu != 'none'">
+        AND gu = #{gu}
+    </if>
+    <if test="crimeType != null and crimeType != 'none'">
+        AND crime_type = #{crimeType}
+    </if>
+    ORDER BY created_at DESC
+</select>
 
   <!-- 4) 상세 -->
   <select id="findById" resultMap="reportMap">
