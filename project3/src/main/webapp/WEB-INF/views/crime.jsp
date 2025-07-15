@@ -401,7 +401,7 @@
 	  <!-- 출동시간 표시용 div 추가 -->
 	  <div id="arrivalTimeCircle" 
 	       style="
-	         width: 270px; height: 270px; 
+	         width: 280px; height: 280px; 
 	         border-radius: 50%; background-color: rgba(0, 123, 255,0.9); 
 	         color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; 
 	         font-weight: bold; font-size: 20px; font-size: 20px;
@@ -412,7 +412,7 @@
 	  </div>
 	</div>
 
-
+ 
 <!-- 	<div id="declaration"> -->
 <%-- 		<canvas id="Reportreceived">112 신고접수 막대그래프</canvas> --%>
 <%-- 		<canvas id="Reportprediction">112 평균 현장 도착 시간 </canvas> --%>
@@ -1403,7 +1403,7 @@ fetch('resources/data/Predicted.json')
             const selectedYear = years[index];
             const timeText = arrivalTimes[selectedYear];
             const el = document.getElementById('arrivalTimeCircle');
-            el.innerHTML = '<div style="font-size:17px;">현장 평균 출동시간</div><div style="font-size:25px;">' + timeText + '</div>';
+            el.innerHTML = '<div style="font-size:21px;">🚨\u00A0현장 평균 출동시간\u00A0🚨</div><div style="font-size:38px; margin-top:10px;">' + timeText + '</div>';
           }
         },
         plugins: {
