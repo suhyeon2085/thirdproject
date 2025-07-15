@@ -83,6 +83,9 @@
             font-size: 14px;
             flex: 0.5;
         }
+        a{
+        	color: black;
+        }
     </style>
     <link rel="stylesheet" type="text/css" href="resources/css/menu.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>

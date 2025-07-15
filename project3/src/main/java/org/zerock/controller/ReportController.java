@@ -158,9 +158,15 @@ public class ReportController {
 	        // 새로 업로드된 파일 처리
 	        if (files != null) {
 	            for (MultipartFile file : files) {
-	                if (file.isEmpty()) continue;
+	            	if (file == null || file.isEmpty()) continue;
 	
 	                String originalFilename = file.getOriginalFilename();
+	                
+	                // originalFilename 이 null 이거나 "undefined" 이면 무시
+	                if (originalFilename == null 
+	                    || "undefined".equalsIgnoreCase(originalFilename.trim()) 
+	                    || "".equals(originalFilename.trim())) continue;
+	                
 	                String ext = "";
 	                int dotIdx = originalFilename.lastIndexOf('.');
 	                if (dotIdx != -1) ext = originalFilename.substring(dotIdx);

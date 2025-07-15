@@ -875,8 +875,8 @@ function togglePassword() {
             const existingStoredNames = $("#existingStoredNames").val();
             const existingOrigNames = $("#existingOrigNames").val();
 
-            formData.append("existingStoredNames", existingStoredNames);
-            formData.append("existingOrigNames", existingOrigNames);
+            formData.append("existingStoredNames", existingStoredNames ?? "");
+            formData.append("existingOrigNames", existingOrigNames ?? "");
 
  			formData.append("password", password); 
             
@@ -886,7 +886,10 @@ function togglePassword() {
             formData.append("locationYn", selectedLocation);
 
             for (let i = 0; i < selectedFiles.length; i++) {
-                formData.append("files", selectedFiles[i]); // input name="files"에 맞춤
+                const file = selectedFiles[i];
+                if (file && typeof file !== "undefined") {
+                    formData.append("files", file); // input name="files"에 맞춤
+                }
             }
 
             $.ajax({
