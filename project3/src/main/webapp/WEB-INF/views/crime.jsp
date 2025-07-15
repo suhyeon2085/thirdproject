@@ -102,19 +102,23 @@
 	#declaration{
 	  position: relative;
 	  display: flex;
-	  flex-direction: column;
+	  flex-direction: row;
 	  align-items: center;
 	  justify-content: center;
 	  width: 100%;
-	  height: 450px;
+	  height: 550px;
 	  margin-top: 20px;
 	  border: 3px solid rgb(255, 204, 0);
-	  padding-top: 80px;
+/* 	  padding-top: 80px; */
 	  background: rgb(245, 247, 250);
 	  box-sizing: border-box;
 	  margin-bottom: 20px;
 	}
 	
+	#Reportreceived{
+        width: 900px !important;
+        height: 500px !important;
+	}
 
     /* 도넛 차트 */
     #donutChart1 {
@@ -361,7 +365,7 @@
  
     <!-- 시간/요일별 통계 영역 -->
 	<div id="time">
-	<span class="time_day">요일별 5대 범죄 발생율 추이</span>
+	<span class="time_day">요일/시간별 5대 범죄 발생율 추이</span>
 		<div id="time-multi-charts" style="display: flex; flex-wrap: wrap; gap: 20px;">
 		  <canvas id="timechart-살인" ></canvas>
 		  <canvas id="timechart-강간및추행" ></canvas>
@@ -391,10 +395,28 @@
 	    <canvas id="forecastChart" <%-- width="1100px" height="600px" --%>></canvas>
 	  </div>
 	</div>
-
-	<div id="declaration">
-		<canvas id="">112 신고접수</canvas>
+ 
+	<div id="declaration" style="display:flex; align-items:center; gap:170px;">
+	  <canvas id="Reportreceived" width="700" height="400"></canvas>
+	  <!-- 출동시간 표시용 div 추가 -->
+	  <div id="arrivalTimeCircle" 
+	       style="
+	         width: 270px; height: 270px; 
+	         border-radius: 50%; background-color: rgba(0, 123, 255,0.9); 
+	         color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; 
+	         font-weight: bold; font-size: 20px; font-size: 20px;
+	         user-select: none;  text-align: center;
+	         box-shadow: 0 0 30px rgba(0, 123, 255,0.9);
+	         ">
+	    년도를 선택해 주세요
+	  </div>
 	</div>
+
+
+<!-- 	<div id="declaration"> -->
+<%-- 		<canvas id="Reportreceived">112 신고접수 막대그래프</canvas> --%>
+<%-- 		<canvas id="Reportprediction">112 평균 현장 도착 시간 </canvas> --%>
+<!-- 	</div> -->
 
 
 		<div id="location">
@@ -1297,7 +1319,132 @@ fetch("resources/data/radar_chart_crime6.json")
         plugins: [ChartDataLabels]  // 플러그인 등록 필수!
       });
     });
-  
+    
+    
+  // 이제부터는 신고접수 예측과 평균 출동 시간 차트 -------------------------------------------
+fetch('resources/data/Predicted.json')
+  .then(res => res.json())
+  .then(data => {
+    const years = data.map(d => d.연도);
+    const counts = data.map(d => d.신고접수건수);
+    const arrivalTimes = {};
+    data.forEach(d => {
+      arrivalTimes[d.연도] = d.현장평균도착시간.replace(/분(\d)/,'분 $1');
+    });
+
+    const actualEndYear = 2024;
+    
+    const actualCounts = counts.map((count, i) => years[i] <= actualEndYear ? count : null);
+ 	const predictedCounts = counts.map((count, i) => years[i] > actualEndYear ? count : null);
+    
+    const canvas = document.getElementById('Reportreceived');
+    const style = getComputedStyle(canvas);
+    const width = parseInt(style.width);
+    const height = parseInt(style.height);
+
+    canvas.width = width;
+    canvas.height = height;
+
+    const ctx = canvas.getContext('2d');
+
+    const gradient = ctx.createLinearGradient(0, 0, 0, height);
+    gradient.addColorStop(0, 'rgba(0, 123, 255, 1)');
+    gradient.addColorStop(1, 'rgba(0, 123, 255, 0.4)');
+
+    // 그라데이션 막대 & 단색 막대 설정
+    const backgroundColors = years.map(year => {
+      if (year <= actualEndYear) {
+        const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+        gradient.addColorStop(0, 'rgba(0, 123, 255, 1)');   // 진한 파랑
+        gradient.addColorStop(1, 'rgba(0, 123, 255, 0.4)'); // 연한 파랑
+        return gradient;
+      } else {
+        return 'rgba(0, 123, 255, 0.2)';  // 예측값: 연한 단색
+      }
+    });
+
+    const chart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: years,
+        datasets: [{
+          label: '신고접수건수',
+          data: counts,
+          backgroundColor: backgroundColors,
+          borderRadius: 4
+        }]
+      },
+      options: {
+        responsive: false,
+        scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                color: 'black',           
+                font: {
+                  size: 14,               
+                  weight: 'bold'          
+                }
+              }
+            },
+            x: {
+              ticks: {
+                color: 'black',
+                font: {
+                  size: 14,
+                  weight: 'bold'
+                }
+              }
+            }
+          },
+        onClick: (evt, elements) => {
+          if (elements.length > 0) {
+            const index = elements[0].index;
+            const selectedYear = years[index];
+            const timeText = arrivalTimes[selectedYear];
+            const el = document.getElementById('arrivalTimeCircle');
+            el.innerHTML = '<div style="font-size:17px;">현장 평균 출동시간</div><div style="font-size:25px;">' + timeText + '</div>';
+          }
+        },
+        plugins: {
+            title: {
+                display: true,
+                text: '📞\u00A0112 신고접수 추세와 예측', 
+                font: {
+                  size: 25,
+                  weight: 'bold'
+                },
+                padding: {
+                  top: 10,
+                  bottom: 30
+                },
+                color: '#003366'
+              },
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => {
+            	  const year = ctx.label;
+            	  const value = ctx.parsed.y;
+            	  if(year <= actualEndYear){
+            		  return '실제값 : ' + value.toLocaleString() + '건';
+
+            	  } else {
+            		  return '예측값 : ' + value.toLocaleString() + '건';
+            	  }
+              }
+            }
+          },
+          datalabels: {
+        	  display: false
+          }
+        }
+      }
+    });
+  })
+  .catch(e => console.error('JSON 로딩 실패:', e));
+
+
 </script> 
 </body>
 </html>
