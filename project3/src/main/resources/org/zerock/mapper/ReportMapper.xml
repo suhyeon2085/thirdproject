@@ -59,18 +59,18 @@
 
   <!-- 2) 개인 조회 -->
   
-   <select id="findByNameAndPhone" resultMap="reportMap">
+<select id="findByNameAndPhone" resultMap="reportMap">
     SELECT * FROM report
-    WHERE name = #{param1} AND phone = #{param2}
+    WHERE name = #{name} AND phone = #{phone}
     ORDER BY created_at DESC
-  </select>
+</select>
  
   
-  <select id="existsByNamePhonePassword" resultType="boolean" parameterType="map">
+<!--   <select id="existsByNamePhonePassword" resultType="boolean" parameterType="map">
     SELECT CASE WHEN COUNT(*) > 0 THEN TRUE ELSE FALSE END
     FROM report
     WHERE name = #{name} AND phone = #{phone} AND password = #{password}
-</select>
+</select> -->
 
   <!-- 3) 관리자 필터 조회 (city, district, crimeType 동적)
   <select id="findByFilter" resultMap="reportMap">

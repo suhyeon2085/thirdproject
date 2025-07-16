@@ -130,38 +130,37 @@
 				<tr>
 				    <td class="infoT">위치</td>
 				    <td>
-					    <c:choose>
-					        <c:when test="
-					            ${not empty fn:trim(report.si) and fn:trim(report.si) ne 'none' 
-					            and fn:trim(report.si) ne 'null'}">
-					            <c:out value="${report.si}" />
-					            <c:if test="
-					                ${not empty fn:trim(report.gu) and fn:trim(report.gu) ne 'none' 
-					                and fn:trim(report.gu) ne 'null'}">
-					                &nbsp;<c:out value="${report.gu}" />
-					            </c:if>
-					        </c:when>
-					        <c:otherwise>
-					            입력X(기억나지 않습니다)
-					        </c:otherwise>
-					    </c:choose>
-					</td>
+				    <c:choose>
+				        <c:when test="${not empty fn:trim(report.si) 
+				                       and fn:trim(report.si) ne 'none' 
+				                       and fn:trim(report.si) ne 'null'}">
+				            <c:out value="${report.si}" />
+				            <c:if test="${not empty fn:trim(report.gu) 
+				                        and fn:trim(report.gu) ne 'none' 
+				                        and fn:trim(report.gu) ne 'null'}">
+				                &nbsp;<c:out value="${report.gu}" />
+				            </c:if>
+				        </c:when>
+				        <c:otherwise>
+				            입력X(기억나지 않습니다)
+				        </c:otherwise>
+				    </c:choose>
+				</td>
 				</tr>
-                <tr>
-                    <td class="infoT">상세 위치</td>
-                    <td>
-					    <c:choose>
-					        <c:when test="
-					            ${not empty fn:trim(report.location) 
-					            and fn:trim(report.location) ne 'null'}">
-					            <c:out value="${report.location}" />
-					        </c:when>
-					        <c:otherwise>
-					            입력X(기억나지 않습니다)
-					        </c:otherwise>
-					    </c:choose>
-					</td>
-                </tr>
+				<tr>
+				    <td class="infoT">상세 위치</td>
+				    <td>
+				        <c:choose>
+				            <c:when test="${not empty fn:trim(report.location) 
+				                           and fn:trim(report.location) ne 'null'}">
+				                <c:out value="${report.location}" />
+				            </c:when>
+				            <c:otherwise>
+				                입력X(기억나지 않습니다)
+				            </c:otherwise>
+				        </c:choose>
+				    </td>
+				</tr>
                 <tr>
                     <td class="infoT">상세 내용</td>
                     <td>${report.content}</td>

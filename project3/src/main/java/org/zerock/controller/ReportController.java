@@ -226,15 +226,23 @@ public class ReportController {
             @RequestParam String name,
             @RequestParam String phone,
             @RequestParam String password) {
+    	
+    	List<ReportDTO> matchedReports = reportService.findAllReportsByNamePhoneAndPassword(name, phone, password);
 
-        boolean validUser = reportService.checkUser(name, phone, password);
-
-        if (!validUser) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 올바르지 않습니다.");
+        if (matchedReports.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 올바르지 않거나 신고글이 없습니다.");
         }
 
-        List<ReportDTO> reports = reportService.getMyReports(name, phone);
-        return ResponseEntity.ok(reports);
+        return ResponseEntity.ok(matchedReports);
+
+//        boolean validUser = reportService.checkUser(name, phone, password);
+//
+//        if (!validUser) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 올바르지 않습니다.");
+//        }
+//
+//        List<ReportDTO> reports = reportService.getMyReports(name, phone);
+//        return ResponseEntity.ok(reports);
     }
 
     

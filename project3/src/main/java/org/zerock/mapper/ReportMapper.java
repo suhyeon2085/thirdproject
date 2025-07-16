@@ -20,7 +20,8 @@ public interface ReportMapper {
     int delete(int id);  // ReportMapper 인터페이스
 
     // 이름+전화번호로 개인 조회
-    List<ReportDTO> findByNameAndPhone(String name, String phone);
+    List<ReportDTO> findByNameAndPhone(@Param("name") String name, @Param("phone") String phone);
+
 
 //    // 관리자: 전체 목록 + 동적 필터
 //    List<ReportDTO> findByFilter(String city, String district, String crimeType);
@@ -28,9 +29,9 @@ public interface ReportMapper {
     // id로 단건 조회
     ReportDTO findById(Integer id);
 
-    boolean existsByNamePhonePassword(@Param("name") String name, 
-            @Param("phone") String phone,
-            @Param("password") String password);
+//    boolean existsByNamePhonePassword(@Param("name") String name, 
+//            @Param("phone") String phone,
+//            @Param("password") String password);
     
     List<ReportDTO> findByFilter(Map<String, String> paramMap);
 

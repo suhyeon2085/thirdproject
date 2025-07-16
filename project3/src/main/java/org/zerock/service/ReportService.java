@@ -1,11 +1,13 @@
 package org.zerock.service;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.zerock.domain.ReportDTO;
@@ -19,8 +21,15 @@ public class ReportService {
 
 	@Autowired
     private ReportMapper reportMapper;
+	@Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     public Integer submitReport(ReportDTO dto) {
+    	// 비밀번호 암호화
+        String rawPassword = dto.getPassword();
+        String encodedPassword = passwordEncoder.encode(rawPassword);
+        dto.setPassword(encodedPassword);
+    	
     	int row = reportMapper.insertReport(dto); // ② 성공 행수 체크
         if (row == 0) throw new RuntimeException("Insert 실패");
         return dto.getId();
@@ -72,13 +81,22 @@ public class ReportService {
     }
 
 
-
-
-
-    public boolean checkUser(String name, String phone, String password) {
-        // 예시 : 해당 이름, 전화번호, 비밀번호가 일치하는 신고글이 존재하는지 확인
-        return reportMapper.existsByNamePhonePassword(name, phone, password);
+    public List<ReportDTO> findAllReportsByNamePhoneAndPassword(String name, String phone, String rawPassword) {
+        List<ReportDTO> reports = reportMapper.findByNameAndPhone(name, phone);
+        List<ReportDTO> matched = new ArrayList<>();
+        for (ReportDTO report : reports) {
+            if (passwordEncoder.matches(rawPassword, report.getPassword())) {
+                matched.add(report);
+            }
+        }
+        return matched;
     }
+
+
+//    public boolean checkUser(String name, String phone, String password) {
+//        // 예시 : 해당 이름, 전화번호, 비밀번호가 일치하는 신고글이 존재하는지 확인
+//        return reportMapper.existsByNamePhonePassword(name, phone, password);
+//    }
     
     public List<ReportDTO> findByFilter(String si, String gu, String crimeType) {
         Map<String, String> params = new HashMap<>();
