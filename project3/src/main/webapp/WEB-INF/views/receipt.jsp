@@ -773,6 +773,47 @@ function togglePassword() {
             selectedFiles.splice(index, 1);
             renderFileList();
         });
+        
+        const storageKey = "reportFormData";
+        const ttl = 60 * 1000; // 1분
+
+        // 1) 입력 시 localStorage에 저장
+        $('#reportForm').on('input change', function () {
+            const data = {
+                name: $('#name').val(),
+                phone: $('#phone').val(),
+                password: $('#password').val(),
+                crimeType: $('#crimeType').val(),
+                locationYn: $('input[name="locationYn"]:checked').val(),
+                si: $('#si').val(),
+                gu: $('#gu').val(),
+                location: $('#location').val(),
+                content: $('#content').val(),
+                savedAt: new Date().getTime()
+            };
+            localStorage.setItem(storageKey, JSON.stringify(data));
+        });
+
+        // 2) 페이지 로드 시 localStorage 값 복원
+        const saved = localStorage.getItem(storageKey);
+        if (saved) {
+            const data = JSON.parse(saved);
+            const now = new Date().getTime();
+            if (now - data.savedAt < ttl) {
+                $('#name').val(data.name || '');
+                $('#phone').val(data.phone || '');
+                $('#password').val(data.password || '');
+                $('#crimeType').val(data.crimeType || 'none');
+                $('input[name="locationYn"][value="' + (data.locationYn || 'O') + '"]').prop('checked', true);
+                $('#si').val(data.si || 'none');
+                $('#gu').val(data.gu || 'none');
+                $('#location').val(data.location || '');
+                $('#content').val(data.content || '');
+                $('#letters').text((data.content || '').length); // textarea 글자 수 복원
+            } else {
+                localStorage.removeItem(storageKey); // 만료되면 삭제
+            }
+        }
 
 
      	// 폼 제출 시 유효성 검사
