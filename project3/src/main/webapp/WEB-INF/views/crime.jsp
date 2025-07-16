@@ -404,14 +404,14 @@
 	         width: 280px; height: 280px; 
 	         border-radius: 50%; background-color: rgba(0, 123, 255,0.9); 
 	         color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; 
-	         font-weight: bold; font-size: 20px; font-size: 20px;
+	         font-weight: bold; font-size: 20px; font-size: 22px;
 	         user-select: none;  text-align: center;
 	         box-shadow: 0 0 30px rgba(0, 123, 255,0.9);
 	         ">
 	    년도를 선택해 주세요
 	  </div>
-	</div>
-
+	</div> 
+   
  
 <!-- 	<div id="declaration"> -->
 <%-- 		<canvas id="Reportreceived">112 신고접수 막대그래프</canvas> --%>
@@ -420,10 +420,10 @@
 
 
 		<div id="location">
-				<canvas id="stacked"></canvas>
+	   			<canvas id="stacked"></canvas>
 				<div id="radar">
 				  <canvas id="crimeTopChart"></canvas>
-				</div>
+		 		</div>
 
 		</div>
 
@@ -839,7 +839,7 @@ function initForecastChart() {
             plugins: {
               title: {
                 display: true,
-                text: `5대 범죄 발생건수 연도별 추세`,
+                text: `5대 범죄 발생건수 추세 및 예측`,
                 font: { size: 20, weight: 'bold' },
                 color: 'rgb(0, 51, 153)',
                 padding: { top: 15, bottom: 15 }
