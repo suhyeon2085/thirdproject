@@ -18,8 +18,6 @@
         }
         #notice{
             border: 1px solid black;
-            /* padding: 15px;
-            padding-right: 20px; */
             background-color: rgb(231, 231, 231);
             word-break: keep-all; /* 단어 단위로 줄바꿈 */
             white-space: normal; /* 기본 줄바꿈 허용 */
@@ -212,7 +210,7 @@
                     <p class="title">신고인 기본 정보</p>
                     <p class="blue" id="notice1">
                     	아래에 대한 정보를 통해 이후 조회페이지에서 조회하실 수 있습니다.<br>
-                        필요 시, 사전 연락 메시지 이후 전화가 갈 수도 있습니다.
+                        필요 시, 정보 확인에 대한 전화가 갈 수도 있습니다.
                     </p>
                 </div>
                 <div class="infowrap">

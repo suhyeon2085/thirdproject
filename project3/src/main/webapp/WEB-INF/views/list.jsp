@@ -131,6 +131,7 @@
             <p id="pageTitle">신고 조회 목록</p>
         </div>
         <div id="row2">
+        <form id="searchForm">
             <div class="infowrap">
                 <span class="cate">이름</span>
                 <div class="inpWrap">
@@ -154,8 +155,9 @@
                 <span class="red" id="passwordErrMsg"></span>
             </div>
             <div id="btnBox">
-                <button id="searchBtn">조회</button>
+                <button type="submit" id="searchBtn">조회</button>
             </div>
+            </form>
             <table>
             	<thead>
                 <tr>
@@ -199,7 +201,7 @@ function formatDate(createdAtObj) {
 }*/
 
 	$(document).ready(function(){
-		$("#searchBtn").on("click", function(e) {
+		$("#searchForm").on("submit", function(e) {
 			e.preventDefault();
 			
 			let isValid = true;
@@ -273,7 +275,7 @@ function formatDate(createdAtObj) {
                             var row = "<tr>" +
                             	"<td>" + (data.length - index) + "</td>" +
                                 "<td><a href='${pageContext.request.contextPath}/view?id=" + report.id + "'>" + report.crimeType + "</a></td>" +
-                                "<td>" + (report.state === '확인완료' ? "확인완료" : report.state === '확인필요'? "확인필요" : "미확인") + "</td>" +
+                                "<td>" + (report.state === '확인완료' ? "확인완료" : "미확인") + "</td>" +
                                 "<td>" + dateOnly + "</td>" +
                                 "</tr>";
                             $tbody.append(row);

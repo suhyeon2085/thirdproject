@@ -14,7 +14,7 @@
         #wrap{
             padding: 5% 20%;
         }
-        #row1{
+        #titleWrap{
             border-bottom: 1px solid black;
             padding-bottom: 10px;
             display: flex;
@@ -24,6 +24,20 @@
         #pageTitle{
             font-size: 25px;
         }
+        #notice{
+            border: 1px solid black;
+            background-color: rgb(231, 231, 231);
+            margin: 25px 0;
+            word-break: keep-all; /* 단어 단위로 줄바꿈 */
+            white-space: normal; /* 기본 줄바꿈 허용 */
+            overflow-wrap: break-word; /* 긴 단어가 있으면 자동 줄바꿈 */
+        }
+        #notice ul{
+            padding: 20px 5%;
+        }
+        #notice li{
+            padding: 3px 0;
+        }
         .title{
             font-size: 18px;
         }
@@ -32,7 +46,7 @@
         }
         #state{
             border: none;
-            margin-top: 15px;
+            
         }
         table{
             border: 1px solid black;
@@ -100,10 +114,17 @@
 <jsp:include page="/WEB-INF/views/menu.jsp" />
     <div id="wrap">
         <div id="row1">
-            <span id="pageTitle">신고 조회</span>
-            <span id="datetime">
-			  <fmt:formatDate value="${report.createdAt}" pattern="yyyy-MM-dd HH:mm"/>
-			</span>
+        	<div id="titleWrap">
+	            <span id="pageTitle">신고 조회</span>
+	            <span id="datetime">
+				  <fmt:formatDate value="${report.createdAt}" pattern="yyyy-MM-dd HH:mm"/>
+				</span>
+			</div>
+			<div id="notice">
+                <ul>
+                    <li>확인 상태가 '확인 완료'로 변경되면 더 이상 수정/삭제를 하실 수 없습니다.</li>
+                </ul>
+            </div>
         </div>
         <div id="row2">
         	<input type="hidden" name="id" value="${report.id}" />
