@@ -2,6 +2,27 @@
  * 
  */
  
+	var regionMap = {
+		'서울특별시': '서울',
+		'부산광역시': '부산',
+		'대구광역시': '대구',
+		'인천광역시': '인천',
+		'광주광역시': '광주',
+		'대전광역시': '대전',
+		'울산광역시': '울산',
+		'세종특별자치시': '세종',
+		'경기도': '경기',
+		'강원도': '강원',
+		'충청북도': '충북',
+		'충청남도': '충남',
+		'전라북도': '전북',
+		'전라남도': '전남',
+		'경상북도': '경북',
+		'경상남도': '경남',
+		'제주특별자치도': '제주'
+	};
+	
+	var region = '';
  	
 	function haversine(lat1, lng1, lat2, lng2) {
 		var R = 6371;
@@ -220,17 +241,6 @@
 			setVisible(false);
 		}
 		
-/* 		const isDevTools = () => window.outerWidth - window.innerWidth > 160 || window.outerHeight - window.innerHeight > 160;
-
-		if (isDevTools()) {
-		    console.warn("🛡️ DevTools 감지됨 → tracker 경량화");
-		    tracker.style.contain = 'layout paint style';
-		    tracker.style.overflow = 'hidden';
-		    tracker.style.maxWidth = '100px';
-		    tracker.style.maxHeight = '100px';
-		    tracker.style.transition = 'none';
-		    tracker.style.transform = 'none';  // 회전은 꺼도 무방할 땐 이 옵션 추가
-		} */
 	}
 	
 	
@@ -247,8 +257,53 @@
 				var container = document.getElementById('map');
 				var option = { center: new kakao.maps.LatLng(lat, lon), level: 3 };
 				var map = new kakao.maps.Map(container, option);
+				var currentPosition = new kakao.maps.LatLng(lat, lon);
+				
+				$('.currentPosition').on('click', function() {
+					map.setCenter(currentPosition);
+				})
+				
+				
+				kakao.maps.load(function() {
+											var center = map.getCenter();
+						var near3 = getNearStation(center.getLat(), center.getLng(), station);
+						var nearest = near3[0];
+						
+						if (currentPosition.La != center.La && currentPosition.Ma != center.Ma)
+						{
+							regionChart(nearest['축약주소']);
+						}
+						
+						console.log("최근접 3개", near3);
+						console.log("가장 가까운", nearest);
+						
+						markerReset();
+						
+						var img = "../resources/img/marker.png";
+						var imageSize = new kakao.maps.Size(30, 48);
+						var markerImage = new kakao.maps.MarkerImage(img, imageSize);
+						for (var i = 0; i < near3.length; i++)
+						{
+							var position = new kakao.maps.LatLng(near3[i].Latitude, near3[i].Longitude);
+							var title = near3[i]['관서명'] + near3[i]['구분']
+							var marker = new kakao.maps.Marker({
+								map: map,
+								position: position,
+								title: title,
+								image: markerImage
+							});
+							var markerTracker = new MarkerTracker(map, marker);
+							markers.push(marker);
+							markerTrackers.push(markerTracker);							
+						}
+						markerTrackers.forEach(el => el.run());
+					
+				});
+				
+				
+				var markerImg = new kakao.maps.MarkerImage('../resources/img/resize.png', new kakao.maps.Size(30, 30), new kakao.maps.Point(15, 15));
 				var markerPosition = new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude);
-				var currentMarker = new kakao.maps.Marker({position: markerPosition});
+				var currentMarker = new kakao.maps.Marker({position: markerPosition, image: markerImg});
 				currentMarker.setMap(map);
 				
 				kakao.maps.event.addListener(map, 'resize', function() {
@@ -262,6 +317,11 @@
 						var center = map.getCenter();
 						var near3 = getNearStation(center.getLat(), center.getLng(), station);
 						var nearest = near3[0];
+						
+						if (currentPosition.La != center.La && currentPosition.Ma != center.Ma)
+						{
+							regionChart(nearest['축약주소']);
+						}
 						
 						console.log("최근접 3개", near3);
 						console.log("가장 가까운", nearest);
@@ -290,8 +350,11 @@
 						window.addEventListener('resize', function() {
 							markerReset();
 							markerTrackers.forEach(el => el.run());
-
+						
+						
 						})
+						
+
 					}, 300);
 				});
 		
@@ -303,9 +366,9 @@
 				document.querySelectorAll('.tracker').forEach(el => el.remove());
 				markerTrackers = [];
 			}
-			
 
 		})
+		
 		
 	Chart.register(ChartDataLabels);
 	
@@ -483,6 +546,8 @@
 	 barChart.update();
 	}
 	
+	
+
 	//------------------ 현위치 차트 ------------------ //
 	const crimesLocal = ["살인", "강간 및 추행", "상해 및 폭행", "교통범죄", "강도 및 절도"];
 	const donutColors2 = donutColors; // 동일한 색상 사용
@@ -490,41 +555,47 @@
 	let donutChart1;
 	let barChart1;
 	
-	fetch('/resources/data/position.json')
-	.then(res => res.json())
-	.then(data => {
-	 const filtered = data.filter(d => d["지역"] === "부산해운대구");
+    let position = [];
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        const response = await fetch('/resources/data/position.json');
+        const data = await response.json();
+        position = data;
+    });
+
+    function regionChart(region) {
+	    const filtered = position.filter(d => d["지역"] == region);
 	
-	 function sumByCrime(crime) {
-	     return filtered
-	         .filter(d => d["중분류그룹"] === crime)
-	         .reduce((acc, row) => {
-	             return acc + ["일", "월", "화", "수", "목", "금", "토"]
-	                 .reduce((a, day) => a + (parseFloat(row[day]) || 0), 0);
-	         }, 0);
-	 }
+	    function sumByCrime(crime) {
+	        return filtered
+	            .filter(d => d["중분류그룹"] === crime)
+	            .reduce((acc, row) => {
+	                return acc + ["일", "월", "화", "수", "목", "금", "토"]
+	                    .reduce((a, day) => a + (parseFloat(row[day]) || 0), 0);
+                }, 0);
+        }
 	
-	 const totalByCrime = {};
-	 crimesLocal.forEach(c => totalByCrime[c] = sumByCrime(c));
-	 const totalSum = Object.values(totalByCrime).reduce((a, b) => a + b, 0);
-	 const donutData = crimesLocal.map(c => Number(((totalByCrime[c] / totalSum) * 100).toFixed(1)));
+	    const totalByCrime = {};
+	    crimesLocal.forEach(c => totalByCrime[c] = sumByCrime(c));
+	    const totalSum = Object.values(totalByCrime).reduce((a, b) => a + b, 0);
+	    const donutData = crimesLocal.map(c => Number(((totalByCrime[c] / totalSum) * 100).toFixed(1)));
 	
-	 createDonutChartLocal(crimesLocal, donutData);
+	    createDonutChartLocal(crimesLocal, donutData, region);
 	
-	 const barData = crimesLocal.map(c => {
-	     const rows = filtered.filter(d => d["중분류그룹"] === c);
-	     const total = rows.reduce((acc, row) => {
-	         return acc + ["일", "월", "화", "수", "목", "금", "토"]
-	             .reduce((a, day) => a + (parseFloat(row[day]) || 0), 0);
-	     }, 0);
-	     const count = rows.length * 7;
-	     return count > 0 ? Number((total / count).toFixed(2)) : 0;
-	 });
+	    const barData = crimesLocal.map(c => {
+	        const rows = filtered.filter(d => d["중분류그룹"] === c);
+	        const total = rows.reduce((acc, row) => {
+	            return acc + ["일", "월", "화", "수", "목", "금", "토"]
+	                .reduce((a, day) => a + (parseFloat(row[day]) || 0), 0);
+	        }, 0);
+	        const count = rows.length * 7;
+	        return count > 0 ? Number((total / count).toFixed(2)) : 0;
+	    });
 	
-	 createBarChartLocal(crimesLocal, barData);
-	});
+	    createBarChartLocal(crimesLocal, barData, region);
+	}
 	
-	function createDonutChartLocal(labels, data) {
+	function createDonutChartLocal(labels, data, region) {
 	 const ctx = document.getElementById('donutChart1').getContext('2d');
 	 const filteredLabels = [], filteredData = [], filteredColors = [];
 	
@@ -565,7 +636,7 @@
 	             },
 	             title: {
 	                 display: true,
-	                 text: '부산 해운대구 5대 범죄 발생 비율 (%)',
+	                 text: region + '5대 범죄 발생 비율 (%)',
 	                 color: 'rgb(0, 51, 153)',
 	                 font: { size: 20, weight: 'bold' },
 	                 align: 'start',
@@ -584,7 +655,7 @@
 	 });
 	}
 	
-	function createBarChartLocal(labels, data) {
+	function createBarChartLocal(labels, data, region) {
 	 const maxBarValue = Math.max(...data);
 	 const ctx = document.getElementById('barChart1').getContext('2d');
 	 if (barChart1) barChart1.destroy();
@@ -626,7 +697,7 @@
 	             legend: { display: false },
 	             title: {
 	                 display: true,
-	                 text: '부산 해운대구 범죄별 검거율(요일 평균)',
+	                 text: region + '범죄별 검거율(요일 평균)',
 	                 color: 'rgb(0, 51, 153)',
 	                 font: { size: 20, weight: 'bold' },
 	                 padding: { top: 0, bottom: 20 }
@@ -643,6 +714,7 @@
 	     plugins: [ChartDataLabels]
 	 });
 	}
+
 	
 	//------------------ 예측 차트 ------------------ //
 	fetch("/resources/data/crime_forecast.json")
@@ -731,7 +803,7 @@
 	          beginAtZero: false,
 	          title: {
 	            display: true,
-	//             text: '발생 건수',
+	            text: '발생 건수',
 	            color: 'black',
 	            font: { size: 14, weight: 'bold' }
 	          },
@@ -770,5 +842,6 @@
 	    return colorMap[crime] || 'gray';
 	  }
 	});
+
 
  
