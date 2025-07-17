@@ -19,7 +19,7 @@
 <div class="container">
     <!-- 지도 영역 -->
     <div class="left" id="map">
-        
+        <div class="currentPosition" id="current"><img src="../resources/img/current.png" style="width: 40px; height: 40px;"></div>
     </div>
 
     <!-- 오른쪽 차트 영역 -->
