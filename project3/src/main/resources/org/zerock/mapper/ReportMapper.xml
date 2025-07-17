@@ -30,9 +30,9 @@
   	
     INSERT INTO report
         (name, phone, location, crime_type, content,
-         stored_name, orig_name, file_path, password, si, gu)
+         stored_name, orig_name, file_path, password, si, gu, locationYn)
   VALUES (#{name}, #{phone}, #{location}, #{crimeType}, #{content},
-          #{storedName}, #{origName}, #{filePath}, #{password}, #{si}, #{gu})
+          #{storedName}, #{origName}, #{filePath}, #{password}, #{si}, #{gu}, #{locationYn})
   </insert>
   
   <delete id="delete" parameterType="int">
@@ -44,6 +44,7 @@
     SET name = #{name},
         phone = #{phone},
         crime_type = #{crimeType},
+        locationYn = #{locationYn},
         location = #{location},
         content = #{content},
         password = #{password},
@@ -51,20 +52,27 @@
         gu = #{gu},
         stored_name = #{storedName},
         orig_name = #{origName},
-        file_path = #{filePath},
-		created_at = NOW()
+        file_path = #{filePath}
     WHERE id = #{id}
 </update>
 
 
   <!-- 2) 개인 조회 -->
-  <select id="findByNameAndPhone" resultMap="reportMap">
+  
+<select id="findByNameAndPhone" resultMap="reportMap">
     SELECT * FROM report
-    WHERE name = #{param1} AND phone = #{param2}
+    WHERE name = #{name} AND phone = #{phone}
     ORDER BY created_at DESC
-  </select>
+</select>
+ 
+  
+<!--   <select id="existsByNamePhonePassword" resultType="boolean" parameterType="map">
+    SELECT CASE WHEN COUNT(*) > 0 THEN TRUE ELSE FALSE END
+    FROM report
+    WHERE name = #{name} AND phone = #{phone} AND password = #{password}
+</select> -->
 
-  <!-- 3) 관리자 필터 조회 (city, district, crimeType 동적) -->
+  <!-- 3) 관리자 필터 조회 (city, district, crimeType 동적)
   <select id="findByFilter" resultMap="reportMap">
     SELECT * FROM report
     <where>
@@ -79,7 +87,23 @@
       </if>
     </where>
     ORDER BY created_at DESC
-  </select>
+  </select> -->
+  
+  <select id="findByFilter" parameterType="map" resultMap="reportMap">
+    SELECT *
+    FROM report
+    WHERE 1 = 1
+    <if test="si != null and si != 'none'">
+        AND si = #{si}
+    </if>
+    <if test="gu != null and gu != 'none'">
+        AND gu = #{gu}
+    </if>
+    <if test="crimeType != null and crimeType != 'none'">
+        AND crime_type = #{crimeType}
+    </if>
+    ORDER BY created_at DESC
+</select>
 
   <!-- 4) 상세 -->
   <select id="findById" resultMap="reportMap">

@@ -131,16 +131,14 @@
         </div>
     </div>
 <script>
-    $(document).ready(function(){
-        // 시구 select
-        const $si = $('#si');
-        const $gu = $('#gu');
-        
-        const guOptions = {
-            none: [
-                { value: 'none', text: '시/군/구' },
-            ],
-            서울특별시: [
+$(document).ready(function() {
+    const $si = $('#si');
+    const $gu = $('#gu');
+    const skipGuSiList = ["세종특별자치시", "기타"];
+
+    const guOptions = {
+        none: [{ value: 'none', text: '시/군/구' }],
+        서울특별시: [
                 { value: 'none', text: '시/군/구' },
                 { value: '종로구', text: '종로구' },
                 { value: '중구', text: '중구' },
@@ -417,42 +415,100 @@
             ]
         };
 
-        function updateSelect($select, options) {
-            $select.empty();
-            $.each(options, function (_, opt) {
-                $select.append($('<option>', {
-                    value: opt.value,
-                    text: opt.text
-                }));
-            });
+    function updateSelect($select, options) {
+        $select.empty();
+        $.each(options, function (_, opt) {
+            $select.append($('<option>', { value: opt.value, text: opt.text }));
+        });
+    }
+
+    function updateGu() {
+        const siVal = $si.val();
+        const options = guOptions[siVal] || guOptions.none;
+        updateSelect($gu, options);
+
+        if (skipGuSiList.includes(siVal)) {
+            $gu.prop('disabled', true).val('none');
+            $('#siguErrMsg').html('');
+        } else {
+            $gu.prop('disabled', false);
         }
+    }
 
-        function updateGu() {
-            const siValue = $si.val();
-            const options = guOptions[siValue] || [];
-            updateSelect($gu, options);
-        }
-
-        $si.on('change', updateGu);
-
-        // 초기화
+    // 시 select 변경 시 구 select 옵션 변경 및 조회
+    $si.on('change', function() {
         updateGu();
+        searchReports();
     });
 
+    // 구 select, 범죄 유형 select 변경 시 조회
+    $gu.add($('#crimeType')).on('change', function() {
+        searchReports();
+    });
 
-    // 시 선택 시 gu 비활성화/활성화
-    const skipGuSiList = ["세종특별자치시", "기타"];
+    // 초기 세팅
+    updateGu();
+    searchReports();
 
-	$("#si").on("change", function () {
-		const siVal = $(this).val();
-		
-		if (skipGuSiList.includes(siVal)) {
-		    $("#gu").prop("disabled", true).val("none");
-		    $("#siguErrMsg").html("");
-		} else {
-		    $("#gu").prop("disabled", false);
-		}
-	});
+    function searchReports() {
+        const si = $si.val();
+        const gu = $gu.val();
+        const crimeType = $('#crimeType').val();
+
+        $.ajax({
+            url: '${pageContext.request.contextPath}/admin/reportList',
+            type: 'get',
+            data: { si, gu, crimeType },
+            dataType: 'json',
+            success: function(data) {
+            	console.log('전체 데이터:', data);
+            	const $tbody = $('#reportTableBody');
+                $tbody.empty();
+
+                if (!data || data.length === 0) {
+                    $tbody.append('<tr><td colspan="4" align="center">등록된 신고 내용이 없습니다.</td></tr>');
+                    return;
+                }
+               
+
+                // 서버에서 내림차순 정렬을 하므로 reverse()는 제거
+
+                $.each(data, function(index, report) {
+                	console.log('index:', index);
+                    // createdAt이 문자열일 때 자르기
+                    let createdDate = '';
+                    if (report.createdAt) {
+                        if (typeof report.createdAt === 'string') {
+                            createdDate = report.createdAt.substring(0, 10);
+                        } else {
+                            // Date 객체일 경우 ISO 문자열 변환
+                            createdDate = new Date(report.createdAt).toISOString().substring(0, 10);
+                        }
+                    }
+
+                    const row = `
+                        <tr>
+                            <td>${i + 1}</td>
+                            <td>${report.crimeType || ''}</td>
+                            <td>${report.state || ''}</td>
+                            <td>${createdDate}</td>
+                        </tr>
+                    `;
+                    $tbody.append(row);
+                    console.log('index:', index);
+                    console.log('report.crimeType:', report.crimeType, typeof report.crimeType);
+                    console.log('report.state:', report.state, typeof report.state);
+                    console.log('report.createdAt:', report.createdAt);
+                    
+                });
+            },
+            error: function() {
+                alert('조회 실패');
+            }
+        });
+        
+    }
+});
 </script>
 </body>
 </html>

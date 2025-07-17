@@ -18,8 +18,6 @@
         }
         #notice{
             border: 1px solid black;
-            /* padding: 15px;
-            padding-right: 20px; */
             background-color: rgb(231, 231, 231);
             word-break: keep-all; /* 단어 단위로 줄바꿈 */
             white-space: normal; /* 기본 줄바꿈 허용 */
@@ -63,6 +61,9 @@
             font-size: 14px;
             margin-top: 5px;
             margin-bottom: 0;
+            word-break: keep-all; /* 단어 단위로 줄바꿈 */
+            white-space: normal; /* 기본 줄바꿈 허용 */
+            overflow-wrap: break-word; /* 긴 단어가 있으면 자동 줄바꿈 */
         }
         .red{
             color: red;
@@ -90,6 +91,8 @@
         #check{
             margin-bottom: 10px;
             font-size: 15px;
+            display: flex;
+            gap: 10px;
         }
         #si, #gu{
             font-size: 14px;
@@ -151,6 +154,36 @@
             margin: 30px 0;
             cursor: pointer;
         }
+        @media screen and (max-width: 1080px){
+        	#wrap{
+                padding: 5% 15%;
+            }
+            #notice ul {
+                padding-left: 40px;
+            }
+            #locSlt{
+                display: flex;
+                gap:5px
+	        }
+            #si, #gu{
+                flex: 1;
+            }
+        }
+        @media screen and (max-width: 480px){
+		    #wrap{
+                padding: 5% 10%;
+            }
+            #pageTitle{
+                margin-top: 10px;
+            }
+		    #crimeType{
+	            width: 100%;
+	        }
+	        #check{
+	            display: block;
+	        }
+	        
+		}
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
@@ -175,9 +208,9 @@
             <form id="reportForm">
                 <div class="infoT">
                     <p class="title">신고인 기본 정보</p>
-                    <p class="blue">
+                    <p class="blue" id="notice1">
                     	아래에 대한 정보를 통해 이후 조회페이지에서 조회하실 수 있습니다.<br>
-                        필요 시, 사전 연락 메시지 이후 전화가 갈 수도 있습니다.
+                        필요 시, 정보 확인에 대한 전화가 갈 수도 있습니다.
                     </p>
                 </div>
                 <div class="infowrap">
@@ -221,31 +254,37 @@
                 <div class="infowrap">
                     <p class="cate">위치<span class="redStar">*</span></p>
                     <div id="check">
-                        <input type="radio" name="locationYn" value="O" checked>입력
-                        <input type="radio" name="locationYn" value="X">입력X(기억나지 않습니다)
+                    	<div>
+                        	<input type="radio" name="locationYn" value="O" checked>입력
+                        </div>
+                        <div>
+                        	<input type="radio" name="locationYn" value="X">입력X(기억나지 않습니다)
+                        </div>
                     </div>
-                    <select name="si" id="si">
-                        <option value="none">시/도</option>
-                        <option value="서울특별시">서울</option>
-                        <option value="부산광역시">부산</option>
-                        <option value="대구광역시">대구</option>
-                        <option value="인천광역시">인천</option>
-                        <option value="광주광역시">광주</option>
-                        <option value="대전광역시">대전</option>
-                        <option value="울산광역시">울산</option>
-                        <option value="세종특별자치시">세종</option>
-                        <option value="제주특별자치도">제주</option>
-                        <option value="경기도">경기도</option>
-                        <option value="강원도">강원도</option>
-                        <option value="충청북도">충청북도</option>
-                        <option value="충청남도">충청남도</option>
-                        <option value="전라북도">전라북도</option>
-                        <option value="전라남도">전라남도</option>
-                        <option value="경상북도">경상북도</option>
-                        <option value="경상남도">경상남도</option>
-                        <option value="기타">기타</option>
-                    </select>
-                    <select name="gu" id="gu"></select>
+                    <div id="locSlt">
+	                    <select name="si" id="si">
+	                        <option value="none">시/도</option>
+	                        <option value="서울특별시">서울</option>
+	                        <option value="부산광역시">부산</option>
+	                        <option value="대구광역시">대구</option>
+	                        <option value="인천광역시">인천</option>
+	                        <option value="광주광역시">광주</option>
+	                        <option value="대전광역시">대전</option>
+	                        <option value="울산광역시">울산</option>
+	                        <option value="세종특별자치시">세종</option>
+	                        <option value="제주특별자치도">제주</option>
+	                        <option value="경기도">경기도</option>
+	                        <option value="강원도">강원도</option>
+	                        <option value="충청북도">충청북도</option>
+	                        <option value="충청남도">충청남도</option>
+	                        <option value="전라북도">전라북도</option>
+	                        <option value="전라남도">전라남도</option>
+	                        <option value="경상북도">경상북도</option>
+	                        <option value="경상남도">경상남도</option>
+	                        <option value="기타">기타</option>
+	                    </select>
+	                    <select name="gu" id="gu"></select>
+                    </div>
                     <p class="red" id="siguErrMsg"></p>
                     <input class="inp" type="text" id="location" name="location">
                     <span class="red" id="locationErrMsg"></span>
@@ -734,6 +773,47 @@ function togglePassword() {
             selectedFiles.splice(index, 1);
             renderFileList();
         });
+        
+        const storageKey = "reportFormData";
+        const ttl = 60 * 1000; // 1분
+
+        // 1) 입력 시 localStorage에 저장
+        $('#reportForm').on('input change', function () {
+            const data = {
+                name: $('#name').val(),
+                phone: $('#phone').val(),
+                password: $('#password').val(),
+                crimeType: $('#crimeType').val(),
+                locationYn: $('input[name="locationYn"]:checked').val(),
+                si: $('#si').val(),
+                gu: $('#gu').val(),
+                location: $('#location').val(),
+                content: $('#content').val(),
+                savedAt: new Date().getTime()
+            };
+            localStorage.setItem(storageKey, JSON.stringify(data));
+        });
+
+        // 2) 페이지 로드 시 localStorage 값 복원
+        const saved = localStorage.getItem(storageKey);
+        if (saved) {
+            const data = JSON.parse(saved);
+            const now = new Date().getTime();
+            if (now - data.savedAt < ttl) {
+                $('#name').val(data.name || '');
+                $('#phone').val(data.phone || '');
+                $('#password').val(data.password || '');
+                $('#crimeType').val(data.crimeType || 'none');
+                $('input[name="locationYn"][value="' + (data.locationYn || 'O') + '"]').prop('checked', true);
+                $('#si').val(data.si || 'none');
+                $('#gu').val(data.gu || 'none');
+                $('#location').val(data.location || '');
+                $('#content').val(data.content || '');
+                $('#letters').text((data.content || '').length); // textarea 글자 수 복원
+            } else {
+                localStorage.removeItem(storageKey); // 만료되면 삭제
+            }
+        }
 
 
      	// 폼 제출 시 유효성 검사
@@ -790,6 +870,11 @@ function togglePassword() {
                     $("#locationErrMsg").html("상세 위치를 입력해 주십시오.");
                     isValid = false;
                 }
+            } else if (selectedLocation === "X") {
+                // locationYn 이 X라면, 위치 관련 값들을 비움
+                $("#si").val("none");
+                $("#gu").val("none");
+                $("#location").val("");
             }
 
             if (content.length < 10) {
@@ -811,6 +896,7 @@ function togglePassword() {
             
             formData.append("si", siType);
             formData.append("gu", guType);
+            formData.append("locationYn", selectedLocation);
 
             for (let i = 0; i < selectedFiles.length; i++) {
                 formData.append("files", selectedFiles[i]); // input name="files"에 맞춤

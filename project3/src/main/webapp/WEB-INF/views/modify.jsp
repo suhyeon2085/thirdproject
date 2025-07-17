@@ -178,7 +178,7 @@
                     <p class="title">신고인 기본 정보</p>
                     <p class="blue">
                     	아래에 대한 정보를 통해 이후 조회페이지에서 조회하실 수 있습니다.<br>
-                        필요 시, 사전 연락 메시지 이후 전화가 갈 수도 있습니다.
+                        필요 시, 정보 확인에 대한 전화가 갈 수도 있습니다.
                     </p>
                 </div>
                 <div class="infowrap">
@@ -323,7 +323,7 @@ function togglePassword() {
 	    $('input[name="locationYn"][value="' + beforeLocValue + '"]').prop("checked", true);*/
 	    
 	    const beforeSiValue = "${report.si}";
-	    $("#si").val(beforeSiValue);
+	    $("#si").val(beforeSiValue || "none");
 	    
 	    
 	 	// 숫자만 입력되도록 처리 및 에러 제거
@@ -735,7 +735,7 @@ function togglePassword() {
         updateGu();
         
 	    const beforeGuValue = "${report.gu}";
-	    $("#gu").val(beforeGuValue);
+	    $("#gu").val(beforeGuValue || "none");
         
      	// 기존 파일 제거 시
         $(document).on("click", ".old-file-remove", function () {
@@ -848,6 +848,11 @@ function togglePassword() {
                     $("#locationErrMsg").html("상세 위치를 입력해 주십시오.");
                     isValid = false;
                 }
+            } else if (selectedLocation === "X") {
+                // locationYn 이 X라면, 위치 관련 값들을 비움
+                $("#si").val("none");
+                $("#gu").val("none");
+                $("#location").val("");
             }
 
             if (content.length < 10) {
@@ -870,16 +875,21 @@ function togglePassword() {
             const existingStoredNames = $("#existingStoredNames").val();
             const existingOrigNames = $("#existingOrigNames").val();
 
-            formData.append("existingStoredNames", existingStoredNames);
-            formData.append("existingOrigNames", existingOrigNames);
+            formData.append("existingStoredNames", existingStoredNames ?? "");
+            formData.append("existingOrigNames", existingOrigNames ?? "");
 
  			formData.append("password", password); 
             
             formData.append("si", siType);
             formData.append("gu", guType);
+            
+            formData.append("locationYn", selectedLocation);
 
             for (let i = 0; i < selectedFiles.length; i++) {
-                formData.append("files", selectedFiles[i]); // input name="files"에 맞춤
+                const file = selectedFiles[i];
+                if (file && typeof file !== "undefined") {
+                    formData.append("files", file); // input name="files"에 맞춤
+                }
             }
 
             $.ajax({

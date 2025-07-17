@@ -70,19 +70,55 @@
         }
         .tTitle{
             background-color: rgb(231, 231, 231);
-            
+            word-break: keep-all; /* 단어 단위로 줄바꿈 */
+            white-space: normal; /* 기본 줄바꿈 허용 */
+            overflow-wrap: break-word; /* 긴 단어가 있으면 자동 줄바꿈 */
+            text-align: center;
         }
         td{
             border-bottom: 1px solid black;
             padding: 10px;
             box-sizing: border-box;
             text-align: center;
+            word-break: keep-all; /* 단어 단위로 줄바꿈 */
+            white-space: normal; /* 기본 줄바꿈 허용 */
+            overflow-wrap: break-word; /* 긴 단어가 있으면 자동 줄바꿈 */
         }
         .red{
             color: red;
             font-size: 14px;
             flex: 0.5;
         }
+        a{
+        	color: black;
+        }
+        @media screen and (max-width: 1080px){
+        	#wrap{
+                padding: 5% 15%;
+            }
+            .infowrap{
+            	gap: 15px;
+            }
+		    .cate {
+		        flex: 0 0 auto;
+		        margin-right: 10px; /* 약간 간격 */
+		    }
+		    .inpWrap {
+		        flex: 1 1 auto;     /* 공간 채움 */
+		    }
+		    .red {
+		        flex: 0 0 100%;         /* 무조건 새 줄로 */
+		        order: 2;               /* 항상 마지막에 배치 */
+		    }
+        }
+        @media screen and (max-width: 480px){
+		    #wrap{
+                padding: 5% 10%;
+            }
+            .infowrap{
+                display: block;
+            }            
+		}
     </style>
     <link rel="stylesheet" type="text/css" href="resources/css/menu.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -95,6 +131,7 @@
             <p id="pageTitle">신고 조회 목록</p>
         </div>
         <div id="row2">
+        <form id="searchForm">
             <div class="infowrap">
                 <span class="cate">이름</span>
                 <div class="inpWrap">
@@ -118,8 +155,9 @@
                 <span class="red" id="passwordErrMsg"></span>
             </div>
             <div id="btnBox">
-                <button id="searchBtn">조회</button>
+                <button type="submit" id="searchBtn">조회</button>
             </div>
+            </form>
             <table>
             	<thead>
                 <tr>
@@ -152,9 +190,18 @@ function togglePassword() {
         icon.classList.add("bi-eye-slash");
     }
 }
+/*
+function formatDate(createdAtObj) {
+    const y = createdAtObj.year;
+    const m = String(createdAtObj.month).padStart(2, '0');
+    const d = String(createdAtObj.day).padStart(2, '0');
+    const h = String(createdAtObj.hour).padStart(2, '0');
+    const min = String(createdAtObj.minute).padStart(2, '0');
+    return `${y}-${m}-${d} ${h}:${min}`;
+}*/
 
 	$(document).ready(function(){
-		$("#searchBtn").on("click", function(e) {
+		$("#searchForm").on("submit", function(e) {
 			e.preventDefault();
 			
 			let isValid = true;
@@ -206,33 +253,43 @@ function togglePassword() {
             
             if (!isValid) return;
             
-            /*$.ajax({
-                url: "${pageContext.request.contextPath}/report/search",
+            
+            $.ajax({
+                url: "${pageContext.request.contextPath}/search",
                 type: "get",
-                data: { name: name, phone: phone },
+                data: { 
+                    name: name, 
+                    phone: phone,
+                    password: password
+                },
                 dataType: "json",
                 success: function(data) {
                     var $tbody = $("#reportTableBody");
-                    $tbody.empty(); // 기존 내용 제거
+                    $tbody.empty();
 
                     if (data.length === 0) {
                         $tbody.append("<tr><td colspan='4' align='center'>등록된 신고 내용이 없습니다.</td></tr>");
                     } else {
                         $.each(data, function(index, report) {
+                        	var dateOnly = report.createdAt.substring(0, 10); // 앞의 10글자: "2025-07-14"
                             var row = "<tr>" +
-                                "<td>" + (index + 1) + "</td>" +
-                                "<td>" + report.crimeType + "</td>" +
-                                "<td>" + (report.confirmYn === 'Y' ? "확인됨" : report.confirmYn === 'C'? "전화 필요" : "미확인") + "</td>" +
-                                "<td>" + report.createdAt + "</td>" +
+                            	"<td>" + (data.length - index) + "</td>" +
+                                "<td><a href='${pageContext.request.contextPath}/view?id=" + report.id + "'>" + report.crimeType + "</a></td>" +
+                                "<td>" + (report.state === '확인완료' ? "확인완료" : "미확인") + "</td>" +
+                                "<td>" + dateOnly + "</td>" +
                                 "</tr>";
                             $tbody.append(row);
                         });
                     }
                 },
-                error: function(xhr, status, error) {
-                    console.error("오류 발생:", error);
+                error: function(xhr) {
+                    if(xhr.status === 401){
+                        alert("비밀번호가 올바르지 않습니다.");
+                    } else {
+                        alert("조회 중 오류가 발생했습니다.");
+                    }
                 }
-            });*/
+            });
 		});
 	})
 </script>

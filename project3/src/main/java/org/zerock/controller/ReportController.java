@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import java.nio.file.StandardOpenOption;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
@@ -54,6 +56,13 @@ public class ReportController {
     @ResponseBody               // JSON 직렬화
     public Map<String, Object> submitReport(@ModelAttribute ReportDTO dto,
                                             @RequestParam("files") MultipartFile[] files) throws Exception {
+    	
+    	// locationYn 이 X일 때 location/si/gu 무시
+        if ("X".equals(dto.getLocationYn())) {
+            dto.setLocation(null);
+            dto.setSi(null);
+            dto.setGu(null);
+        }
 
         String uploadDir = "\\\\Des67\\02-공유폴더\\20250223KDT반\\LiveAir\\image\\";
         File dir = new File(uploadDir);
@@ -107,6 +116,13 @@ public class ReportController {
 	
 	        System.out.println("수정 id: " + dto.getId());
 	        System.out.println("삭제할 파일들(원본명): " + removedFiles);
+	        
+	        // locationYn 이 X일 때 location/si/gu 무시
+	        if ("X".equals(dto.getLocationYn())) {
+	            dto.setLocation(null);
+	            dto.setSi(null);
+	            dto.setGu(null);
+	        }
 	
 	        String uploadDir = "\\\\Des67\\02-공유폴더\\20250223KDT반\\LiveAir\\image\\";
 	        File dir = new File(uploadDir);
@@ -142,9 +158,15 @@ public class ReportController {
 	        // 새로 업로드된 파일 처리
 	        if (files != null) {
 	            for (MultipartFile file : files) {
-	                if (file.isEmpty()) continue;
+	            	if (file == null || file.isEmpty()) continue;
 	
 	                String originalFilename = file.getOriginalFilename();
+	                
+	                // originalFilename 이 null 이거나 "undefined" 이면 무시
+	                if (originalFilename == null 
+	                    || "undefined".equalsIgnoreCase(originalFilename.trim()) 
+	                    || "".equals(originalFilename.trim())) continue;
+	                
 	                String ext = "";
 	                int dotIdx = originalFilename.lastIndexOf('.');
 	                if (dotIdx != -1) ext = originalFilename.substring(dotIdx);
@@ -179,14 +201,14 @@ public class ReportController {
         ReportDTO report = reportService.getReport(id);
         model.addAttribute("report", report);   // 기존 그대로
 
-        // 2) LocalDateTime → Date 변환해서 별도 전달
-        if (report.getCreatedAt() != null) {
-            Date createdDate = Date.from(
-                    report.getCreatedAt()
-                       .atZone(ZoneId.systemDefault())
-                       .toInstant());
-            model.addAttribute("createdDate", createdDate);
-        }
+//        // 2) LocalDateTime → Date 변환해서 별도 전달
+//        if (report.getCreatedAt() != null) {
+//            Date createdDate = Date.from(
+//                    report.getCreatedAt()
+//                       .atZone(ZoneId.systemDefault())
+//                       .toInstant());
+//            model.addAttribute("createdDate", createdDate);
+//        }
 
         return "view";
     }
@@ -198,6 +220,31 @@ public class ReportController {
         
         return "/list";
     }
+    
+    @GetMapping("/search")
+    public ResponseEntity<?> searchReports(
+            @RequestParam String name,
+            @RequestParam String phone,
+            @RequestParam String password) {
+    	
+    	List<ReportDTO> matchedReports = reportService.findAllReportsByNamePhoneAndPassword(name, phone, password);
+
+        if (matchedReports.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 올바르지 않거나 신고글이 없습니다.");
+        }
+
+        return ResponseEntity.ok(matchedReports);
+
+//        boolean validUser = reportService.checkUser(name, phone, password);
+//
+//        if (!validUser) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 올바르지 않습니다.");
+//        }
+//
+//        List<ReportDTO> reports = reportService.getMyReports(name, phone);
+//        return ResponseEntity.ok(reports);
+    }
+
     
     @PostMapping("/modify")
     public String modifyPost(@RequestParam("id") int id, Model model) {

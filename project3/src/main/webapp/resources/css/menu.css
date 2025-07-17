@@ -60,3 +60,35 @@
         #logo{
             width: 100px;
         }
+        #hamburger{
+            display: none;
+        }
+        @media screen and (max-width: 1080px){
+        	header{
+                padding: 0% 15%;
+            }
+            #admin{
+            	right: 15%;
+            }
+        }
+        @media screen and (max-width: 480px){
+            header{
+                justify-content: center;
+                height: 100px;
+                background: transparent;
+                border: none;
+                position: relative;
+            }
+            #logo{
+                width: 70px;
+            }
+            .txtmenu, #admin{
+                display: none;
+            }
+            #hamburger{
+                display: block;
+                position: absolute;
+                right: 10%;
+                font-size: 25px;
+            }
+		}

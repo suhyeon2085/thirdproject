@@ -44,4 +44,9 @@
 	            <button type="submit" style="background:none; border:none; cursor:pointer; font-family: 'GongGothicMedium';" id="admin">로그아웃</button>
 	        </form>
 	    </sec:authorize>
+	    
+	    <!-- 햄버거 메뉴 아이콘 -->
+        <div id="hamburger">
+            &#9776; 
+        </div>
     </header>
