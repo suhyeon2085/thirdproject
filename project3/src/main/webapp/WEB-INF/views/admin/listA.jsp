@@ -461,6 +461,7 @@ $(document).ready(function() {
             data: { si, gu, crimeType },
             dataType: 'json',
             success: function(data) {
+            	console.log('전체 데이터:', data);
             	const $tbody = $('#reportTableBody');
                 $tbody.empty();
 
@@ -472,7 +473,8 @@ $(document).ready(function() {
 
                 // 서버에서 내림차순 정렬을 하므로 reverse()는 제거
 
-                $.each(data, function(i, report) {
+                $.each(data, function(index, report) {
+                	console.log('index:', index);
                     // createdAt이 문자열일 때 자르기
                     let createdDate = '';
                     if (report.createdAt) {
@@ -493,9 +495,10 @@ $(document).ready(function() {
                         </tr>
                     `;
                     $tbody.append(row);
-                    console.log('report.state:', report.state, typeof report.state);
+                    console.log('index:', index);
                     console.log('report.crimeType:', report.crimeType, typeof report.crimeType);
-                    console.log('createdDate', createdDate, typeof createdDate);
+                    console.log('report.state:', report.state, typeof report.state);
+                    console.log('report.createdAt:', report.createdAt);
                     
                 });
             },
