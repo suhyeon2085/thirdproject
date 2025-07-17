@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,11 +41,31 @@ public class AdminController {
         return reportService.findByFilter(si, gu, crimeType);
     }
 	
-	@GetMapping("/viewA")
-    public String redirectAdminViewGet() {
-        
-        return "/admin/viewA";
+//	@GetMapping("/viewA")
+//    public String redirectAdminViewGet() {
+//        
+//        return "/admin/viewA";
+//    }
+//	
+    @GetMapping("/viewA")
+    public String view(@RequestParam("id") Integer id, Model model) {
+
+        // 1) 상세 가져오기
+        ReportDTO report = reportService.getReport(id);
+        model.addAttribute("report", report);   // 기존 그대로
+
+//        // 2) LocalDateTime → Date 변환해서 별도 전달
+//        if (report.getCreatedAt() != null) {
+//            Date createdDate = Date.from(
+//                    report.getCreatedAt()
+//                       .atZone(ZoneId.systemDefault())
+//                       .toInstant());
+//            model.addAttribute("createdDate", createdDate);
+//        }
+
+        return "admin/viewA";
     }
+	
 	
 	/*@PostMapping("/updateState")
 	@ResponseBody

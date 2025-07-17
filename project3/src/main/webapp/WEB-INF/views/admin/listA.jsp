@@ -486,14 +486,13 @@ $(document).ready(function() {
                         }
                     }
 
-                    const row = `
-                        <tr>
-                            <td>${i + 1}</td>
-                            <td>${report.crimeType || ''}</td>
-                            <td>${report.state || ''}</td>
-                            <td>${createdDate}</td>
-                        </tr>
-                    `;
+                    const row = 
+                    "<tr>" +
+                            	"<td>" + (data.length - index) + "</td>" +
+                                "<td><a href='${pageContext.request.contextPath}/admin/viewA?id=" + report.id + "'>" + report.crimeType + "</a></td>" +
+                                "<td>" + (report.state === '확인완료' ? "확인완료" : "미확인") + "</td>" +
+                                "<td>" + createdDate + "</td>" +
+                                "</tr>";
                     $tbody.append(row);
                     console.log('index:', index);
                     console.log('report.crimeType:', report.crimeType, typeof report.crimeType);
