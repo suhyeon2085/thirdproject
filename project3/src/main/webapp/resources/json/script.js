@@ -149,6 +149,7 @@
 			}
 		}
 		
+		
 		function extendBounds(bounds, proj) {
 			var sw = proj.pointFromCoords(bounds.getSouthWest());
 			var ne = proj.pointFromCoords(bounds.getNorthEast());
