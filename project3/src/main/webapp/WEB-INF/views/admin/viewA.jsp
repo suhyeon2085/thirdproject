@@ -89,7 +89,7 @@
         <div id="row1">
             <span id="pageTitle">신고 조회 | 관리자</span>            
 			<span id="datetime">
-			  <fmt:formatDate value="${createdDate}" pattern="yyyy-MM-dd HH:mm"/>
+			  <fmt:formatDate value="${report.createdAt}" pattern="yyyy-MM-dd HH:mm"/>
 			</span>
         </div>
         <div id="row2">
@@ -100,12 +100,14 @@
             </div>
             <p class="title">| 신고인 기본 정보</p>
             <table>
+            	<tbody id="infoTable">
                 <tr>
                     <td class="infoT">이름</td>
-                    <td>${report.name}</td>
+                    <td id="name">${report.name}</td>
                     <td class="infoT">전화번호</td>
-                    <td>${report.phone}</td>
+                    <td id="phone">${report.phone}</td>
                 </tr>
+                </tbody>
             </table>
         </div>
         <div id="row3">
@@ -118,13 +120,36 @@
                 <tr>
                     <td class="infoT">위치</td>
                     <td>
-				    	${report.si}
-				    	<c:if test="${not empty report.gu and report.gu ne 'null'}"> ${report.gu}</c:if>
+                    				    <c:choose>
+				        <c:when test="${not empty fn:trim(report.si) 
+				                       and fn:trim(report.si) ne 'none' 
+				                       and fn:trim(report.si) ne 'null'}">
+				            <c:out value="${report.si}" />
+				            <c:if test="${not empty fn:trim(report.gu) 
+				                        and fn:trim(report.gu) ne 'none' 
+				                        and fn:trim(report.gu) ne 'null'}">
+				                &nbsp;<c:out value="${report.gu}" />
+				            </c:if>
+				        </c:when>
+				        <c:otherwise>
+				            입력X(기억나지 않습니다)
+				        </c:otherwise>
+				    </c:choose>
 				  	</td>
                 </tr>
                 <tr>
                     <td class="infoT">상세 위치</td>
-                    <td>${report.location}</td>
+				    <td>
+				        <c:choose>
+				            <c:when test="${not empty fn:trim(report.location) 
+				                           and fn:trim(report.location) ne 'null'}">
+				                <c:out value="${report.location}" />
+				            </c:when>
+				            <c:otherwise>
+				                입력X(기억나지 않습니다)
+				            </c:otherwise>
+				        </c:choose>
+				    </td>
                 </tr>
                 <tr>
                     <td class="infoT">상세 내용</td>
@@ -133,14 +158,19 @@
                 <tr>
                     <td class="infoT">첨부 파일</td>
                     <td>
-                    <c:forEach var="uuid" items="${fn:split(report.storedName, ';')}" varStatus="i">
-	        			<c:set var="orig" value="${fn:split(report.origName, ';')[i.index]}" />
-	        			
-	        			<img src="/image/${uuid}" width="600" height="400" style="object-fit:cover; border:1px solid #ccc;" 
-	         				onerror="this.style.display='none';" alt="${orig}" title="${orig}" />
-	        			
-	        			<a href="/download?uuid=${uuid}&name=${orig}">${orig}</a><br/>
-      				</c:forEach>
+                    <c:if test="${empty report.storedName or report.storedName eq 'undefined'}">
+					        없음
+					    </c:if>
+					    <c:if test="${not empty report.storedName and report.storedName ne 'undefined'}">
+					        <c:forEach var="uuid" items="${fn:split(report.storedName, ';')}" varStatus="i">
+					            <c:set var="orig" value="${fn:split(report.origName, ';')[i.index]}" />
+					            
+					            <img class="fileimg" src="/image/${uuid}" 
+					                onerror="this.style.display='none';" alt="${orig}" title="${orig}" />
+					            
+					            <a href="/download?uuid=${uuid}&name=${orig}">${orig}</a><br/>
+					        </c:forEach>
+					    </c:if>
                     </td>
                 </tr>
             </table>
