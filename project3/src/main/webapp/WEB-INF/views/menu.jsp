@@ -29,9 +29,6 @@
         <sec:authorize access="hasRole('ROLE_ADMIN')">
 		    <a class="txtmenu" href="${pageContext.request.contextPath}/admin/listA">신고 조회</a>
 		</sec:authorize>
-		<sec:authorize access="!hasRole('ROLE_ADMIN')">
-		    <a class="txtmenu" href="list">신고 조회</a>
-		</sec:authorize>
         
         <!-- 로그인하지 않은 경우 -->
 	    <sec:authorize access="!isAuthenticated()">

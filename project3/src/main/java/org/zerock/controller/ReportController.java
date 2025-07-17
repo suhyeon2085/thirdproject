@@ -57,8 +57,8 @@ public class ReportController {
     public Map<String, Object> submitReport(@ModelAttribute ReportDTO dto,
                                             @RequestParam("files") MultipartFile[] files) throws Exception {
     	
-    	// locationYn 이 X일 때 location/si/gu 무시
-        if ("X".equals(dto.getLocationYn())) {
+    	// locationYn 이 O일 때 location/si/gu 무시
+        if ("O".equals(dto.getLocationYn())) {
             dto.setLocation(null);
             dto.setSi(null);
             dto.setGu(null);
@@ -117,8 +117,8 @@ public class ReportController {
 	        System.out.println("수정 id: " + dto.getId());
 	        System.out.println("삭제할 파일들(원본명): " + removedFiles);
 	        
-	        // locationYn 이 X일 때 location/si/gu 무시
-	        if ("X".equals(dto.getLocationYn())) {
+	        // locationYn 이 O일 때 location/si/gu 무시
+	        if ("O".equals(dto.getLocationYn())) {
 	            dto.setLocation(null);
 	            dto.setSi(null);
 	            dto.setGu(null);
@@ -221,19 +221,19 @@ public class ReportController {
         return "/list";
     }
     
-    @GetMapping("/search")
-    public ResponseEntity<?> searchReports(
-            @RequestParam String name,
-            @RequestParam String phone,
-            @RequestParam String password) {
-    	
-    	List<ReportDTO> matchedReports = reportService.findAllReportsByNamePhoneAndPassword(name, phone, password);
-
-        if (matchedReports.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 올바르지 않거나 신고글이 없습니다.");
-        }
-
-        return ResponseEntity.ok(matchedReports);
+//    @GetMapping("/search")
+//    public ResponseEntity<?> searchReports(
+//            @RequestParam String name,
+//            @RequestParam String phone,
+//            @RequestParam String password) {
+//    	
+//    	List<ReportDTO> matchedReports = reportService.findAllReportsByNamePhoneAndPassword(name, phone, password);
+//
+//        if (matchedReports.isEmpty()) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 올바르지 않거나 신고글이 없습니다.");
+//        }
+//
+//        return ResponseEntity.ok(matchedReports);
 
 //        boolean validUser = reportService.checkUser(name, phone, password);
 //
@@ -243,7 +243,7 @@ public class ReportController {
 //
 //        List<ReportDTO> reports = reportService.getMyReports(name, phone);
 //        return ResponseEntity.ok(reports);
-    }
+//    }
 
     
     @PostMapping("/modify")

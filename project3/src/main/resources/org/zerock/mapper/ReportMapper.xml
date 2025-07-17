@@ -17,8 +17,9 @@
   <result property="storedName" column="stored_name"/>  <!-- ★ -->
   <result property="origName"   column="orig_name"/>    <!-- ★ -->
   <result property="createdAt"  column="created_at"/>
-  
-  <result property="password"      column="password"/>
+  <result property="lat"      column="lat"/>
+  <result property="lon"      column="lon"/>
+  <result property="myLoc2"      column="myLoc2"/>
 </resultMap>
 
   <!-- 1) INSERT -->
@@ -30,9 +31,9 @@
   	
     INSERT INTO report
         (name, phone, location, crime_type, content,
-         stored_name, orig_name, file_path, password, si, gu, locationYn)
+         stored_name, orig_name, file_path, si, gu, locationYn, lat, lon, myLoc2)
   VALUES (#{name}, #{phone}, #{location}, #{crimeType}, #{content},
-          #{storedName}, #{origName}, #{filePath}, #{password}, #{si}, #{gu}, #{locationYn})
+          #{storedName}, #{origName}, #{filePath}, #{si}, #{gu}, #{locationYn}, #{lat}, #{lon}, #{myLoc2})
   </insert>
   
   <delete id="delete" parameterType="int">
@@ -43,11 +44,13 @@
     UPDATE report
     SET name = #{name},
         phone = #{phone},
+        lat = #{lat},
+        lon = #{lon},
+        myLoc2 = #{myLoc2},
         crime_type = #{crimeType},
         locationYn = #{locationYn},
         location = #{location},
         content = #{content},
-        password = #{password},
         si = #{si},
         gu = #{gu},
         stored_name = #{storedName},

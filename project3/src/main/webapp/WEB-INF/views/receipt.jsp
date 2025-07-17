@@ -71,16 +71,21 @@
             margin-top: 5px;
             margin-bottom: 0;
         }
-        #pwBox{
-        	position: relative;
+        #myLocWrap{
+        	display: flex;
+        	gap: 15px;
         }
-        .eye-icon {
-            cursor: pointer;
-            position: absolute;
-            bottom: 6px;
-            right: 15px;
-            font-size: 18px;
-        }
+		#myLocMap{
+			border: 1px solid gray;
+			width: 100%;
+			height: 350px;
+		}
+		#myLocMap, #myLocTextWrap{
+			flex: 1;
+		}
+		#myLoc1{
+			margin-bottom: 5px;
+		}
         #crimeType{
             font-size: 14px;
             border: none;
@@ -100,6 +105,9 @@
             border-bottom: 1px solid gray;
             padding: 10px 0px;
             width: 25%;
+        }
+        #locTxt{
+        	margin-bottom: 10px;
         }
         #location{
             margin-top: 10px;
@@ -188,6 +196,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="resources/css/menu.css">
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8630523bb26c1a45d2753088246f3a05"></script>
 </head>
 <body>
 	<jsp:include page="/WEB-INF/views/menu.jsp" />
@@ -209,7 +218,7 @@
                 <div class="infoT">
                     <p class="title">신고인 기본 정보</p>
                     <p class="blue" id="notice1">
-                    	아래에 대한 정보를 통해 이후 조회페이지에서 조회하실 수 있습니다.<br>
+                    	입력하신 정보는 접수 후 조회 및 수정/삭제하실 수 없습니다.<br>
                         필요 시, 정보 확인에 대한 전화가 갈 수도 있습니다.
                     </p>
                 </div>
@@ -227,12 +236,16 @@
                     </p>
                 </div>
                 <div class="infowrap">
-                    <p class="cate">비밀번호<span class="redStar">*</span></p>
-                    <div id="pwBox">
-	                    <input class="inp" type="password" id="password" name="password">
-	                    <i class="bi bi-eye-slash eye-icon" onclick="togglePassword()"></i>
+                    <p class="cate">현재 위치</p>
+                    <div id="myLocWrap">
+	                    <div id="myLocMap"></div>
+	                    <div id="myLocTextWrap">
+		                    <input class="inp" type="text" id="myLoc1" name="myLoc1" readonly>
+		                    <input class="inp" type="text" id="myLoc2" name="myLoc2" placeholder="상세주소">
+	                    </div>
                     </div>
-                    <p class="red" id="passwordErrMsg"></p>
+                    <input class="inp" type="hidden" id="lat" name="lat">
+	                <input class="inp" type="hidden" id="lon" name="lon">
                 </div>
                 <div class="infoT">
                     <p class="title">신고 내용</p>
@@ -252,13 +265,16 @@
                     <p class="red" id="sltErrMsg"></p>
                 </div>
                 <div class="infowrap">
-                    <p class="cate">위치<span class="redStar">*</span></p>
+                    <p class="cate">신고할 위치<span class="redStar">*</span></p>
+                    <p class="blue" id="locTxt">
+                        위 주소와 동일한 위치입니까?
+                    </p>
                     <div id="check">
                     	<div>
-                        	<input type="radio" name="locationYn" value="O" checked>입력
+                        	<input type="radio" name="locationYn" value="O" checked>예
                         </div>
-                        <div>
-                        	<input type="radio" name="locationYn" value="X">입력X(기억나지 않습니다)
+                    	<div>
+                        	<input type="radio" name="locationYn" value="X">아니오
                         </div>
                     </div>
                     <div id="locSlt">
@@ -286,7 +302,7 @@
 	                    <select name="gu" id="gu"></select>
                     </div>
                     <p class="red" id="siguErrMsg"></p>
-                    <input class="inp" type="text" id="location" name="location">
+                    <input class="inp" type="text" id="location" name="location" placeholder="상세주소">
                     <span class="red" id="locationErrMsg"></span>
                 </div>
                 <div class="infowrap">
@@ -315,19 +331,57 @@
         </div>
     </div>
 <script>
-function togglePassword() {
-    const input = document.getElementById("password");
-    const icon = document.querySelector(".eye-icon");
-    if (input.type === "password") {
-        input.type = "text";
-        icon.classList.remove("bi-eye-slash");
-        icon.classList.add("bi-eye");
-    } else {
-        input.type = "password";
-        icon.classList.remove("bi-eye");
-        icon.classList.add("bi-eye-slash");
-    }
-}
+navigator.geolocation.getCurrentPosition(function(position) {
+    var lat = position.coords.latitude;
+    var lon = position.coords.longitude;
+
+    // 지도 표시
+    var container = document.getElementById('myLocMap'); 
+    var options = { 
+        center: new kakao.maps.LatLng(lat, lon), 
+        level: 3 
+    };
+    var map = new kakao.maps.Map(container, options);
+
+    // 현재 위치 마커
+    var marker = new kakao.maps.Marker({
+        position: new kakao.maps.LatLng(lat, lon)
+    });
+    marker.setMap(map);
+
+    // input에 좌표 저장 (혹은 지역명 API로 변환 가능)
+    document.getElementById('lat').value = lat;
+    document.getElementById('lon').value = lon;
+
+ 	// Kakao REST API: 좌표 → 주소 변환
+    fetch(`https://dapi.kakao.com/v2/local/geo/coord2address.json?x=\${lon}&y=\${lat}`, {
+        headers: {
+            Authorization: 'KakaoAK 0dcf02ffc9f749494154f69366ea02ab'  // ★ 여기 REST API 키 넣으세요!
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.documents.length > 0) {
+            // 도로명 주소
+            var roadAddress = data.documents[0].road_address 
+                            ? data.documents[0].road_address.address_name 
+                            : null;
+
+            // 지번 주소
+            var jibunAddress = data.documents[0].address.address_name;
+
+            // input에 넣기 (도로명 주소가 있으면 도로명, 없으면 지번)
+            document.getElementById('myLoc1').value = roadAddress || jibunAddress;
+        } else {
+            document.getElementById('myLoc1').value = '주소를 찾을 수 없습니다';
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        document.getElementById('myLoc1').value = '주소 조회 실패';
+    });
+});
+
 
     $(document).ready(function(){
     	// 숫자만 입력되도록 처리 및 에러 제거
@@ -349,11 +403,6 @@ function togglePassword() {
     	$("#name").on("input", function () {
     	    if ($(this).val().trim() !== "") {
     	        $("#nameErrMsg").html("");
-    	    }
-    	});
-    	$("#password").on("input", function () {
-    	    if ($(this).val().trim() !== "") {
-    	        $("#passwordErrMsg").html("");
     	    }
     	});
 
@@ -405,13 +454,10 @@ function togglePassword() {
 		// gu 선택 시에도 validate
 		$("#gu").on("change", validateSigu);
 		
-		// 위치X면 위치 입력 숨기기
-		$("input[name='locationYn']").on("change", function () {
-		    const isLocationX = $(this).val() === "X";
-		
-		    $("#location, #si, #gu").toggle(!isLocationX);
-		
-		    if (isLocationX) {
+		function updateLocationVisibility() {
+		    const isLocationO = $("input[name='locationYn']:checked").val() === "O";
+		    $("#location, #si, #gu").toggle(!isLocationO); // "예"면 숨기고, "아니오"면 보이게
+		    if (isLocationO) {
 		        $("#locationErrMsg, #siguErrMsg").html("");
 		    } else {
 		        if ($("#location").val().trim() === "") {
@@ -419,7 +465,18 @@ function togglePassword() {
 		        }
 		        validateSigu();
 		    }
+		}
+
+		// 페이지 로드 시 초기 상태 설정
+		$(document).ready(function() {
+		    updateLocationVisibility();
 		});
+
+		// 라디오 버튼 값이 변경될 때도 실행
+		$("input[name='locationYn']").on("change", function () {
+		    updateLocationVisibility();
+		});
+
 
         
      	// 시구 select
@@ -782,7 +839,6 @@ function togglePassword() {
             const data = {
                 name: $('#name').val(),
                 phone: $('#phone').val(),
-                password: $('#password').val(),
                 crimeType: $('#crimeType').val(),
                 locationYn: $('input[name="locationYn"]:checked').val(),
                 si: $('#si').val(),
@@ -802,9 +858,8 @@ function togglePassword() {
             if (now - data.savedAt < ttl) {
                 $('#name').val(data.name || '');
                 $('#phone').val(data.phone || '');
-                $('#password').val(data.password || '');
                 $('#crimeType').val(data.crimeType || 'none');
-                $('input[name="locationYn"][value="' + (data.locationYn || 'O') + '"]').prop('checked', true);
+                $('input[name="locationYn"][value="' + (data.locationYn || 'X') + '"]').prop('checked', true);
                 $('#si').val(data.si || 'none');
                 $('#gu').val(data.gu || 'none');
                 $('#location').val(data.location || '');
@@ -823,7 +878,9 @@ function togglePassword() {
             let isValid = true;
             const name = $("#name").val().trim();
             const phone = $("#phone").val().trim();
-            const password = $("#password").val().trim();
+            const lat = $("#lat").val().trim();
+            const lon = $("#lon").val().trim();
+            const myLoc2 = $("#myLoc2").val().trim();
             const selectedType = $("#crimeType").val();
             const selectedLocation = $("input[name='locationYn']:checked").val();
             const siType = $("#si").val();
@@ -832,7 +889,7 @@ function togglePassword() {
             const content = $("#content").val().trim();
 
             // 에러 초기화
-            $("#nameErrMsg, #phoneErrMsg, #passwordErrMsg, #sltErrMsg, #locationErrMsg, #siguErrMsg, #contentErrMsg").html("");
+            $("#nameErrMsg, #phoneErrMsg, #sltErrMsg, #locationErrMsg, #siguErrMsg, #contentErrMsg").html("");
 
             if (!name) {
                 $("#nameErrMsg").html("이름을 입력해 주십시오.");
@@ -847,10 +904,6 @@ function togglePassword() {
                 isValid = false;
             }
 
-            if (!password) {
-                $("#passwordErrMsg").html("비밀번호를 입력해 주십시오.");
-                isValid = false;
-            }
 
             if (selectedType === "none") {
                 $("#sltErrMsg").html("범죄 유형을 선택해 주십시오.");
@@ -870,8 +923,8 @@ function togglePassword() {
                     $("#locationErrMsg").html("상세 위치를 입력해 주십시오.");
                     isValid = false;
                 }
-            } else if (selectedLocation === "X") {
-                // locationYn 이 X라면, 위치 관련 값들을 비움
+            } else if (selectedLocation === "O") {
+                // locationYn 이 O라면, 위치 관련 값들을 비움
                 $("#si").val("none");
                 $("#gu").val("none");
                 $("#location").val("");
@@ -888,12 +941,12 @@ function togglePassword() {
             const formData = new FormData();
             formData.append("name", name);
             formData.append("phone", phone);
+            formData.append("lat", lat);
+            formData.append("lon", lon);
+            formData.append("myLoc2", myLoc2);
             formData.append("crimeType", selectedType);
             formData.append("location", locationValue);
-            formData.append("content", content);
-            
-            formData.append("password", password); 
-            
+            formData.append("content", content); 
             formData.append("si", siType);
             formData.append("gu", guType);
             formData.append("locationYn", selectedLocation);
@@ -909,13 +962,12 @@ function togglePassword() {
                 contentType: false,
                 processData: false,
                 dataType: "json",
-                success: function (res) {
-                	console.log(res);
-                    // res.id를 받아서 상세 페이지로 이동
-                    window.location.href = "/view?id=" + res.id;
+                success: function () {
+                    alert("신고 접수가 완료되었습니다.");
+                    window.location.href = "/";  // 필요 시 다른 페이지로 변경
                 },
                 error: function () {
-                    alert("제출에 실패했습니다. 관리자에게 문의하세요.");  // 필요하면 복구
+                    alert("제출에 실패했습니다. 관리자에게 문의하세요.");
                 }
             });
         });

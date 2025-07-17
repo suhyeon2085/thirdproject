@@ -21,15 +21,9 @@ public class ReportService {
 
 	@Autowired
     private ReportMapper reportMapper;
-	@Autowired
-    private BCryptPasswordEncoder passwordEncoder;
 
-    public Integer submitReport(ReportDTO dto) {
-    	// 비밀번호 암호화
-        String rawPassword = dto.getPassword();
-        String encodedPassword = passwordEncoder.encode(rawPassword);
-        dto.setPassword(encodedPassword);
-    	
+
+    public Integer submitReport(ReportDTO dto) {    	
     	int row = reportMapper.insertReport(dto); // ② 성공 행수 체크
         if (row == 0) throw new RuntimeException("Insert 실패");
         return dto.getId();
@@ -81,16 +75,16 @@ public class ReportService {
     }
 
 
-    public List<ReportDTO> findAllReportsByNamePhoneAndPassword(String name, String phone, String rawPassword) {
-        List<ReportDTO> reports = reportMapper.findByNameAndPhone(name, phone);
-        List<ReportDTO> matched = new ArrayList<>();
-        for (ReportDTO report : reports) {
-            if (passwordEncoder.matches(rawPassword, report.getPassword())) {
-                matched.add(report);
-            }
-        }
-        return matched;
-    }
+//    public List<ReportDTO> findAllReportsByNamePhoneAndPassword(String name, String phone, String rawPassword) {
+//        List<ReportDTO> reports = reportMapper.findByNameAndPhone(name, phone);
+//        List<ReportDTO> matched = new ArrayList<>();
+//        for (ReportDTO report : reports) {
+//            if (passwordEncoder.matches(rawPassword, report.getPassword())) {
+//                matched.add(report);
+//            }
+//        }
+//        return matched;
+//    }
 
 
 //    public boolean checkUser(String name, String phone, String password) {
