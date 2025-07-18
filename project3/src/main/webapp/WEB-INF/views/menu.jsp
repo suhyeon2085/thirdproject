@@ -20,7 +20,7 @@
 		</sec:authorize>
 		
 		<!-- '범죄 신고' 메뉴 -->
-        <sec:authorize access="!hasRole('ROLE_ADMIN')">
+        <sec:authorize access="!hasRole('ROLE_ADMIN') and !hasRole('ROLE_POLICE')">
 		    <a class="txtmenu" href="receipt">범죄 신고</a>
 		</sec:authorize>
 
@@ -28,6 +28,9 @@
         <!-- '신고 조회' 메뉴 -->
         <sec:authorize access="hasRole('ROLE_ADMIN')">
 		    <a class="txtmenu" href="${pageContext.request.contextPath}/admin/listA">신고 조회</a>
+		</sec:authorize>
+		<sec:authorize access="hasRole('ROLE_POLICE')">
+		    <a class="txtmenu" href="${pageContext.request.contextPath}/police/listP">신고 조회</a>
 		</sec:authorize>
         
         <!-- 로그인하지 않은 경우 -->

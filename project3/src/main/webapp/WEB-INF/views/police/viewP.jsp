@@ -8,7 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>신고 조회 | 상황실</title>
+    <title>신고 조회 | 파출소</title>
     <style>
         #wrap{
             padding: 5% 20%;
@@ -80,17 +80,17 @@
             color: whitesmoke;
             /* border-radius: 10px; */
         }
-        #assign{
-            border: 1px solid rgb(4, 80, 54);
-            background-color: rgb(16, 124, 88);
+        #move{
+            border: 1px solid rgb(172, 75, 20);
+            background-color: rgb(218, 125, 72);
         }
-        #support_completed{
-            border: 1px solid rgb(0, 26, 82);
-            background-color: rgb(16, 50, 124);  
+        #need_support{
+            border: 1px solid rgb(72, 3, 78);
+            background-color: rgb(115, 16, 124);  
         }
-        #delete{
-            border: 1px solid rgb(80, 4, 4);
-            background-color: rgb(124, 16, 16);   
+        #end{
+            border: 1px solid black;
+            background-color: black;   
         }
         @media screen and (max-width: 1080px){
         	#wrap{
@@ -116,7 +116,7 @@
 <jsp:include page="/WEB-INF/views/menu.jsp" />
     <div id="wrap">
         <div id="row1">
-            <span id="pageTitle">신고 조회 | 상황실</span>            
+            <span id="pageTitle">신고 조회 | 파출소</span>            
 			<span id="datetime">
 			  <fmt:formatDate value="${report.createdAt}" pattern="yyyy-MM-dd HH:mm"/>
 			</span>
@@ -219,12 +219,9 @@
             </table>
         </div>
         <div id="bottomBtn">
-            <button class="btn" id="assign">배정</button>
-            <button class="btn" id="support_completed">지원 완료</button>
-            <form action="/delete" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?')">
-			  <input type="hidden" name="id" value="${report.id}" />
-			  <button class="btn" id="delete">삭제</button>
-			</form>
+            <button class="btn" id="move">출동</button>
+            <button class="btn" id="need_support">지원 요청</button>
+            <button class="btn" id="end">상황 종료</button>
         </div>
     </div> 
 <script>
@@ -273,23 +270,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
 $(document).ready(function(){
     // 기본 상태 설정
-    updateState('미확인');
+    updateState('배정');
 
-    $('#assign').on('click', function(){
-        changeStateOnServer('배정');
+    $('#move').on('click', function(){
+        changeStateOnServer('출동');
     });
 
-    $('#support_completed').on('click', function(){
-        changeStateOnServer('지원 완료');
+    $('#need_support').on('click', function(){
+        changeStateOnServer('지원 요청');
+    });
+    
+    $('#end').on('click', function(){
+        changeStateOnServer('상황 종료');
     });
 
     function updateState(state){
         $('#state').val(state);
-        let color = 'red';
-        if(state === '배정') color = 'green';
-        else if(state === '출동') color = 'orange';
+        let color = 'green';
+        if(state === '출동') color = 'orange';
         else if(state === '지원 요청') color = 'purple';
         else if(state === '지원 완료') color = 'blue';
+        else if(state === '지원 완료') color = 'blue';
+        else if(state === '상황 종료') color = 'black';
 
         $('#state').css('color', color);
     }
