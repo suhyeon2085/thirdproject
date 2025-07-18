@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>신고 조회 목록 | 관리자</title>
+    <title>신고 조회 목록 | 상황실</title>
     <style>
         @font-face {
             font-family: 'GongGothicMedium';
@@ -61,13 +61,18 @@
             padding: 10px;
             box-sizing: border-box;
             text-align: center;
+            word-break: keep-all; /* 단어 단위로 줄바꿈 */
+            white-space: normal; /* 기본 줄바꿈 허용 */
+            overflow-wrap: break-word; /* 긴 단어가 있으면 자동 줄바꿈 */
         }
         .red{
             color: red;
             font-size: 14px;
             flex: 0.5;
         }
-        
+        a{
+        	color: black;
+        }
         
 		#pagination {
 		  display: flex;
@@ -114,7 +119,52 @@
 		  color: #007bff;
 		}
 		
-
+		@media screen and (max-width: 1080px){
+        	#wrap{
+                padding: 5% 15%;
+            }
+            .infowrap{
+            	gap: 15px;
+            }
+		    .cate {
+		        flex: 0 0 auto;
+		        margin-right: 10px; /* 약간 간격 */
+		    }
+		    .inpWrap {
+		        flex: 1 1 auto;     /* 공간 채움 */
+		    }
+		    .red {
+		        flex: 0 0 100%;         /* 무조건 새 줄로 */
+		        order: 2;               /* 항상 마지막에 배치 */
+		    }
+		    #si, #gu, #crimeType{
+            	width: 30%;
+        	} 
+        }
+        @media screen and (max-width: 480px){
+		    #wrap{
+                padding: 5% 10%;
+            }
+            .infowrap{
+                display: block;
+            }
+            #row1{
+            	display:block;
+            }
+            #searchFrm{
+            	text-align:right;
+            }
+			#search{
+				width: 100px;
+				margin-top: 10px;
+			}
+            td{
+            	font-size: 14px;
+            }
+            #datetime{
+            	font-size: 12px;
+            }
+		}
     </style>
     <link rel="stylesheet" type="text/css" href="../resources/css/menu.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -123,7 +173,7 @@
 <jsp:include page="/WEB-INF/views/menu.jsp" />
     <div id="wrap">
         <div id="row1">
-            <p id="pageTitle">신고 조회 목록 | 관리자</p>
+            <p id="pageTitle">신고 조회 목록 | 상황실</p>
         </div>
         <div id="row2">
             <div id="sltWrap">
@@ -165,8 +215,9 @@
                 <tr>
                     <td class="tTitle" width="10%">번호</td>
                     <td class="tTitle">범죄 유형</td>
-                    <td class="tTitle" width="15%">확인 상태</td>
-                    <td class="tTitle" width="15%">작성일</td>
+                    <td class="tTitle" width="15%">진행 상태</td>
+                    <td class="tTitle" width="20%">배정된 파출소</td>
+                    <td class="tTitle" width="15%">신고일</td>
                 </tr>
                 </thead>
                 <tbody id="reportTableBody">
@@ -528,10 +579,27 @@ $(document).ready(function() {
                 $.each(reports, function(index, report) {
                     let createdDate = '';
                     if (report.createdAt) {
-                        if (typeof report.createdAt === 'string') {
-                            createdDate = report.createdAt.substring(0, 10);
+                        let dateObj = (typeof report.createdAt === 'string') 
+                            ? new Date(report.createdAt) 
+                            : new Date(report.createdAt);
+                        
+                        // 오늘 날짜(연, 월, 일) 구하기
+                        const today = new Date();
+                        const isToday = dateObj.getFullYear() === today.getFullYear() &&
+                                        dateObj.getMonth() === today.getMonth() &&
+                                        dateObj.getDate() === today.getDate();
+
+                        if (isToday) {
+                            // 시:분 형태 (두 자리수로 표시)
+                            const hours = dateObj.getHours().toString().padStart(2, '0');
+                            const minutes = dateObj.getMinutes().toString().padStart(2, '0');
+                            createdDate = `\${hours}:\${minutes}`;
                         } else {
-                            createdDate = new Date(report.createdAt).toISOString().substring(0, 10);
+                            // YYYY-MM-DD 형태
+                            const year = dateObj.getFullYear();
+                            const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+                            const day = dateObj.getDate().toString().padStart(2, '0');
+                            createdDate = `\${year}-\${month}-\${day}`;
                         }
                     }
 
@@ -539,8 +607,9 @@ $(document).ready(function() {
                         "<tr>" +
                             "<td>" + (reports.length - index) + "</td>" +
                             "<td><a href='${pageContext.request.contextPath}/admin/viewA?id=" + report.id + "'>" + report.crimeType + "</a></td>" +
-                            "<td>" + (report.state === '확인완료' ? "확인완료" : "미확인") + "</td>" +
-                            "<td>" + createdDate + "</td>" +
+                            "<td>" + report.state + "</td>" +
+                            "<td>" + report.station + "</td>" +
+                            "<td id='datetime'>" + createdDate + "</td>" +
                         "</tr>";
                     $tbody.append(row);
                     console.log('index:', index);
