@@ -100,5 +100,21 @@ public class ReportService {
         return reportMapper.findByFilter(params);
     }
 
+    public List<ReportDTO> findByFilterWithPaging(String si, String gu, String crimeType, int offset, int size) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("si", si);
+        params.put("gu", gu);
+        params.put("crimeType", crimeType);
+        params.put("offset", offset);
+        params.put("size", size);
+        return reportMapper.findByFilterWithPaging(params);
+    }
 
+    public int getTotalCount(String si, String gu, String crimeType) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("si", si);
+        params.put("gu", gu);
+        params.put("crimeType", crimeType);
+        return reportMapper.getTotalCount(params);
+    }
 }

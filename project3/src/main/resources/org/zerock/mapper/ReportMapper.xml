@@ -108,6 +108,38 @@
     ORDER BY created_at DESC
 </select>
 
+	<select id="findByFilterWithPaging" parameterType="map" resultMap="reportMap">
+        SELECT *
+        FROM report
+        WHERE 1 = 1
+        <if test="si != null and si != 'none'">
+            AND si = #{si}
+        </if>
+        <if test="gu != null and gu != 'none'">
+            AND gu = #{gu}
+        </if>
+        <if test="crimeType != null and crimeType != 'none'">
+            AND crime_Type = #{crimeType}
+        </if>
+        ORDER BY created_At DESC
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+
+    <select id="getTotalCount" parameterType="map" resultType="int">
+        SELECT COUNT(*) 
+        FROM report
+        WHERE 1 = 1
+        <if test="si != null and si != 'none'">
+            AND si = #{si}
+        </if>
+        <if test="gu != null and gu != 'none'">
+            AND gu = #{gu}
+        </if>
+        <if test="crimeType != null and crimeType != 'none'">
+            AND crime_Type = #{crimeType}
+        </if>
+    </select>
+
   <!-- 4) 상세 -->
   <select id="findById" resultMap="reportMap">
     SELECT * FROM report WHERE id = #{id}
