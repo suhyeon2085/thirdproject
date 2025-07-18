@@ -29,14 +29,15 @@
         #row2, #row3{
             margin-bottom: 50px;
         }
-        #stateWrap{
+        #nowWrap{
             margin-top: 15px;
-            font-size: 16px;
+            margin-bottom: 50px;
+            font-size: 18px;
         }
-        #state{
+        #station, #state{
             border: none;
             font-family: 'GongGothicMedium';
-            font-size: 16px;
+            font-size: 18px;
         }
         table{
             border: 1px solid black;
@@ -46,6 +47,9 @@
         td{
             border: 1px solid black;
             padding: 10px;
+            word-break: keep-all; /* 단어 단위로 줄바꿈 */
+            white-space: normal; /* 기본 줄바꿈 허용 */
+            overflow-wrap: break-word; /* 긴 단어가 있으면 자동 줄바꿈 */
         }
         .infoT{
             background-color: rgb(231, 231, 231);
@@ -59,6 +63,12 @@
         	gap: 5px;
             justify-content: center;
         }
+        .fileimg{
+        	object-fit: cover;
+        	border: 1px solid #ccc;
+			width: 100%;
+			height: auto;
+        }
         .btn{
             padding: 10px 15px;
             font-family: 'GongGothicMedium';
@@ -71,14 +81,20 @@
             border: 1px solid rgb(4, 80, 54);
             background-color: rgb(16, 124, 88);
         }
-        #hold{
-            border: 1px solid rgb(0, 26, 82);
-            background-color: rgb(16, 50, 124);  
-        }
         #delete{
             border: 1px solid rgb(80, 4, 4);
             background-color: rgb(124, 16, 16);   
         }
+        @media screen and (max-width: 1080px){
+        	#wrap{
+                padding: 5% 15%;
+            }
+        }
+        @media screen and (max-width: 480px){
+		    #wrap{
+                padding: 5% 10%;
+            }
+		}
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../resources/css/menu.css">
@@ -94,9 +110,15 @@
         </div>
         <div id="row2">
         	<input type="hidden" name="id" value="${report.id}" />
-            <div id="stateWrap">
-        	    <span id="stateTxt">확인 상태: </span>
-                <input type="text" name="state" id="state" value="${report.state}">
+        	<div id="nowWrap">
+	            <div>
+	        	    <span class="title">| 배정된 파출소: </span>
+	                <input type="text" name="station" id="station" value="${report.station}" readonly>
+	            </div>
+	            <div>
+	        	    <span class="title">| 진행 상태: </span>
+	                <input type="text" name="state" id="state" value="${report.state}">
+	            </div>
             </div>
             <p class="title">| 신고인 기본 정보</p>
             <table>
@@ -106,6 +128,14 @@
                     <td id="name">${report.name}</td>
                     <td class="infoT">전화번호</td>
                     <td id="phone">${report.phone}</td>
+                </tr>
+                <tr>
+                	<td class="infoT">현재 위치</td>
+                    <td colspan="3">${report.myLoc1}</td>
+                </tr>
+                <tr>
+                	<td class="infoT">상세 주소</td>
+                    <td colspan="3">${report.myLoc2}</td>
                 </tr>
                 </tbody>
             </table>
@@ -118,9 +148,9 @@
                     <td>${report.crimeType}</td>
                 </tr>
                 <tr>
-                    <td class="infoT">위치</td>
+                    <td class="infoT">신고할 위치</td>
                     <td>
-                    				    <c:choose>
+                    <c:choose>
 				        <c:when test="${not empty fn:trim(report.si) 
 				                       and fn:trim(report.si) ne 'none' 
 				                       and fn:trim(report.si) ne 'null'}">
@@ -132,13 +162,13 @@
 				            </c:if>
 				        </c:when>
 				        <c:otherwise>
-				            입력X(기억나지 않습니다)
+				            현재 위치와 동일
 				        </c:otherwise>
 				    </c:choose>
 				  	</td>
                 </tr>
                 <tr>
-                    <td class="infoT">상세 위치</td>
+                    <td class="infoT">상세 주소</td>
 				    <td>
 				        <c:choose>
 				            <c:when test="${not empty fn:trim(report.location) 
@@ -146,7 +176,7 @@
 				                <c:out value="${report.location}" />
 				            </c:when>
 				            <c:otherwise>
-				                입력X(기억나지 않습니다)
+				                현재 위치와 동일
 				            </c:otherwise>
 				        </c:choose>
 				    </td>
@@ -177,7 +207,6 @@
         </div>
         <div id="bottomBtn">
             <button class="btn" id="confirm">확인</button>
-            <button class="btn" id="hold">보류</button>
             <form action="/delete" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?')">
 			  <input type="hidden" name="id" value="${report.id}" />
 			  <button class="btn" id="delete">삭제</button>
@@ -185,6 +214,49 @@
         </div>
     </div> 
 <script>
+document.addEventListener("DOMContentLoaded", function () {
+	// 전화번호 형식
+    const phoneElement = document.getElementById("phone");
+    const phoneRaw = phoneElement.textContent.trim();
+    if (phoneRaw.length === 11) {
+        phoneElement.textContent = phoneRaw.slice(0, 3) + '-' + phoneRaw.slice(3, 7) + '-' + phoneRaw.slice(7);
+    }
+    
+    const tableBody = document.getElementById("infoTable");
+    const originalHTML = tableBody.innerHTML;  // 원래 구조 저장
+    
+    function restructureTable() {
+        const tableBody = document.getElementById("infoTable");
+        if (window.innerWidth <= 480) {
+            if (tableBody.dataset.modified !== "true") {
+                // 기존 셀에서 값을 가져와서 사용
+                const name = document.getElementById("name").textContent.trim();
+                const phone = phoneElement.textContent.trim();
+
+                tableBody.innerHTML = `
+                    <tr>
+                        <td class="infoT">이름</td>
+                        <td>\${name}</td>
+                    </tr>
+                    <tr>
+                        <td class="infoT">전화번호</td>
+                        <td>\${phone}</td>
+                    </tr>
+                `;
+                tableBody.dataset.modified = "true";
+            }
+        } else {
+            if (tableBody.dataset.modified === "true") {
+                tableBody.innerHTML = originalHTML;
+                tableBody.dataset.modified = "false";
+            }
+        }
+    }
+
+    restructureTable(); // 첫 로드 시 실행
+    window.addEventListener("resize", restructureTable); // 화면 크기 변경 시 실행
+});
+
 $(document).ready(function(){
     // 기본 상태 설정
     //updateState('미확인');
