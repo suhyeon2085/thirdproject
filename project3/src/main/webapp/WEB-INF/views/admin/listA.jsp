@@ -605,7 +605,7 @@ $(document).ready(function() {
 
                     const row = 
                         "<tr>" +
-                            "<td>" + (reports.length - index) + "</td>" +
+                            "<td>" + report.id + "</td>" +
                             "<td><a href='${pageContext.request.contextPath}/admin/viewA?id=" + report.id + "'>" + report.crimeType + "</a></td>" +
                             "<td>" + report.state + "</td>" +
                             "<td>" + report.station + "</td>" +
