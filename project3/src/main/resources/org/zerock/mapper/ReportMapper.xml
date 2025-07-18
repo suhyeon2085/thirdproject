@@ -59,6 +59,12 @@
     WHERE id = #{id}
 </update>
 
+<update id="updateState">
+    UPDATE report
+    SET state = #{state}
+    WHERE id = #{id}
+</update>
+
 
   <!-- 2) 개인 조회 -->
   
@@ -139,6 +145,7 @@
             AND crime_Type = #{crimeType}
         </if>
     </select>
+    
 
   <!-- 4) 상세 -->
   <select id="findById" resultMap="reportMap">

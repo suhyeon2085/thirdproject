@@ -39,5 +39,7 @@ public interface ReportMapper {
     
     int getTotalCount(Map<String, Object> params);
     
+    void updateState(@Param("id") int id, @Param("state") String state);
+    
     
 }

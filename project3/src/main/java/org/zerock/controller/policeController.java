@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -55,4 +56,17 @@ public class policeController {
 	    result.put("totalCount", totalCount);
 	    return result;
 	}
+	
+	@PostMapping("/police/updateState")
+	@ResponseBody
+	public String updateState(@RequestParam("id") int id, @RequestParam("state") String state) {
+	    try {
+	        reportService.updateState(id, state);
+	        return "success";
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "fail";
+	    }
+	}
+	
 }

@@ -117,4 +117,8 @@ public class ReportService {
         params.put("crimeType", crimeType);
         return reportMapper.getTotalCount(params);
     }
+    
+    public void updateState(int id, String state) {
+        reportMapper.updateState(id, state);
+    }
 }

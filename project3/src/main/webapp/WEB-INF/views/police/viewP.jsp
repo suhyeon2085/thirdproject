@@ -270,7 +270,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 $(document).ready(function(){
     // 기본 상태 설정
-    updateState('배정');
+//    updateState('배정');
 
     $('#move').on('click', function(){
         changeStateOnServer('출동');
@@ -301,10 +301,11 @@ $(document).ready(function(){
 
         $.ajax({
             type: "POST", // 또는 PATCH, PUT 등
-            url: "/updateState", // 서버에 만든 상태 변경 API 엔드포인트
+            url: "${pageContext.request.contextPath}/police/updateState", // 서버에 만든 상태 변경 API 엔드포인트
             data: { id: reportId, state: newState },
             success: function(response){
                 updateState(newState); // 화면에도 반영
+                alert('상태가 변경되었습니다.');
             },
             error: function(){
                 alert('상태 변경에 실패했습니다.');
