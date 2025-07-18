@@ -291,7 +291,7 @@ $(document).ready(function(){
         else if(state === '지원 요청') color = 'purple';
         else if(state === '지원 완료') color = 'blue';
         else if(state === '지원 완료') color = 'blue';
-        else if(state === '상황 종료') color = 'black';
+        else if(state === '상황 종료') color = 'gray';
 
         $('#state').css('color', color);
     }

@@ -639,12 +639,19 @@ $(document).ready(function() {
                             createdDate = `\${year}-\${month}-\${day}`;
                         }
                     }
-
+					
+                    let color = 'black';
+                    if (report.state === '접수') color = 'green';
+                    else if (report.state === '출동') color = 'orange';
+                    else if (report.state === '지원 요청') color = 'purple';
+                    else if (report.state === '상황 종료') color = 'gray';
+                    
+                    
                     const row = 
                     "<tr>" +
                             	"<td>" + report.id + "</td>" +
                                 "<td><a href='${pageContext.request.contextPath}/police/viewP?id=" + report.id + "'>" + report.crimeType + "</a></td>" +
-                                "<td>" + report.state + "</td>" +
+                                "<td style='color:" + color + "'>" + report.state + "</td>" + // 색상 적용
                                 "<td>" + report.station + "</td>" +
                                 "<td id='datetime'>" + createdDate + "</td>" +
                                 "</tr>";
