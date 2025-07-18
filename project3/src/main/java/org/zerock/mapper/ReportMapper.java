@@ -36,6 +36,7 @@ public interface ReportMapper {
     List<ReportDTO> findByFilter(Map<String, String> paramMap);
 
     List<ReportDTO> findByFilterWithPaging(Map<String, Object> params);
+    
     int getTotalCount(Map<String, Object> params);
     
     

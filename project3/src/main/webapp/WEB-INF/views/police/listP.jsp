@@ -146,6 +146,52 @@
             	font-size: 12px;
             }
 		}
+		
+		#pagination {
+		  display: flex;
+		  justify-content: center;
+		  gap: 10px;
+		  margin-top: 20px;
+		  font-family: 'Arial', sans-serif;
+		  font-size: 14px;
+		}
+		
+		#pagination button {
+		  border: none;
+		  background: none;
+		  color: #555;
+		  cursor: pointer;
+		  padding: 4px 8px;
+		  border-radius: 4px;
+		  transition: color 0.3s, background-color 0.3s;
+		}
+		
+		#pagination button:hover:not(:disabled) {
+		  color: #007bff;
+		  background-color: #e6f0ff;
+		}
+		
+		#pagination button:disabled {
+		  color: #1a73e8; /* 파란색 강조 */
+		  font-weight: 600;
+		  cursor: default;
+		  pointer-events: none;
+		  background-color: #f0f8ff;
+		}
+		
+		/* 다음 버튼 (화살표 포함) */
+		#pagination button.next::after {
+		  content: '>';
+		  margin-left: 4px;
+		  font-weight: normal;
+		  color: #555;
+		  transition: color 0.3s;
+		}
+		
+		#pagination button.next:hover::after {
+		  color: #007bff;
+		}
+		
     </style>
     <link rel="stylesheet" type="text/css" href="../resources/css/menu.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -215,6 +261,9 @@
                 </tr>
                 </tbody>
             </table>
+            
+            <div id="pagination"></div>
+            
         </div>
     </div>
 <script>
@@ -537,45 +586,63 @@ $(document).ready(function() {
     updateGu();
     searchReports();
 
-    function searchReports() {
+    function searchReports(page = 1) {
         const si = $si.val();
         const gu = $gu.val();
         const crimeType = $('#crimeType').val();
+        const size = 10;
 
         $.ajax({
             url: '${pageContext.request.contextPath}/police/reportList',
             type: 'get',
-            data: { si, gu, crimeType },
+            data: { si, gu, crimeType, page, size },
             dataType: 'json',
-            success: function(data) {
-            	console.log('전체 데이터:', data);
+            success: function(response) {
+            	console.log('전체 응답:', response);
+            	const reports = response.data || [];
+                const totalCount = response.totalCount || 0;
             	const $tbody = $('#reportTableBody');
                 $tbody.empty();
 
-                if (!data || data.length === 0) {
+                if (reports.length === 0) {
                     $tbody.append('<tr><td colspan="4" align="center">등록된 신고 내용이 없습니다.</td></tr>');
+                    $('#pagination').empty();
                     return;
                 }
                
 
                 // 서버에서 내림차순 정렬을 하므로 reverse()는 제거
 
-                $.each(data, function(index, report) {
-                	console.log('index:', index);
-                    // createdAt이 문자열일 때 자르기
+                 $.each(reports, function(index, report) {
                     let createdDate = '';
                     if (report.createdAt) {
-                        if (typeof report.createdAt === 'string') {
-                            createdDate = report.createdAt.substring(0, 10);
+                        let dateObj = (typeof report.createdAt === 'string') 
+                            ? new Date(report.createdAt) 
+                            : new Date(report.createdAt);
+                        
+                        // 오늘 날짜(연, 월, 일) 구하기
+                        const today = new Date();
+                        const isToday = dateObj.getFullYear() === today.getFullYear() &&
+                                        dateObj.getMonth() === today.getMonth() &&
+                                        dateObj.getDate() === today.getDate();
+
+                        if (isToday) {
+                            // 시:분 형태 (두 자리수로 표시)
+                            const hours = dateObj.getHours().toString().padStart(2, '0');
+                            const minutes = dateObj.getMinutes().toString().padStart(2, '0');
+                            createdDate = `\${hours}:\${minutes}`;
                         } else {
-                            // Date 객체일 경우 ISO 문자열 변환
-                            createdDate = new Date(report.createdAt).toISOString().substring(0, 10);
+                            // YYYY-MM-DD 형태
+                            const year = dateObj.getFullYear();
+                            const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+                            const day = dateObj.getDate().toString().padStart(2, '0');
+                            createdDate = `\${year}-\${month}-\${day}`;
                         }
                     }
 
                     const row = 
                     "<tr>" +
-                            	"<td>" + (data.length - index) + "</td>" +
+                            	"<td>" + report.id + "</td>" +
                                 "<td><a href='${pageContext.request.contextPath}/police/viewP?id=" + report.id + "'>" + report.crimeType + "</a></td>" +
                                 "<td>" + report.state + "</td>" +
                                 "<td>" + report.station + "</td>" +
@@ -588,6 +655,8 @@ $(document).ready(function() {
                     console.log('report.createdAt:', report.createdAt);
                     
                 });
+                
+                renderPagination(totalCount, page, size);
             },
             error: function() {
                 alert('조회 실패');
@@ -595,6 +664,55 @@ $(document).ready(function() {
         });
         
     }
+    
+    function renderPagination(totalCount, currentPage, pageSize) {
+        const totalPages = Math.ceil(totalCount / pageSize);
+        const $pagination = $('#pagination');
+        $pagination.empty();
+
+        if (totalPages < 1) return;
+
+        // 최대 버튼 개수 조절 (원하면)
+        const maxButtons = 10;
+        let startPage = 1;
+        let endPage = totalPages > maxButtons ? maxButtons : totalPages;
+
+        if (currentPage > maxButtons) {
+            startPage = currentPage;
+            endPage = currentPage + maxButtons - 1;
+            if (endPage > totalPages) endPage = totalPages;
+        }
+
+        // 이전 버튼 추가
+        const $prevBtn = $('<button>').addClass('prev').text('이전');
+        if (currentPage === 1) {
+            $prevBtn.prop('disabled', true);
+        } else {
+            $prevBtn.on('click', () => searchReports(currentPage - 1));
+        }
+        $pagination.append($prevBtn);
+
+        // 페이지 번호 버튼들
+        for (let i = startPage; i <= endPage; i++) {
+            const $btn = $('<button>').text(i);
+            if (i === currentPage) {
+                $btn.prop('disabled', true);
+            } else {
+                $btn.on('click', () => searchReports(i));
+            }
+            $pagination.append($btn);
+        }
+
+        // 다음 버튼 추가
+        const $nextBtn = $('<button>').addClass('next').text('다음');
+        if (currentPage === totalPages) {
+            $nextBtn.prop('disabled', true);
+        } else {
+            $nextBtn.on('click', () => searchReports(currentPage + 1));
+        }
+        $pagination.append($nextBtn);
+    }
+    
 });
 </script>
 </body>
