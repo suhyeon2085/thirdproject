@@ -1,5 +1,6 @@
 package org.zerock.controller;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,22 +38,45 @@ public class policeController {
         return "police/viewP";
     }
 	
+//	@GetMapping("/police/reportList")
+//	@ResponseBody
+//	public Map<String, Object> getReportList(
+//	        @RequestParam(required = false) String si,
+//	        @RequestParam(required = false) String gu,
+//	        @RequestParam(required = false) String crimeType,
+//	        @RequestParam(defaultValue = "1") int page,
+//	        @RequestParam(defaultValue = "10") int size) {
+//
+//	    int offset = (page - 1) * size;
+//
+//	    List<ReportDTO> reportList = reportService.findByFilterWithPaging(si, gu, crimeType, offset, size);
+//	    int totalCount = reportService.getTotalCount(si, gu, crimeType);
+//
+//	    Map<String, Object> result = new HashMap<>();
+//	    result.put("data", reportList);
+//	    result.put("totalCount", totalCount);
+//	    return result;
+//	}
+	
 	@GetMapping("/police/reportList")
 	@ResponseBody
-	public Map<String, Object> getReportList(
-	        @RequestParam(required = false) String si,
+	public Map<String, Object> getFilteredReportList(
+			@RequestParam(required = false) String si,
 	        @RequestParam(required = false) String gu,
 	        @RequestParam(required = false) String crimeType,
 	        @RequestParam(defaultValue = "1") int page,
-	        @RequestParam(defaultValue = "10") int size) {
-
+	        @RequestParam(defaultValue = "10") int size
+	) {
 	    int offset = (page - 1) * size;
 
-	    List<ReportDTO> reportList = reportService.findByFilterWithPaging(si, gu, crimeType, offset, size);
-	    int totalCount = reportService.getTotalCount(si, gu, crimeType);
+	    // 여기에 상태 조건 추가
+	    List<String> states = Arrays.asList("배정", "출동", "지원 요청", "지원완료", "상황 종료");
+
+	    List<ReportDTO> reports = reportService.findByFilterWithStates(si, gu, crimeType, states, offset, size);
+	    int totalCount = reportService.getTotalCountWithStates(si, gu, crimeType, states);
 
 	    Map<String, Object> result = new HashMap<>();
-	    result.put("data", reportList);
+	    result.put("data", reports);
 	    result.put("totalCount", totalCount);
 	    return result;
 	}

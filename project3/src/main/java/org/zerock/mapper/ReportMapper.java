@@ -39,6 +39,9 @@ public interface ReportMapper {
     
     int getTotalCount(Map<String, Object> params);
     
+    List<ReportDTO> findByFilterWithStates(Map<String, Object> params);
+    int getTotalCountWithStates(Map<String, Object> params);
+    
     void updateState(@Param("id") int id, @Param("state") String state);
     
     

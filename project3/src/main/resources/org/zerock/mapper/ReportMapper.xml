@@ -114,7 +114,7 @@
     ORDER BY created_at DESC
 </select>
 
-	<select id="findByFilterWithPaging" parameterType="map" resultMap="reportMap">
+  	<select id="findByFilterWithPaging" parameterType="map" resultMap="reportMap">
         SELECT *
         FROM report
         WHERE 1 = 1
@@ -144,7 +144,49 @@
         <if test="crimeType != null and crimeType != 'none'">
             AND crime_Type = #{crimeType}
         </if>
+    </select> 
+    
+    
+    <select id="findByFilterWithStates" parameterType="map" resultMap="reportMap">
+        SELECT *
+        FROM report
+        WHERE 1 = 1
+        <if test="si != null and si != 'none'">
+            AND si = #{si}
+        </if>
+        <if test="gu != null and gu != 'none'">
+            AND gu = #{gu}
+        </if>
+        <if test="crimeType != null and crimeType != 'none'">
+            AND crime_Type = #{crimeType}
+        </if>
+        AND state IN
+    	<foreach collection="states" item="state" open="(" separator="," close=")">
+        #{state}
+    	</foreach>	
+        ORDER BY created_At DESC
+        LIMIT #{size} OFFSET #{offset}
     </select>
+
+    <select id="getTotalCountWithStates" parameterType="map" resultType="int">
+        SELECT COUNT(*) 
+        FROM report
+        WHERE 1 = 1
+        <if test="si != null and si != 'none'">
+            AND si = #{si}
+        </if>
+        <if test="gu != null and gu != 'none'">
+            AND gu = #{gu}
+        </if>
+        <if test="crimeType != null and crimeType != 'none'">
+            AND crime_Type = #{crimeType}
+        </if>
+        AND state IN
+    	<foreach collection="states" item="state" open="(" separator="," close=")">
+        #{state}
+    	</foreach>
+    </select>
+    
     
 
   <!-- 4) 상세 -->
