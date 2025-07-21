@@ -70,7 +70,7 @@ public class policeController {
 	    int offset = (page - 1) * size;
 
 	    // 여기에 상태 조건 추가
-	    List<String> states = Arrays.asList("배정", "출동", "지원 요청", "지원완료", "상황 종료");
+	    List<String> states = Arrays.asList("배정", "출동", "지원 요청", "지원 완료", "상황 종료");
 
 	    List<ReportDTO> reports = reportService.findByFilterWithStates(si, gu, crimeType, states, offset, size);
 	    int totalCount = reportService.getTotalCountWithStates(si, gu, crimeType, states);

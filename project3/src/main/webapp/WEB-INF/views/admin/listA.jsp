@@ -603,7 +603,7 @@ $(document).ready(function() {
                         }
                     }
                     
-                    let color = 'black';
+                    let color = 'red';
                     if (report.state === '배정') color = 'green';
                     else if (report.state === '출동') color = 'orange';
                     else if (report.state === '지원 요청') color = 'purple';
