@@ -7,15 +7,20 @@
 <head>
 <meta charset="UTF-8">
 <title>범죄 예측 페이지</title>
+<!-- 지도 api 자바스크립트 -->
+<!-- <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d81fcc7c7588922a54375b145a169769&libraries=services"></script> -->
+<!--  <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=d81fcc7c7588922a54375b145a169769&libraries=services"></script> -->
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8630523bb26c1a45d2753088246f3a05"></script>
 <style>
 
-    body {
-        margin: 0;
-        padding: 10px;
-        background-color: rgb(0, 51, 153);
-        font-family: 'Segoe UI', sans-serif;
-        color: black;
-    }
+body {
+  margin: 0;
+  padding: 10px;
+  background-color: rgb(0, 51, 153);
+  font-family: 'Segoe UI', sans-serif;
+  color: black;
+}
+
 
     .container {
         display: flex;
@@ -23,33 +28,107 @@
         gap: 10px;
     }
 
-    .left {
-        flex: 1;
-        border: 3px solid rgb(255, 204, 0);
-        padding: 10px;
-        margin: 5px;
-        background: rgb(245, 247, 250);
-    }
+.main-content {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+  height: 800px; /* 필요에 따라 조절 */
+  box-sizing: border-box;
+  width:100%;
+}
 
-    .right {
-        flex: 0 0 300px;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        margin: 5px;
-    }
 
-    .right .box {
-        flex: 1;
-        border: 3px solid rgb(255, 204, 0);
-        background: rgb(245, 247, 250);
-        
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        overflow: visible; /* 차트 잘림 방지 */
-    }
-    
+.left-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 10px;
+}
+
+.left {
+  flex: 1;
+  border: 3px solid rgb(255, 204, 0);
+  padding: 10px;
+  background: rgb(245, 247, 250);
+  box-sizing: border-box;
+  hieght: 87%;
+}
+
+/*신고접수 페이지 넘어가는 div*/
+/* #one { */
+/*   height: 20%; */
+/*   border: 3px solid rgb(255, 204, 0); */
+/*   padding: 10px; */
+/*   background: rgb(245, 247, 250); */
+/*   box-sizing: border-box; */
+/*   display: flex; */
+/*   align-items: center; */
+/*   justify-content: center; */
+/*   font-weight: bold; */
+/* } */
+
+#one {
+  height: 13%; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  background-color: #ff4d4d;       /* 빨간 배경 */
+  color: white;                    /* 글자 흰색 */
+  padding: 10px 20px;
+/*   border-radius: 12px;             /* 둥근 테두리 */ */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2); /* 살짝 그림자 */
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#one:hover {
+  transform: scale(1.02); /* 2%만 확대 */
+  box-shadow: 0 6px 12px rgba(0,0,0,0.25); /* 그림자도 살짝 줄임 */
+}
+
+#one div {
+  font-weight: bold;
+  font-size: 25px;
+  letter-spacing: 1px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+#one img {
+  height: 32px;
+  width: 32px;
+  object-fit: contain;
+}
+
+
+
+
+/* 오른쪽 영역 */
+.right {
+  flex: 0 0 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+/*   border: 3px solid rgb(255, 204, 0); */
+/*   padding: 10px; */
+  box-sizing: border-box;
+/*   background: rgb(245, 247, 250); */
+  height: 50%;
+  width: 100%;
+}
+
+.right .box {
+  flex: 1;
+  border: 3px solid rgb(255, 204, 0);
+  background: rgb(245, 247, 250);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  overflow: visible;
+  height: 97%;
+}
+
 	#location {
 	  display: flex;
 	  justify-content: space-between;;
@@ -323,46 +402,246 @@
     #police {
         width: 100px;
         height: 100px;
-        margin: 0;
+        margin-bottom: 2px;
         padding: 0;
     }
     
+.header-bar {
+    display: flex;          /* 가로 정렬 추가 */
+    gap: 50px;              /* 줄 사이 여백 */
+    justify-content: center;/* 중앙 정렬 */
+    align-items: center;    /* 수직 중앙 정렬 */
+    width: 100%;
+    height: 50px;
+    background: rgb(245, 247, 250,0.5);
+    border: 2px solid gold; /* 노란색 테두리 */
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    text-align: center;
+    line-height: 30px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+}
+
+.dropdown-row {
+    display: flex;
+    gap: 5px;
+    margin: 10px;
+    height: 32px;
+}
+
+select {
+  appearance: none;           /* 기본 화살표 제거 */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: #fff;
+  border: 1.5px solid #f1c40f; /* 노란색 테두리 */
+  border-radius: 6px;
+  padding: 8px 38px 8px 12px;  /* 오른쪽 여유 공간은 화살표 아이콘 자리 */
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+  position: relative;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  width: 200px;
+  height: 32px;
+}
+
+/* 마우스 올릴 때 테두리 강조 */ 
+select:hover, select:focus {
+  border-color: #f39c12;
+  outline: none;
+}
+
+select:active {
+  border-color: #d78f0f;
+  box-shadow: inset 2px 2px 2px rgba(0,0,0,0.3);
+  outline: none;
+}
 
 
+/* 화살표 커스텀: select 박스 내부 오른쪽에 삼각형 */
+select {
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2210%22%20height%3D%227%22%20viewBox%3D%220%200%2010%207%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M0%200l5%207%205-7z%22%20fill%3D%22%23f1c40f%22/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 10px 7px;
+}
+
+#search{
+width: 32px;
+height: 32px;
+    justify-content: center;/* 중앙 정렬 */
+    align-items: center;    /* 수직 중앙 정렬 */
+    display: flex;
+    color: yellow;
+}
+
+#searchBell, #searchCCTV{
+background-color: white;
+ background-color: #fff;
+  border: 1.5px solid #f1c40f; /* 노란색 테두리 */
+  border-radius: 6px;
+}
+
+
+/* 모던창 주소 창 css*/
+.infowindow-address {
+  padding: 6px 10px;
+  font-size: 13px;
+  background-color: white;
+  border: 1px solid #888;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  color: #333;
+  font-weight: 500;
+}
+
+/*모던 창 닫기 css*/
+#closeModal {
+  background: #f44336;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+#closeModal:hover {
+  background: #d32f2f;
+}
 
 </style>
 
 </head>
+
 <body>
-
+<!-- 홈페이지 로고 -->
 <img src="resources/img/crimelogo.png" id="police">
-
+<!-- 로고빼고 전체 div -->
 <div class="container">
-    <!-- 지도 영역 -->
-    <div class="left">
-        지도 api 넣는 자리 
-    </div>
-
-    <!-- 오른쪽 차트 영역 -->
-    <div class="right">
-    <div class="tooltip-container" style="position: absolute; top: 137px; left: 61%;">
-    <img src="resources/img/guide.png" alt="Info" class="info-icon">
-    <span class="tooltiptext">0%의 범죄는 나타나지 않음</span>
-</div>
-    
-        <!-- 현위치 범죄 예측 그래프 -->
-		<div class="box">
-		    <canvas id="donutChart1"></canvas>
-		    <canvas id="barChart1"></canvas>
+	
+	<!-- CCTV와 비상벨 위치정보 영역 -->
+	<div class="header-bar">
+	  <!-- CCTV div -->
+	  <div class="dropdown-row">
+	    <label for="city1">CCTV 확인하기</label>
+	    	<select name="city1" id="city1">
+			  <option value="">시/도 선택</option>
+			  <option value="서울특별시">서울특별시</option>
+			  <option value="부산">부산</option>
+			  <option value="대구">대구</option>
+			  <option value="인천">인천</option>
+			  <option value="광주">광주</option>
+			  <option value="대전">대전</option>
+			  <option value="울산">울산</option>
+			  <option value="세종">세종</option>
+			  <option value="경기도">경기도</option>
+			  <option value="강원">강원</option>
+			  <option value="충청북">충청북</option>
+			  <option value="충청남">충청남</option>
+			  <option value="전라북">전라북</option>
+			  <option value="전라남">전라남</option>
+			  <option value="경상북">경상북</option>
+			  <option value="경상남">경상남</option>
+			  <option value="제주특별자치">제주특별자치</option>
+			</select>
+	    <select name="district1" id="district1">
+	     <option value="" selected>전체</option>
+	      <!-- JS로 옵션 동적 생성 -->
+	    </select>
+	    <select name="purpose1" id="purpose1">
+	     <option value="" selected>전체</option>
+	      <!-- JS로 옵션 동적 생성 -->
+	    </select>
+	    <button id="searchCCTV" type="button" style="cursor:pointer; width:47px; height:32px;">확인</button>
+	  </div>
+	  
+	  <!-- 안전 비상벨 div -->
+		<div class="dropdown-row">
+		  <label for="city2">안전 비상벨 확인하기</label>
+		  <select name="city2" id="city2"><!-- JS가 옵션 채움 --></select>
+		
+		  <select name="district2" id="district2">
+		    <option value="" selected>전체</option>
+		  </select>
+		
+		  <select name="purpose2" id="purpose2">
+		    <option value="" selected>전체</option>
+		  </select>
+		
+		  <button id="searchBell" type="button" style="cursor:pointer; width:47px; height:32px;">
+		    확인
+		  </button>
 		</div>
+	</div>
 
-        <!-- 전국 범죄 예측 그래프 -->
-        <div class="box">
-            <canvas id="donutChart"></canvas>
-            <canvas id="barChart"></canvas>
-        </div>
+	
+	<!-- 모달 창 추가 -->
+	<!-- 모달 전체 -->
+	<div id="mapModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 9999;">
+	
+		  <!-- 모달 내부 컨텐츠 -->
+		  <div style="position: relative; width: 80%; height: 80%; margin: 5% auto; background: white;">
+	    
+		    <!-- 닫기 버튼 (단 하나만) -->
+		    <button id="closeModal" style="
+		      position: absolute; top: 10px; right: 10px; 
+		      z-index: 1000; background: #f44336; color: white; 
+		      border: none; padding: 8px 12px; font-size: 14px; 
+		      cursor: pointer; border-radius: 4px;">
+		      닫기 ✖
+		    </button>
+
+	    <!-- 모달 지도 영역 -->
+	    <div id="map" style="width: 100%; height: 100%;"></div>
+	  	</div>
+	  	
+	</div>
+	
+	
+<!-- 기존 페이지 상단/하단 다른 내용 -->
+
+<div class="main-content">
+  <div class="left-group">
+    <div class="left">
+      지도 api 넣는 자리
     </div>
- 
+    
+    
+
+<div id="one">
+  <a href="/receipt" 
+     style="text-decoration: none; color: white; display: flex; align-items: center; gap: 10px;">
+    <div>도움이 필요하신가요? 여기로 신고해 주세요</div>
+    <img src="/resources/img/sos.png" alt="신고하기" style="height: 24px; width: auto;">
+  </a>
+</div>
+
+  </div>
+
+  <div class="right">
+    <div class="tooltip-container" style="position: absolute; top: 200px; left: 61%;">
+      <img src="resources/img/guide.png" alt="Info" class="info-icon">
+      <span class="tooltiptext">0%의 범죄는 나타나지 않음</span>
+    </div>
+
+    <div class="box">
+      <canvas id="donutChart1"></canvas>
+      <canvas id="barChart1"></canvas>
+    </div>
+
+    <div class="box">
+      <canvas id="donutChart"></canvas>
+      <canvas id="barChart"></canvas>
+    </div>
+  </div>
+</div>
+
+
     <!-- 시간/요일별 통계 영역 -->
 	<div id="time">
 	<span class="time_day">요일/시간별 5대 범죄 발생율 추이</span>
@@ -440,10 +719,393 @@
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@1.1.0/dist/chartjs-chart-matrix.min.js"></script>
 
+
+
 <script>
-Chart.register(ChartDataLabels);
+
+let cctvData = [];
+
+// 시/도 선택 시 JSON 파일 로드
+document.getElementById('city1').addEventListener('change', async function () {
+  const selectedCity = this.value.trim();
+  const districtSelect = document.getElementById('district1');
+  const purposeSelect = document.getElementById('purpose1');
+
+  // 옵션 초기화
+  districtSelect.innerHTML = '<option value="">전체</option>';
+  purposeSelect.innerHTML = '<option value="">전체</option>';
+  cctvData = [];
+
+  if (!selectedCity) return;
+
+  try {
+    const fileUrl = "/resources/data/" + selectedCity+ ".json";
+    const res = await fetch(fileUrl);
+    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+
+    const data = await res.json();
+    cctvData = data;
+
+    populateDistrictAndPurpose(data, 'district1', 'purpose1');
+  } catch (err) {
+    console.error('❌ JSON 로드 실패:', err);
+  }
+});
+
+// 구/군 + 설치목적 옵션 채우기
+function populateDistrictAndPurpose(data, districtId, purposeId) {
+  const districtSet = new Set();
+  const purposeSet = new Set();
+
+  const validDistrictRegex = /^[가-힣]{2,}(시|군|구)$/; // 예: 강남구, 고양시, 전주시 등
+
+  data.forEach(item => {
+    const rawDistrict = item.sigungu?.trim();
+    const rawPurpose = item.purpose?.trim();
+
+    // ✅ 구/군 필터: 한글로 구성된 'xx구', 'xx시', 'xx군' 형태만
+    if (rawDistrict && validDistrictRegex.test(rawDistrict)) {
+      districtSet.add(rawDistrict);
+    }
+
+    // ✅ 설치목적 필터: 빈 값 아닌 경우만
+    if (rawPurpose && rawPurpose !== '') {
+      purposeSet.add(rawPurpose);
+    }
+  });
+
+  addOptions(document.getElementById(districtId), districtSet);
+  addOptions(document.getElementById(purposeId), purposeSet);
+}
+
+
+// 구 선택 시 설치목적 필터링
+document.getElementById('district1').addEventListener('change', function () {
+  const selectedDistrict = this.value.trim();
+  const purposeSelect = document.getElementById('purpose1');
+
+  purposeSelect.innerHTML = '<option value="">전체</option>';
+
+  const filteredData = !selectedDistrict
+    ? cctvData
+    : cctvData.filter(item => item.sigungu?.trim() === selectedDistrict);
+
+  const purposeSet = new Set();
+  filteredData.forEach(item => {
+    if (item.purpose && item.purpose.trim() !== '') {
+      purposeSet.add(item.purpose.trim());
+    }
+  });
+
+  addOptions(purposeSelect, purposeSet);
+});
+
+// 옵션 추가 함수 (가나다 정렬)
+function addOptions(select, set) {
+  const sortedArray = Array.from(set).sort((a, b) => a.localeCompare(b, 'ko'));
+  sortedArray.forEach(val => {
+    const opt = new Option(val, val);
+    select.appendChild(opt);
+  });
+}
+
+// 페이지 로드시 시/도 옵션 세팅
+window.addEventListener('DOMContentLoaded', () => {
+  const citySelect = document.getElementById('city1');
+  const sidoList = [
+    "서울특별시", "부산", "대구", "인천",
+    "광주", "대전", "울산", "세종특별시",
+    "경기도", "강원", "충청북", "충청남",
+    "전라북", "전라남", "경상북", "경상남", "제주특별자치"
+  ];
+
+  citySelect.innerHTML = '<option value="">시/도 선택</option>';
+  sidoList.forEach(city => {
+    const opt = new Option(city, city);
+    citySelect.appendChild(opt);
+  });
+});
+
+// 검색 버튼 클릭 시 지도 표시
+document.getElementById('searchCCTV').addEventListener('click', function () {
+  const selectedDistrict = document.getElementById('district1').value.trim();
+  const selectedPurpose = document.getElementById('purpose1').value.trim();
+
+  const filteredData = cctvData.filter(item => {
+    const sigungu = item.sigungu?.trim() || '';
+    const address = item.address?.trim() || '';
+    const purpose = item.purpose?.trim() || '';
+
+    const districtMatch = !selectedDistrict || sigungu === selectedDistrict || address.includes(selectedDistrict);
+    const purposeMatch = !selectedPurpose || purpose === selectedPurpose;
+
+    return districtMatch && purposeMatch;
+  });
+
+  if (filteredData.length === 0) {
+    alert("해당 조건의 CCTV가 없습니다.");
+    return;
+  }
+
+  document.getElementById('mapModal').style.display = 'block';
+  drawMap(filteredData);
+});
+
+// 지도 표시
+function drawMap(locations) {
+  if (typeof kakao === 'undefined') {
+    console.error("Kakao Maps가 로딩되지 않았습니다.");
+    return;
+  }
+
+  kakao.maps.load(function () {
+    const container = document.getElementById('map');
+    container.innerHTML = "";
+
+    const centerLat = locations[0].latitude;
+    const centerLng = locations[0].longitude;
+
+    const map = new kakao.maps.Map(container, {
+      center: new kakao.maps.LatLng(centerLat, centerLng),
+      level: 2
+    });
+
+    locations.forEach(item => {
+      const position = new kakao.maps.LatLng(item.latitude, item.longitude);
+
+      const marker = new kakao.maps.Marker({
+        map: map,
+        position: position,
+        title: item.address || '주소 없음'
+      });
+
+      const infowindow = new kakao.maps.InfoWindow({
+        content: `<div style="padding:5px; font-size:13px;">🏠 ${item.address || '주소 없음'}</div>`
+      });
+
+      kakao.maps.event.addListener(marker, 'click', function () {
+        infowindow.open(map, marker);
+      });
+    });
+  });
+}
+
+// 모달 닫기
+document.getElementById('closeModal').addEventListener('click', function () {
+  document.getElementById('mapModal').style.display = 'none';
+});
+
+
+	
+	
+// 이제부터는 방범용벨 -----------------------------------------------------------------------------------------------
+let bellData = [];
+
+// 비상벨 시/도 선택 시 JSON 로드
+document.getElementById('city2').addEventListener('change', async function () {
+  const selectedCity = this.value;
+
+  // 옵션 초기화
+  const districtSelect = document.getElementById('district2');
+  const purposeSelect = document.getElementById('purpose2');
+  districtSelect.innerHTML = '<option value="">전체</option>';
+  purposeSelect.innerHTML = '<option value="">전체</option>';
+  bellData = [];
+
+  if (!selectedCity) return;
+
+  try {
+    const fileUrl = "/resources/data/"+selectedCity+"_bell.json"; // 경로는 프로젝트에 맞게 수정
+    const res = await fetch(fileUrl);
+    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+
+    const data = await res.json();
+    bellData = data;
+
+    populateBellDistrictAndPurpose(bellData, 'district2', 'purpose2');
+  } catch (err) {
+    console.error('❌ 비상벨 JSON 로드 실패:', err);
+  }
+});
+
+// 구 선택 시 설치목적 다시 필터링
+document.getElementById('district2').addEventListener('change', function () {
+  const selectedDistrict = this.value.trim();
+
+  const purposeSelect = document.getElementById('purpose2');
+  purposeSelect.innerHTML = '<option value="">전체</option>';
+
+  if (!selectedDistrict) {
+    // 구 선택 안 하면 시/도 전체 데이터 기준 설치목적 보여주기
+    const purposeSet = new Set();
+    bellData.forEach(item => {
+      if (item.purpose && item.purpose.trim() !== '') {
+        purposeSet.add(item.purpose.trim());
+      }
+    });
+    addBellOptions(purposeSelect, purposeSet);
+    return;
+  }
+
+  // 선택한 구에 해당하는 데이터 필터링 후 설치목적만 추출
+  const filteredData = bellData.filter(item => item.sigungu?.trim() === selectedDistrict);
+  const purposeSet = new Set();
+  filteredData.forEach(item => {
+    if (item.purpose && item.purpose.trim() !== '') {
+      purposeSet.add(item.purpose.trim());
+    }
+  });
+
+  addBellOptions(purposeSelect, purposeSet);
+});
+
+// 비상벨 구/군, 설치목적 필터 옵션 채우기
+function populateBellDistrictAndPurpose(data, districtId, purposeId) {
+  const districtSet = new Set();
+  const purposeSet = new Set();
+
+  data.forEach(item => {
+    const rawDistrict = item.sigungu?.trim();
+    const rawPurpose = item.purpose?.trim();
+
+    if (
+      rawDistrict &&
+      rawDistrict !== '' &&
+      !/[0-9]/.test(rawDistrict) &&             // 숫자 제외
+      !/[-–—?]/.test(rawDistrict) &&            // 특수문자 포함 제외
+      !/^[-–—?]+$/.test(rawDistrict) &&         // 특수문자만 있는 경우 제외
+      rawDistrict.length >= 2                    // 너무 짧은 문자열 제외
+    ) {
+      districtSet.add(rawDistrict);
+    }
+
+    if (rawPurpose && rawPurpose !== '') {
+      purposeSet.add(rawPurpose);
+    }
+  });
+
+  addBellOptions(document.getElementById(districtId), districtSet);
+  addBellOptions(document.getElementById(purposeId), purposeSet);
+}
+
+function addBellOptions(select, set) {
+  Array.from(set).sort().forEach(val => {
+    const opt = document.createElement('option');
+    opt.value = val;
+    opt.textContent = val;
+    select.appendChild(opt);
+  });
+}
+
+// 시/도 목록 로딩 (초기화)
+window.addEventListener('DOMContentLoaded', () => {
+  const city2 = document.getElementById('city2');
+  const sidoList = [
+    "서울", "부산", "대구", "인천", "광주", "대전", "울산", "세종",
+    "경기도", "강원", "충청북", "충청남", "전북", "전라남", "경상북", "경상남", "제주"
+  ];
+
+  city2.innerHTML = '<option value="">시/도 선택</option>';
+  sidoList.forEach(city => {
+    const opt = new Option(city, city);
+    city2.appendChild(opt);
+  });
+});
+
+// 확인 버튼 클릭 시 지도 표시
+document.getElementById('searchBell').addEventListener('click', function () {
+  const selectedDistrict = document.getElementById('district2').value.trim();
+  const selectedPurpose = document.getElementById('purpose2').value.trim();
+
+  const filteredData = bellData.filter(item => {
+    const sigungu = item.sigungu?.trim() || '';
+    const purpose = item.purpose?.trim() || '';
+
+    const districtMatch = !selectedDistrict || sigungu === selectedDistrict;
+    const purposeMatch = !selectedPurpose || purpose === selectedPurpose;
+
+    return districtMatch && purposeMatch;
+  });
+
+  if (filteredData.length === 0) {
+    alert("해당 조건의 비상벨이 없습니다.");
+    return;
+  }
+
+  document.getElementById('mapModal').style.display = 'block';
+  drawBellMap(filteredData);
+});
+
+// 지도에 비상벨 마커 표시
+function drawBellMap(locations) {
+  if (typeof kakao === 'undefined') {
+    console.error("Kakao Maps가 로드되지 않았습니다.");
+    return;
+  }
+
+  kakao.maps.load(function () {
+    const container = document.getElementById('map');
+    container.innerHTML = "";
+
+    const centerLat = locations[0].latitude;
+    const centerLng = locations[0].longitude;
+
+    const map = new kakao.maps.Map(container, {
+      center: new kakao.maps.LatLng(centerLat, centerLng),
+      level: 4
+    });
+
+    locations.forEach(item => {
+      const position = new kakao.maps.LatLng(item.latitude, item.longitude);
+
+      const marker = new kakao.maps.Marker({
+        map: map,
+        position: position,
+        title: item.address || '주소 없음'
+      });
+
+      const infowindow = new kakao.maps.InfoWindow({
+        content: `
+          <div style="padding:5px; font-size:13px;">
+            🏠 ${item.address || '주소 없음'}<br/>
+            ☎️ ${item.manager_phone || '관리번호 없음'}<br/>
+            🔔 벨 ID: ${item.bell_id || '없음'}<br/>
+            👮 경찰 연계: ${item.police_linked || '미확인'}
+          </div>`
+      });
+
+      kakao.maps.event.addListener(marker, 'click', function () {
+        infowindow.open(map, marker);
+      });
+    });
+  });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //------------------ 전국 차트 ------------------ //
+Chart.register(ChartDataLabels);
+
 const crimes = ["살인", "강간 강제추행", "상해 및 폭행", "교통범죄", "강도 및 절도"];
 const donutColors = [
  'rgba(255, 206, 86, 0.9)',
@@ -1028,172 +1690,167 @@ let stackedBarData = {};
 
 // 색상 정의
 const colors = {
-    "주거시설": "#FF6B6B",
-    "상업시설": "#b04a0b",
-    "교통시설": "#22aac9",
-    "공공/교육/문화시설": "#96CEB4",
-    "자연/기타시설": "#FFEAA7"
+  "주거시설": "#FF6B6B",
+  "상업시설": "#b04a0b",
+  "교통시설": "#22aac9",
+  "공공/교육/문화시설": "#96CEB4",
+  "자연/기타시설": "#FFEAA7"
 };
 
-// ✅ JSON 데이터 로드
+// 활성 차트들을 담는 배열 (resize 시 사용)
+const activeCharts = [];
+
+// JSON 데이터 로드
 async function loadDataFromJSON() {
-    try {
-        const stackedRes = await fetch('resources/data/stacked_bar_chart2.json');
-
-        if (!stackedRes.ok) {
-            throw new Error('stacked_bar_chart2.json 로드 실패');
-        }
-
-        stackedBarData = await stackedRes.json();
-        console.log('✅ stacked_bar_chart2.json 로드 완료');
-    } catch (error) {
-        console.error('❌ JSON 로딩 오류:', error);
-    }
+  try {
+    const stackedRes = await fetch('resources/data/stacked_bar_chart2.json');
+    if (!stackedRes.ok) throw new Error('stacked_bar_chart2.json 로드 실패');
+    stackedBarData = await stackedRes.json();
+    console.log('✅ stacked_bar_chart2.json 로드 완료');
+  } catch (error) {
+    console.error('❌ JSON 로딩 오류:', error);
+  }
 }
 
-// ✅ 차트 초기화
+// 차트 초기화
 async function initializeCharts() {
-    await loadDataFromJSON();
-
-    resizeCanvas('stacked', 400);
-    createStackedBarChart();
+  await loadDataFromJSON();
+  resizeCanvas('stacked', 400);
+  createStackedBarChart();
 }
 
-// ✅ canvas 크기 조절
+// canvas 크기 조절
 function resizeCanvas(id, height, width) {
-    const canvas = document.getElementById(id);
-    if (canvas) {
-        canvas.style.height = `${height}px`;
-        if (width) canvas.style.width = `${width}px`;
-    }
+  const canvas = document.getElementById(id);
+  if (canvas) {
+    canvas.style.height = `${height}px`;
+    if (width) canvas.style.width = `${width}px`;
+  }
 }
 
-// ✅ stacked bar chart 생성
+// stacked bar chart 생성
 function createStackedBarChart() {
-    const ctx = document.getElementById('stacked').getContext('2d');
-    const years = Object.keys(stackedBarData);
-    const categories = Object.keys(stackedBarData[years[0]]);
+  const ctx = document.getElementById('stacked').getContext('2d');
+  const years = Object.keys(stackedBarData);
+  const categories = Object.keys(stackedBarData[years[0]]);
 
-    const datasets = categories.map(category => ({
-        label: category,
-        data: years.map(year => stackedBarData[year][category]),
-        backgroundColor: colors[category],
-        borderColor: '#888888',
-        borderWidth: 1,
-        hoverBorderColor: '#454545',
-        hoverBorderWidth: 2,
-        barThickness: 100
-    }));
+  const datasets = categories.map(category => ({
+    label: category,
+    data: years.map(year => stackedBarData[year][category]),
+    backgroundColor: colors[category],
+    borderColor: '#888888',
+    borderWidth: 1,
+    hoverBorderColor: '#454545',
+    hoverBorderWidth: 2,
+    barThickness: 100
+  }));
 
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: years,
-            datasets: datasets
+  const chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: years,
+      datasets: datasets
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        datalabels: { display: false },
+        title: {
+          display: true,
+          text: '연도별 범죄 발생건수',
+          color: '#333',
+          font: {
+            size: 20,
+            weight: 'bold',
+            family: "'Noto Sans KR', sans-serif"
+          },
+          padding: { top: 25, bottom: 10 },
+          backgroundColor: 'rgba(255, 204, 0, 0.2)',
+          borderColor: 'rgb(255, 204, 0)',
+          borderWidth: 3,
         },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                datalabels: {
-                    display: false
-                },
-                title: {
-                    display: true,
-                    text: '연도별 범죄 발생건수',
-                    color: '#333', // 글자 색
-                    font: {
-                      size: 20,     // 글자 크기
-                      weight: 'bold',
-                      family: "'Noto Sans KR', sans-serif"
-                    },
-                    padding: {
-                      top: 25,
-                      bottom: 10
-                    },
-                    backgroundColor: 'rgba(255, 204, 0, 0.2)',  // 노란 배경 (반투명)
-                    borderColor: 'rgb(255, 204, 0)',            // 노란 테두리
-                    borderWidth: 3,
-                  },
-                legend: {
-                    position: 'top',
-                    labels: {
-                        usePointStyle: true,
-                        padding: 20,
-                        boxWidth: 12,
-                        color: 'black',
-                        font: {
-                            size: 13,
-                            weight: 'bold',
-                            family: "'Arial', sans-serif"
-                        },
-                        generateLabels: function(chart) {
-                            const datasets = chart.data.datasets;
-                            return datasets.map((dataset, i) => ({
-                                text: dataset.label,
-                                fillStyle: dataset.backgroundColor,
-//                                 strokeStyle: 'black',
-//                                 lineWidth: 2,
-                                hidden: !chart.isDatasetVisible(i),
-                                datasetIndex: i
-                            }));
-                        }
-                    }
-                },
-                tooltip: {
-                    mode: 'index',
-                    intersect: false
-                }
+        legend: {
+          position: 'top',
+          labels: {
+            usePointStyle: true,
+            padding: 20,
+            boxWidth: 12,
+            color: 'black',
+            font: {
+              size: 13,
+              weight: 'bold',
+              family: "'Arial', sans-serif"
             },
-            scales: {
-                x: {
-                    stacked: true,
-                    ticks: {
-                        font: {
-                            size: 15,
-                            weight: '600',
-                            family: "'Noto Sans KR', sans-serif"
-                        },
-                        maxRotation: 0,
-                        autoSkip: true,
-                        maxTicksLimit: 10
-                    },
-                    grid: {
-                        color: '#eee',
-                        borderColor: '#ccc'
-                    }
-                },
-                y: {
-                    stacked: true,
-                    ticks: {
-                        color: '#555',
-                        font: {
-                            size: 14,
-                            weight: '600',
-                            family: "'Noto Sans KR', sans-serif"
-                        },
-                        callback: value => value.toLocaleString(),
-                        maxTicksLimit: 7
-                    },
-                    grid: {
-                        color: '#eee',
-                        borderColor: '#ccc'
-                    }
-                }
-            },
-            interaction: {
-                mode: 'nearest',
-                axis: 'x',
-                intersect: false
+            generateLabels(chart) {
+              const datasets = chart.data.datasets;
+              return datasets.map((dataset, i) => ({
+                text: dataset.label,
+                fillStyle: dataset.backgroundColor,
+                hidden: !chart.isDatasetVisible(i),
+                datasetIndex: i
+              }));
             }
+          }
+        },
+        tooltip: {
+          mode: 'index',
+          intersect: false
         }
-    });
+      },
+      scales: {
+        x: {
+          stacked: true,
+          ticks: {
+            font: {
+              size: 15,
+              weight: '600',
+              family: "'Noto Sans KR', sans-serif"
+            },
+            maxRotation: 0,
+            autoSkip: true,
+            maxTicksLimit: 10
+          },
+          grid: {
+            color: '#eee',
+            borderColor: '#ccc'
+          }
+        },
+        y: {
+          stacked: true,
+          ticks: {
+            color: '#555',
+            font: {
+              size: 14,
+              weight: '600',
+              family: "'Noto Sans KR', sans-serif"
+            },
+            callback: value => value.toLocaleString(),
+            maxTicksLimit: 7
+          },
+          grid: {
+            color: '#eee',
+            borderColor: '#ccc'
+          }
+        }
+      },
+      interaction: {
+        mode: 'nearest',
+        axis: 'x',
+        intersect: false
+      }
+    }
+  });
+
+  activeCharts.push(chart);
 }
 
-// ✅ DOM 준비되면 초기화 실행
+// DOM 준비되면 초기화 실행
 document.addEventListener('DOMContentLoaded', initializeCharts);
+
+// 창 크기 조절 시 차트 리사이즈
 window.addEventListener('resize', () => {
-    Chart.getActiveCharts().forEach(chart => chart.resize());
+  activeCharts.forEach(chart => chart.resize());
 });
 
 //여기서부터는 장소별 범죄 발생건수 차트 ------------------------------------------------------------------------
@@ -1446,5 +2103,6 @@ fetch('resources/data/Predicted.json')
 
 
 </script> 
+
 </body>
 </html>
