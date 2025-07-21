@@ -604,9 +604,10 @@ $(document).ready(function() {
                     }
                     
                     let color = 'black';
-                    if (report.state === '접수') color = 'green';
+                    if (report.state === '배정') color = 'green';
                     else if (report.state === '출동') color = 'orange';
                     else if (report.state === '지원 요청') color = 'purple';
+                    else if(report.state === '지원 완료') color = 'blue';
                     else if (report.state === '상황 종료') color = 'gray';
 
                     const row = 

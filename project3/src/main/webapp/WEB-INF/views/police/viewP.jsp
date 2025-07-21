@@ -270,7 +270,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 $(document).ready(function(){
     // 기본 상태 설정
-//    updateState('배정');
+    // updateState('배정');
+    
+    // 문서 로드 시 상태 반영
+	updateState($('#state').val());
 
     $('#move').on('click', function(){
         changeStateOnServer('출동');
@@ -287,9 +290,9 @@ $(document).ready(function(){
     function updateState(state){
         $('#state').val(state);
         let color = 'green';
-        if(state === '출동') color = 'orange';
+        if(state === '배정') color = 'green';
+        else if(state === '출동') color = 'orange';
         else if(state === '지원 요청') color = 'purple';
-        else if(state === '지원 완료') color = 'blue';
         else if(state === '지원 완료') color = 'blue';
         else if(state === '상황 종료') color = 'gray';
 

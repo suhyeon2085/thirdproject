@@ -273,8 +273,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 $(document).ready(function(){
     // 기본 상태 설정
-    updateState('미확인');
+    // updateState('미확인');
 
+    // 문서 로드 시 상태 반영
+	updateState($('#state').val());
+    
     $('#assign').on('click', function(){
         changeStateOnServer('배정');
     });
@@ -290,6 +293,7 @@ $(document).ready(function(){
         else if(state === '출동') color = 'orange';
         else if(state === '지원 요청') color = 'purple';
         else if(state === '지원 완료') color = 'blue';
+        else if(state === '상황 종료') color = 'gray';
 
         $('#state').css('color', color);
     }
@@ -299,10 +303,11 @@ $(document).ready(function(){
 
         $.ajax({
             type: "POST", // 또는 PATCH, PUT 등
-            url: "/updateState", // 서버에 만든 상태 변경 API 엔드포인트
+            url: "/admin/updateState", // 서버에 만든 상태 변경 API 엔드포인트
             data: { id: reportId, state: newState },
             success: function(response){
                 updateState(newState); // 화면에도 반영
+                alert('상태가 변경되었습니다.');
             },
             error: function(){
                 alert('상태 변경에 실패했습니다.');

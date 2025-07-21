@@ -77,6 +77,18 @@ public class AdminController {
 
         return "admin/viewA";
     }
+    
+    @PostMapping("/admin/updateState")
+	@ResponseBody
+	public String updateState(@RequestParam("id") int id, @RequestParam("state") String state) {
+	    try {
+	        reportService.updateState(id, state);
+	        return "success";
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "fail";
+	    }
+	}
 	
 	
 	/*@PostMapping("/updateState")
