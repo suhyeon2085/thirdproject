@@ -1,6 +1,8 @@
 package org.zerock.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,14 +34,24 @@ public class AdminController {
     }
 	
 	@GetMapping("/admin/reportList")
-    @ResponseBody
-    public List<ReportDTO> findByFilter(
-            @RequestParam(required = false) String si,
-            @RequestParam(required = false) String gu,
-            @RequestParam(required = false) String crimeType) {
-        
-        return reportService.findByFilter(si, gu, crimeType);
-    }
+	@ResponseBody
+	public Map<String, Object> getReportList(
+	        @RequestParam(required = false) String si,
+	        @RequestParam(required = false) String gu,
+	        @RequestParam(required = false) String crimeType,
+	        @RequestParam(defaultValue = "1") int page,
+	        @RequestParam(defaultValue = "10") int size) {
+
+	    int offset = (page - 1) * size;
+
+	    List<ReportDTO> reportList = reportService.findByFilterWithPaging(si, gu, crimeType, offset, size);
+	    int totalCount = reportService.getTotalCount(si, gu, crimeType);
+
+	    Map<String, Object> result = new HashMap<>();
+	    result.put("data", reportList);
+	    result.put("totalCount", totalCount);
+	    return result;
+	}
 	
 //	@GetMapping("/viewA")
 //    public String redirectAdminViewGet() {
@@ -65,6 +77,18 @@ public class AdminController {
 
         return "admin/viewA";
     }
+    
+    @PostMapping("/admin/updateState")
+	@ResponseBody
+	public String updateState(@RequestParam("id") int id, @RequestParam("state") String state) {
+	    try {
+	        reportService.updateState(id, state);
+	        return "success";
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "fail";
+	    }
+	}
 	
 	
 	/*@PostMapping("/updateState")

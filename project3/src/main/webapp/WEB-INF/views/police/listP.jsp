@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>신고 조회 목록 | 상황실</title>
+    <title>신고 조회 목록 | 파출소</title>
     <style>
         @font-face {
             font-family: 'GongGothicMedium';
@@ -16,15 +16,38 @@
         body{
             margin: 0;
             font-family: 'GongGothicMedium';
+            
         }
         #wrap{
             padding: 5% 20%;
         }
+        #row1{
+        	border-bottom: 1px solid black;
+        	padding-bottom: 10px;
+        	margin-bottom: 30px;
+        	display: flex;
+        	justify-content: space-between;
+            align-items: center;
+        }
         #pageTitle{
-            border-bottom: 1px solid black;
-            padding-bottom: 10px;
+            word-break: keep-all; /* 단어 단위로 줄바꿈 */
+            white-space: normal; /* 기본 줄바꿈 허용 */
+            overflow-wrap: break-word; /* 긴 단어가 있으면 자동 줄바꿈 */
             font-size: 25px;
-            margin-bottom: 30px;
+        }
+
+        #search{
+        	border: 1px solid gray;
+        	padding: 5px;
+        }
+        #search:focus {
+            outline: none;
+        }
+        #searchBtn{
+        	border: 1px solid black;
+            background-color: rgb(231, 231, 231);
+            cursor: pointer;
+            padding: 5px;
         }
         #sltWrap{
             display: flex;
@@ -52,6 +75,7 @@
             border: 1px solid black;
             border-collapse: collapse;
             width: 100%;
+            overflow-x: hidden;
         }
         .tTitle{
             background-color: rgb(231, 231, 231);
@@ -65,6 +89,9 @@
             white-space: normal; /* 기본 줄바꿈 허용 */
             overflow-wrap: break-word; /* 긴 단어가 있으면 자동 줄바꿈 */
         }
+        #datetime{
+            	font-size: 14px;
+            } 
         .red{
             color: red;
             font-size: 14px;
@@ -73,53 +100,7 @@
         a{
         	color: black;
         }
-        
-		#pagination {
-		  display: flex;
-		  justify-content: center;
-		  gap: 10px;
-		  margin-top: 20px;
-		  font-family: 'Arial', sans-serif;
-		  font-size: 14px;
-		}
-		
-		#pagination button {
-		  border: none;
-		  background: none;
-		  color: #555;
-		  cursor: pointer;
-		  padding: 4px 8px;
-		  border-radius: 4px;
-		  transition: color 0.3s, background-color 0.3s;
-		}
-		
-		#pagination button:hover:not(:disabled) {
-		  color: #007bff;
-		  background-color: #e6f0ff;
-		}
-		
-		#pagination button:disabled {
-		  color: #1a73e8; /* 파란색 강조 */
-		  font-weight: 600;
-		  cursor: default;
-		  pointer-events: none;
-		  background-color: #f0f8ff;
-		}
-		
-		/* 다음 버튼 (화살표 포함) */
-		#pagination button.next::after {
-		  content: '>';
-		  margin-left: 4px;
-		  font-weight: normal;
-		  color: #555;
-		  transition: color 0.3s;
-		}
-		
-		#pagination button.next:hover::after {
-		  color: #007bff;
-		}
-		
-		@media screen and (max-width: 1080px){
+        @media screen and (max-width: 1080px){
         	#wrap{
                 padding: 5% 15%;
             }
@@ -165,15 +146,68 @@
             	font-size: 12px;
             }
 		}
+		
+		#pagination {
+		  display: flex;
+		  justify-content: center;
+		  gap: 10px;
+		  margin-top: 20px;
+		  font-family: 'Arial', sans-serif;
+		  font-size: 14px;
+		}
+		
+		#pagination button {
+		  border: none;
+		  background: none;
+		  color: #555;
+		  cursor: pointer;
+		  padding: 4px 8px;
+		  border-radius: 4px;
+		  transition: color 0.3s, background-color 0.3s;
+		}
+		
+		#pagination button:hover:not(:disabled) {
+		  color: #007bff;
+		  background-color: #e6f0ff;
+		}
+		
+		#pagination button:disabled {
+		  color: #1a73e8; /* 파란색 강조 */
+		  font-weight: 600;
+		  cursor: default;
+		  pointer-events: none;
+		  background-color: #f0f8ff;
+		}
+		
+		/* 다음 버튼 (화살표 포함) */
+		#pagination button.next::after {
+		  content: '>';
+		  margin-left: 4px;
+		  font-weight: normal;
+		  color: #555;
+		  transition: color 0.3s;
+		}
+		
+		#pagination button.next:hover::after {
+		  color: #007bff;
+		}
+		
     </style>
     <link rel="stylesheet" type="text/css" href="../resources/css/menu.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/menu.jsp" />
     <div id="wrap">
         <div id="row1">
-            <p id="pageTitle">신고 조회 목록 | 상황실</p>
+            <span id="pageTitle">신고 조회 목록 | 파출소</span>
+            <form method="get" id="searchFrm">
+            	<input type="text" name="search" id="search" placeholder="파출소 검색">
+            	<button type="submit" id="searchBtn">
+				  <i class="bi bi-search"></i>
+				</button>
+            </form>
         </div>
         <div id="row2">
             <div id="sltWrap">
@@ -559,15 +593,15 @@ $(document).ready(function() {
         const size = 10;
 
         $.ajax({
-            url: '${pageContext.request.contextPath}/admin/reportList',
+            url: '${pageContext.request.contextPath}/police/reportList',
             type: 'get',
             data: { si, gu, crimeType, page, size },
             dataType: 'json',
             success: function(response) {
-                console.log('전체 응답:', response);
-                const reports = response.data || [];
+            	console.log('전체 응답:', response);
+            	const reports = response.data || [];
                 const totalCount = response.totalCount || 0;
-                const $tbody = $('#reportTableBody');
+            	const $tbody = $('#reportTableBody');
                 $tbody.empty();
 
                 if (reports.length === 0) {
@@ -575,8 +609,11 @@ $(document).ready(function() {
                     $('#pagination').empty();
                     return;
                 }
+               
 
-                $.each(reports, function(index, report) {
+                // 서버에서 내림차순 정렬을 하므로 reverse()는 제거
+
+                 $.each(reports, function(index, report) {
                     let createdDate = '';
                     if (report.createdAt) {
                         let dateObj = (typeof report.createdAt === 'string') 
@@ -602,22 +639,23 @@ $(document).ready(function() {
                             createdDate = `\${year}-\${month}-\${day}`;
                         }
                     }
-                    
-                    let color = 'red';
+					
+                    let color = 'black';
                     if (report.state === '배정') color = 'green';
                     else if (report.state === '출동') color = 'orange';
                     else if (report.state === '지원 요청') color = 'purple';
                     else if(report.state === '지원 완료') color = 'blue';
                     else if (report.state === '상황 종료') color = 'gray';
-
+                    
+                    
                     const row = 
-                        "<tr>" +
-                            "<td>" + report.id + "</td>" +
-                            "<td><a href='${pageContext.request.contextPath}/admin/viewA?id=" + report.id + "'>" + report.crimeType + "</a></td>" +
-                            "<td style='color:" + color + "'>" + report.state + "</td>" + // 색상 적용
-                            "<td>" + report.station + "</td>" +
-                            "<td id='datetime'>" + createdDate + "</td>" +
-                        "</tr>";
+                    "<tr>" +
+                            	"<td>" + report.id + "</td>" +
+                                "<td><a href='${pageContext.request.contextPath}/police/viewP?id=" + report.id + "'>" + report.crimeType + "</a></td>" +
+                                "<td style='color:" + color + "'>" + report.state + "</td>" + // 색상 적용
+                                "<td>" + report.station + "</td>" +
+                                "<td id='datetime'>" + createdDate + "</td>" +
+                                "</tr>";
                     $tbody.append(row);
                     console.log('index:', index);
                     console.log('report.crimeType:', report.crimeType, typeof report.crimeType);
@@ -627,7 +665,6 @@ $(document).ready(function() {
                 });
                 
                 renderPagination(totalCount, page, size);
-                
             },
             error: function() {
                 alert('조회 실패');

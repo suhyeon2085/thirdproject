@@ -31,9 +31,9 @@
   	
     INSERT INTO report
         (name, phone, location, crime_type, content,
-         stored_name, orig_name, file_path, si, gu, locationYn, lat, lon, myLoc2)
+         stored_name, orig_name, file_path, si, gu, locationYn, lat, lon, myLoc1, myLoc2)
   VALUES (#{name}, #{phone}, #{location}, #{crimeType}, #{content},
-          #{storedName}, #{origName}, #{filePath}, #{si}, #{gu}, #{locationYn}, #{lat}, #{lon}, #{myLoc2})
+          #{storedName}, #{origName}, #{filePath}, #{si}, #{gu}, #{locationYn}, #{lat}, #{lon}, #{myLoc1}, #{myLoc2})
   </insert>
   
   <delete id="delete" parameterType="int">
@@ -56,6 +56,12 @@
         stored_name = #{storedName},
         orig_name = #{origName},
         file_path = #{filePath}
+    WHERE id = #{id}
+</update>
+
+<update id="updateState">
+    UPDATE report
+    SET state = #{state}
     WHERE id = #{id}
 </update>
 
@@ -107,6 +113,81 @@
     </if>
     ORDER BY created_at DESC
 </select>
+
+  	<select id="findByFilterWithPaging" parameterType="map" resultMap="reportMap">
+        SELECT *
+        FROM report
+        WHERE 1 = 1
+        <if test="si != null and si != 'none'">
+            AND si = #{si}
+        </if>
+        <if test="gu != null and gu != 'none'">
+            AND gu = #{gu}
+        </if>
+        <if test="crimeType != null and crimeType != 'none'">
+            AND crime_Type = #{crimeType}
+        </if>
+        ORDER BY created_At DESC
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+
+    <select id="getTotalCount" parameterType="map" resultType="int">
+        SELECT COUNT(*) 
+        FROM report
+        WHERE 1 = 1
+        <if test="si != null and si != 'none'">
+            AND si = #{si}
+        </if>
+        <if test="gu != null and gu != 'none'">
+            AND gu = #{gu}
+        </if>
+        <if test="crimeType != null and crimeType != 'none'">
+            AND crime_Type = #{crimeType}
+        </if>
+    </select> 
+    
+    
+    <select id="findByFilterWithStates" parameterType="map" resultMap="reportMap">
+        SELECT *
+        FROM report
+        WHERE 1 = 1
+        <if test="si != null and si != 'none'">
+            AND si = #{si}
+        </if>
+        <if test="gu != null and gu != 'none'">
+            AND gu = #{gu}
+        </if>
+        <if test="crimeType != null and crimeType != 'none'">
+            AND crime_Type = #{crimeType}
+        </if>
+        AND state IN
+    	<foreach collection="states" item="state" open="(" separator="," close=")">
+        #{state}
+    	</foreach>	
+        ORDER BY created_At DESC
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+
+    <select id="getTotalCountWithStates" parameterType="map" resultType="int">
+        SELECT COUNT(*) 
+        FROM report
+        WHERE 1 = 1
+        <if test="si != null and si != 'none'">
+            AND si = #{si}
+        </if>
+        <if test="gu != null and gu != 'none'">
+            AND gu = #{gu}
+        </if>
+        <if test="crimeType != null and crimeType != 'none'">
+            AND crime_Type = #{crimeType}
+        </if>
+        AND state IN
+    	<foreach collection="states" item="state" open="(" separator="," close=")">
+        #{state}
+    	</foreach>
+    </select>
+    
+    
 
   <!-- 4) 상세 -->
   <select id="findById" resultMap="reportMap">

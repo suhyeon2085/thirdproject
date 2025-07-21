@@ -169,6 +169,9 @@
             #notice ul {
                 padding-left: 40px;
             }
+            #myLocWrap{
+            	display: block;
+            }
             #locSlt{
                 display: flex;
                 gap:5px
@@ -839,6 +842,7 @@ navigator.geolocation.getCurrentPosition(function(position) {
             const data = {
                 name: $('#name').val(),
                 phone: $('#phone').val(),
+                myLoc2: $('#myLoc2').val(),
                 crimeType: $('#crimeType').val(),
                 locationYn: $('input[name="locationYn"]:checked').val(),
                 si: $('#si').val(),
@@ -858,10 +862,24 @@ navigator.geolocation.getCurrentPosition(function(position) {
             if (now - data.savedAt < ttl) {
                 $('#name').val(data.name || '');
                 $('#phone').val(data.phone || '');
+                $('#myLoc2').val(data.myLoc2 || '');
                 $('#crimeType').val(data.crimeType || 'none');
                 $('input[name="locationYn"][value="' + (data.locationYn || 'X') + '"]').prop('checked', true);
                 $('#si').val(data.si || 'none');
+            	
+                // si 값으로 gu option 먼저 채우기
+                const guList = guOptions[data.si] || [{ value: 'none', text: '시/군/구' }];
+                $('#gu').empty();
+                $.each(guList, function(index, item) {
+                    $('#gu').append($('<option>', {
+                        value: item.value,
+                        text: item.text
+                    }));
+                });
+
+                // option 채운 다음에 gu 값 복원                
                 $('#gu').val(data.gu || 'none');
+                
                 $('#location').val(data.location || '');
                 $('#content').val(data.content || '');
                 $('#letters').text((data.content || '').length); // textarea 글자 수 복원
@@ -880,6 +898,7 @@ navigator.geolocation.getCurrentPosition(function(position) {
             const phone = $("#phone").val().trim();
             const lat = $("#lat").val().trim();
             const lon = $("#lon").val().trim();
+            const myLoc1 = $("#myLoc1").val().trim();
             const myLoc2 = $("#myLoc2").val().trim();
             const selectedType = $("#crimeType").val();
             const selectedLocation = $("input[name='locationYn']:checked").val();
@@ -910,7 +929,7 @@ navigator.geolocation.getCurrentPosition(function(position) {
                 isValid = false;
             }
 
-            if (selectedLocation === "O") {
+            if (selectedLocation === "X") {
                 if (siType === "none") {
                     $("#siguErrMsg").html("시/도를 선택해 주십시오.");
                     isValid = false;
@@ -943,6 +962,7 @@ navigator.geolocation.getCurrentPosition(function(position) {
             formData.append("phone", phone);
             formData.append("lat", lat);
             formData.append("lon", lon);
+            formData.append("myLoc1", myLoc1);
             formData.append("myLoc2", myLoc2);
             formData.append("crimeType", selectedType);
             formData.append("location", locationValue);
@@ -962,7 +982,9 @@ navigator.geolocation.getCurrentPosition(function(position) {
                 contentType: false,
                 processData: false,
                 dataType: "json",
-                success: function () {
+                success: function (res) {
+                	// 제출 성공 시 localStorage 데이터 삭제
+                    localStorage.removeItem("reportFormData");
                     alert("신고 접수가 완료되었습니다.");
                     window.location.href = "/";  // 필요 시 다른 페이지로 변경
                 },

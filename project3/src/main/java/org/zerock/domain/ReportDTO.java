@@ -28,6 +28,7 @@ public class ReportDTO {
     
     private double lat;
     private double lon;
+    private String myLoc1;
     private String myLoc2;
     
     private String si;  // 시/도
@@ -35,5 +36,6 @@ public class ReportDTO {
     
     private String locationYn;
     
-    
+    private String station;
+    private String state;
 }

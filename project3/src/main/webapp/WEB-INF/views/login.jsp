@@ -102,6 +102,16 @@
             color: rgb(241, 217, 75);
             margin-top: 35px;
         }
+        @media screen and (max-width: 1080px){
+        	#wrap{
+                padding: 5% 20%;
+            }
+        }
+        @media screen and (max-width: 480px){
+        	#wrap{
+                padding: 5% 15%;
+            }
+        }
     </style>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="resources/css/menu.css">
@@ -114,7 +124,7 @@
         </script>
     </c:if>
     
-<jsp:include page="/WEB-INF/views/menu.jsp" />
+	<jsp:include page="/WEB-INF/views/menu.jsp" />
     <div id="wrap">
         <div id="row1">
             <p id="pageTitle">관리자 로그인</p>
