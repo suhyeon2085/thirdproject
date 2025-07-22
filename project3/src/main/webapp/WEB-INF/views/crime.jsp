@@ -2072,7 +2072,7 @@ fetch('resources/data/Predicted.json')
                   weight: 'bold'
                 }, 
                 padding: {
-                  top: 10,
+                  top: 10, 
                   bottom: 30
                 },
                 color: '#003366'
