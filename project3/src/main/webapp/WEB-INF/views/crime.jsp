@@ -2070,7 +2070,7 @@ fetch('resources/data/Predicted.json')
                 font: {
                   size: 25,
                   weight: 'bold'
-                },
+                }, 
                 padding: {
                   top: 10,
                   bottom: 30
