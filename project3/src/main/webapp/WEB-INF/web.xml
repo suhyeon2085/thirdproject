@@ -28,8 +28,8 @@
 		<multipart-config>
 			<location>\\Des67\02-공유폴더\20250223KDT반\LiveAir\image</location>	
 	        <!-- 단일 파일/전체 요청 제한 (byte) -->
-	        <max-file-size>52428800</max-file-size>
-	        <max-request-size>52428800</max-request-size>
+	        <max-file-size>-1</max-file-size> <!-- 파일 크기 제한 없음 -->
+	        <max-request-size>94371840</max-request-size> <!-- 전체 요청 90MB -->
 	        <file-size-threshold>0</file-size-threshold>
 	    </multipart-config>
 		

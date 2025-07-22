@@ -26,7 +26,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         
         for (GrantedAuthority authority : authorities) {
             String role = authority.getAuthority();
-            System.out.println("role : "+role);
             if (role.equals("ROLE_POLICE")) {
                 redirectUrl = "/police/listP";
                 break;

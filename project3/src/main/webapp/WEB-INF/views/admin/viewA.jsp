@@ -61,24 +61,57 @@
             text-align: center;
             width: 10%;
         }
+        input:focus {
+            outline: none;
+        }
+        #location, #content{
+        	word-break: break-word;
+        }
         #bottomBtn{
         	display: flex;
         	gap: 5px;
             justify-content: center;
         }
-        .fileimg{
-        	object-fit: cover;
-        	border: 1px solid #ccc;
-			width: 100%;
-			height: auto;
-        }
+        #fileWrap {
+		    display: flex;
+		    flex-wrap: wrap;
+		    gap: 10px;
+		    width: 100%;
+		    max-width: 100%;
+		    box-sizing: border-box;
+		    overflow: hidden;  /* 넘침 방지 */
+		}
+		.thumb {
+		    flex: 0 0 30%;
+		    box-sizing: border-box;
+		    max-width: 100%;
+		}
+		
+		.full {
+		    flex: 0 0 100%;
+		    box-sizing: border-box;
+		    max-width: 100%;
+		}
+		
+		.fileimg, .filevideo{
+		    width: 100%;
+		    height: 300px;
+		    object-fit: cover;
+		    border: 1px solid #ccc;
+		    max-width: 100%;
+		}
+		.fileaudio {
+		    display: block;
+		    flex: 0 0 100%;
+		    box-sizing: border-box;
+		    max-width: 100%;
+		}
         .btn{
             padding: 10px 15px;
             font-family: 'GongGothicMedium';
             font-size: 15px;
             cursor: pointer;
             color: whitesmoke;
-            /* border-radius: 10px; */
         }
         #assign{
             border: 1px solid rgb(4, 80, 54);
@@ -92,10 +125,33 @@
             border: 1px solid rgb(80, 4, 4);
             background-color: rgb(124, 16, 16);   
         }
+        #redirectList{
+        	background-color: rgb(231, 231, 231);
+        	
+        	border: 1px solid black;
+        }
+        a{
+        	color: black;
+        }
+        .blue{
+            color: blue;
+            font-size: 14px;
+            margin-top: 5px;
+            margin-bottom: 0;
+            word-break: keep-all; /* 단어 단위로 줄바꿈 */
+            white-space: normal; /* 기본 줄바꿈 허용 */
+            overflow-wrap: break-word; /* 긴 단어가 있으면 자동 줄바꿈 */
+        }
         @media screen and (max-width: 1080px){
         	#wrap{
                 padding: 5% 15%;
             }
+            #nowWrap, #row2, #row3{
+            	margin-bottom: 30px;
+        	}
+        	.thumb {
+			    flex: 0 0 100%;
+			}
         }
         @media screen and (max-width: 480px){
 		    #wrap{
@@ -107,6 +163,10 @@
             #datetime{
             	margin-top: 10px; 
             }
+            .thumb {
+		        flex: 0 0 calc(100% - 10px); /* gap만큼 빼주기 */
+		    }
+            
 		}
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -130,7 +190,7 @@
 	            </div>
 	            <div>
 	        	    <span class="title">| 진행 상태: </span>
-	                <input type="text" name="state" id="state" value="${report.state}">
+	                <input type="text" name="state" id="state" value="${report.state}" readonly>
 	            </div>
             </div>
             <p class="title">| 신고인 기본 정보</p>
@@ -139,7 +199,7 @@
                 <tr>
                     <td class="infoT">이름</td>
                     <td id="name">${report.name}</td>
-                    <td class="infoT">전화번호</td>
+                    <td class="infoT">연락처</td>
                     <td id="phone">${report.phone}</td>
                 </tr>
                 <tr>
@@ -182,7 +242,7 @@
                 </tr>
                 <tr>
                     <td class="infoT">상세 주소</td>
-				    <td>
+				    <td id="location">
 				        <c:choose>
 				            <c:when test="${not empty fn:trim(report.location) 
 				                           and fn:trim(report.location) ne 'null'}">
@@ -196,24 +256,58 @@
                 </tr>
                 <tr>
                     <td class="infoT">상세 내용</td>
-                    <td>${report.content}</td>
+                    <td id="content">${report.content}</td>
                 </tr>
                 <tr>
                     <td class="infoT">첨부 파일</td>
                     <td>
-                    <c:if test="${empty report.storedName or report.storedName eq 'undefined'}">
+	                    <div id="fileWrap">
+	                    <c:if test="${empty report.storedName or report.storedName eq 'undefined'}">
 					        없음
 					    </c:if>
 					    <c:if test="${not empty report.storedName and report.storedName ne 'undefined'}">
 					        <c:forEach var="uuid" items="${fn:split(report.storedName, ';')}" varStatus="i">
 					            <c:set var="orig" value="${fn:split(report.origName, ';')[i.index]}" />
-					            
-					            <img class="fileimg" src="/image/${uuid}" 
-					                onerror="this.style.display='none';" alt="${orig}" title="${orig}" />
-					            
-					            <a href="/download?uuid=${uuid}&name=${orig}">${orig}</a><br/>
+					            <c:set var="lowerName" value="${fn:toLowerCase(orig)}" />
+					            <c:set var="parts" value="${fn:split(lowerName, '.')}" />
+					            <c:set var="ext" value="${parts[fn:length(parts)-1]}" />
+					
+					            <c:set var="downloadUrl" value="/download?uuid=${uuid}&name=${orig}" />
+
+					            <c:choose>
+					                <%-- 이미지 파일 --%>
+					                <c:when test="${ext eq 'jpg' or ext eq 'jpeg' or ext eq 'png' or ext eq 'gif'}">
+					                    <a href="${downloadUrl}" download title="${orig}" class="thumb">
+					                        <img class="fileimg" src="/image/${uuid}"
+					                             onerror="this.style.display='none';" alt="${orig}" />
+					                    </a>
+					                </c:when>
+					
+					                <%-- 동영상 파일 --%>
+					                <c:when test="${ext eq 'mp4' or ext eq 'webm' or ext eq 'ogg'}">
+					                    <a href="${downloadUrl}" download title="${orig}" class="thumb">
+					                        <video class="filevideo" src="/download?uuid=${uuid}&name=${orig}" controls
+					                               onerror="this.style.display='none';"></video>
+					                    </a>
+					                </c:when>
+					
+					                <%-- 오디오 파일 --%>
+					                <c:when test="${ext eq 'mp3' or ext eq 'wav' or ext eq 'm4a' or ext eq 'aac'}">
+					                        <audio class="fileaudio" src="/download?uuid=${uuid}&name=${orig}" controls
+					                               onerror="this.style.display='none';"></audio>
+					                </c:when>
+					
+					                <%-- 기타 파일 --%>
+					                <c:otherwise>
+					                    <a href="${downloadUrl}" download title="${orig}" class="full">
+					                        📄 ${orig}
+					                    </a>
+					                </c:otherwise>
+					            </c:choose>
 					        </c:forEach>
 					    </c:if>
+					    </div>
+					    <p class="blue">사진/동영상/파일명을 클릭하거나 오디오의 경우 컨트롤러의 옵션을 사용해서 파일을 다운하실 수 있습니다.</p>
                     </td>
                 </tr>
             </table>
@@ -225,6 +319,9 @@
 			  <input type="hidden" name="id" value="${report.id}" />
 			  <button class="btn" id="delete">삭제</button>
 			</form>
+			<button class="btn" id="redirectList">
+				<a href="${pageContext.request.contextPath}/admin/listA">목록</a>
+			</button>
         </div>
     </div> 
 <script>
@@ -253,7 +350,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         <td>\${name}</td>
                     </tr>
                     <tr>
-                        <td class="infoT">전화번호</td>
+                        <td class="infoT">연락처</td>
                         <td>\${phone}</td>
                     </tr>
                 `;

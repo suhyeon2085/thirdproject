@@ -35,7 +35,7 @@
         
         <!-- 로그인하지 않은 경우 -->
 	    <sec:authorize access="!isAuthenticated()">
-	        <a href="login" id="admin">관리자</a>
+	        <a href="login" id="admin">로그인</a>
 	    </sec:authorize>
 	
 	    <!-- 로그인한 경우 -->
@@ -45,8 +45,8 @@
 	        </form>
 	    </sec:authorize>
 	    
-	    <!-- 햄버거 메뉴 아이콘 -->
+	    <!-- 햄버거 메뉴 아이콘
         <div id="hamburger">
             &#9776; 
-        </div>
+        </div> -->
     </header>
