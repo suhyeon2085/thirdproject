@@ -7,15 +7,24 @@
 <head>
 <meta charset="UTF-8">
 	<title>Home</title>
+	<script>
+    const contextPath = '${pageContext.request.contextPath}';
+</script>
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8630523bb26c1a45d2753088246f3a05"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
-<link rel="stylesheet" href="resources/css/style.css">
+<link rel="stylesheet" href="../resources/css/style.css">
+<style>
+	.type-link{
+		color: black;
+    	text-decoration: none;
+	}
+</style>
 </head>
 <body>
 <!-- 홈페이지 로고 -->
-<img src="resources/img/crimelogo.png" id="police">
+<img src="../resources/img/crimelogo.png" id="police">
 <!-- 로고빼고 전체 div -->
 <div class="container">
 	
@@ -111,10 +120,10 @@
     
 
 <div id="one">
-  <a href="/receipt" 
+  <a href="${pageContext.request.contextPath}/admin/listA" 
      style="text-decoration: none; color: white; display: flex; align-items: center; gap: 10px;">
     <div>신고목록 조회하기</div>
-    <img src="/resources/img/sos.png" alt="신고하기" style="height: 24px; width: auto;">
+    <img src="../resources/img/sos.png" alt="신고하기" style="height: 24px; width: auto;">
   </a>
 </div>
 
@@ -122,7 +131,7 @@
 
   <div class="right">
     <div class="tooltip-container" style="position: absolute; top: 200px; left: 61%;">
-      <img src="resources/img/guide.png" alt="Info" class="info-icon">
+      <img src="../resources/img/guide.png" alt="Info" class="info-icon">
       <span class="tooltiptext">0%의 범죄는 나타나지 않음</span>
     </div>
 
@@ -168,7 +177,7 @@
 	      <span class="crime-tab" data-crime="강도 및 절도">강도 및 절도</span>
 	      
 		  <div class="tooltip-container" style="margin-left: 10px;">
-		  <img src="resources/img/alert2.png" alt="알림" class="info-icon2">
+		  <img src="../resources/img/alert2.png" alt="알림" class="info-icon2">
 		  <span class="tooltiptext2">2024년 범죄 통계는 관계기관의 집계 일정에 따라 2025년 8월에 공표될 예정이며,<br> 현재 데이터는 제공되지 않습니다.</span>
 		  </div>
 	    </div>
@@ -219,7 +228,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@1.1.0/dist/chartjs-chart-matrix.min.js"></script>
-<script type="text/javascript" src="resources/json/adminScript.js"></script>
+<script type="text/javascript" src="../resources/json/adminScript.js"></script>
 
 </body>
 </html>

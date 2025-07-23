@@ -35,10 +35,10 @@ public class HomeController {
 		return "temp/usermain";
 	}
 	
-	@RequestMapping(value = "/temp")
+	@RequestMapping(value = "/admin/administrator")
 	public String admin()
 	{
-		return "temp/administrator";
+		return "/admin/administrator";
 	}
 	
 	@GetMapping(value = "/temp/list")

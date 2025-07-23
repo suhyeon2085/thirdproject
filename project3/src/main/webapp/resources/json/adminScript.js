@@ -383,40 +383,37 @@
 		 
 		$.ajax({
 		    url: '/temp/list',
-	        type: 'get',
-	        data: { si, gu, crimeType, page, size },
-	        dataType: 'json',
-	        success: function(response) {
-	            console.log(response);
-	            $.each(response.data, function(index, value) {
-            		let row = document.createElement('tr');
-    				let type = document.createElement('td');
-					type.className = 'type';
-					let state = document.createElement('td');
-					state.className = 'state';
-					let time = document.createElement('td');
-					time.className = 'time';
+		    type: 'get',
+		    data: { si, gu, crimeType, page, size },
+		    dataType: 'json',
+		    success: function(response) {
+		        $.each(response.data, function(index, value) {
+		            let row = document.createElement('tr');
+		            let type = document.createElement('td');
 		
-	            	let typetxt = document.createTextNode(value.crimeType);
-	            	type.appendChild(typetxt);
-	            	let statetxt = document.createTextNode(value.state);
-	            	state.appendChild(statetxt);
-	            	let fixed = value.createdAt.replace(" ", "T");
-					let date = new Date(fixed);
-					let hours = String(date.getHours()).padStart(2, '0');
-					let minutes = String(date.getMinutes()).padStart(2, '0');
-	            	let timetxt = document.createTextNode(hours + ":" + minutes);
-	            	time.appendChild(timetxt);
-	            	row.appendChild(type);
-	            	row.appendChild(state);
-	            	row.appendChild(time);
-	            	table.appendChild(row);
-	            });
-	        },
-	        error: function(xhr, status, error) {
-	            console.error('신고 목록 요청 실패:', error);
-	        }
-	    });
+		            let link = document.createElement('a');
+		            link.href = `${contextPath}/admin/viewA?id=${encodeURIComponent(value.id)}`;
+		            link.textContent = value.crimeType;
+		            link.className = 'type-link';
+		
+		            type.appendChild(link);
+		            row.appendChild(type);
+		
+		            let state = document.createElement('td');
+		            state.textContent = value.state;
+		            row.appendChild(state);
+		
+		            let time = document.createElement('td');
+		            let date = new Date(value.createdAt.replace(" ", "T"));
+		            let hours = String(date.getHours()).padStart(2, '0');
+		            let minutes = String(date.getMinutes()).padStart(2, '0');
+		            time.textContent = `${hours}:${minutes}`;
+		            row.appendChild(time);
+		
+		            table.appendChild(row);
+		        });
+		    }
+		});
 
 	}
 
@@ -581,7 +578,7 @@
 
 	
 	//------------------ 예측 차트 ------------------ //
-	fetch("/resources/data/crime_forecast.json")
+	fetch("../resources/data/crime_forecast.json")
 	.then(res => res.json())
     .then(data => {
       const ctx = document.getElementById('forecastChart').getContext('2d');
@@ -698,7 +695,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initForecastChart() {
-  fetch('/resources/data/crime_forecast.json')
+  fetch('../resources/data/crime_forecast.json')
     .then(res => res.json())
     .then(data => {
       const ctx = document.getElementById('forecastChart').getContext('2d');
@@ -829,7 +826,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const charts = {};
 
-  fetch('/resources/data/crime_time_day.json')
+  fetch('../resources/data/crime_time_day.json')
     .then(res => res.json())
     .then(data => {
       crimes2.forEach((crime2, idx) => {
@@ -950,7 +947,7 @@ const activeCharts = [];
 // JSON 데이터 로드
 async function loadDataFromJSON() {
   try {
-    const stackedRes = await fetch('resources/data/stacked_bar_chart2.json');
+    const stackedRes = await fetch('../resources/data/stacked_bar_chart2.json');
     if (!stackedRes.ok) throw new Error('stacked_bar_chart2.json 로드 실패');
     stackedBarData = await stackedRes.json();
     console.log('✅ stacked_bar_chart2.json 로드 완료');
@@ -1101,7 +1098,7 @@ window.addEventListener('resize', () => {
 });
 
 //여기서부터는 장소별 범죄 발생건수 차트 ------------------------------------------------------------------------
-fetch("resources/data/radar_chart_crime6.json")
+fetch("../resources/data/radar_chart_crime6.json")
   .then(res => res.json())
   .then(data => {
     const 장소목록 = Object.keys(data);
@@ -1226,7 +1223,7 @@ fetch("resources/data/radar_chart_crime6.json")
     
     
   // 이제부터는 신고접수 예측과 평균 출동 시간 차트 -------------------------------------------
-fetch('resources/data/Predicted.json')
+fetch('../resources/data/Predicted.json')
   .then(res => res.json())
   .then(data => {
     const years = data.map(d => d.연도);
@@ -1364,7 +1361,7 @@ document.getElementById('city1').addEventListener('change', async function () {
   if (!selectedCity) return;
 
   try {
-    const fileUrl = "/resources/data/" + selectedCity+ ".json";
+    const fileUrl = "../resources/data/" + selectedCity+ ".json";
     const res = await fetch(fileUrl);
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 
@@ -1540,7 +1537,7 @@ document.getElementById('city2').addEventListener('change', async function () {
   if (!selectedCity) return;
 
   try {
-    const fileUrl = "/resources/data/"+selectedCity+"_bell.json"; // 경로는 프로젝트에 맞게 수정
+    const fileUrl = "../resources/data/"+selectedCity+"_bell.json"; // 경로는 프로젝트에 맞게 수정
     const res = await fetch(fileUrl);
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 
