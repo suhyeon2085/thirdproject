@@ -50,6 +50,10 @@ public interface ReportMapper {
             @Param("state") String state,
             @Param("station") String station);
     
+    int updateSupportStation(@Param("id") int id,
+            @Param("supportStation") String supportStation,
+            @Param("state") String state);
+    
     
     
     

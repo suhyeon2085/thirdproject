@@ -97,6 +97,15 @@ public class AdminController {
 	        return "fail";
 	    }
 	}
+  
+  @PostMapping("/admin/updateSupportStation")
+  @ResponseBody
+  public String updateSupportStation(@RequestParam("id") int id,
+                                     @RequestParam("supportStation") String supportStation,
+                                     @RequestParam("state") String state) {
+      boolean result = reportService.updateSupportStation(id, supportStation, state);
+      return result ? "success" : "fail";
+  }
     
 //    @PostMapping("/admin/updateState")
 //    @ResponseBody

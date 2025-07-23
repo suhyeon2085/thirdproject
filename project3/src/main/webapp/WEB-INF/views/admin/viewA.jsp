@@ -37,7 +37,7 @@
         #nowWrap input{
         	width: 150px;
         }
-        #station, #state{
+        #station, #state, #supportStation{
             border: none;
             font-family: 'GongGothicMedium';
             font-size: 18px;
@@ -192,6 +192,14 @@
 	        	    <span class="title">| 배정된 파출소: </span>
 	                <input type="text" name="station" id="station" value="${report.station}" readonly>
 	            </div>
+	            
+	        <c:if test="${not empty report.supportStation}">
+			    <div>
+			        <span class="title">| 지원 파출소: </span>
+			        <input type="text" name="supportStation" id="supportStation" value="${report.supportStation}" readonly>
+			    </div>
+			</c:if>
+	            
 	            <div>
 	        	    <span class="title">| 진행 상태: </span>
 	                <input type="text" name="state" id="state" value="${report.state}" readonly>
@@ -429,6 +437,8 @@ $(document).ready(function(){
         });
     }
 });
+
+
 </script>
 </body>
 </html>

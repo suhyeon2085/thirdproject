@@ -149,4 +149,9 @@ public class ReportService {
     public void updateStateAndStation(int id, String state, String station) {
     	reportMapper.updateStateAndStation(id, state, station);
     }
+    
+    public boolean updateSupportStation(int id, String supportStation, String state) {
+        int updateCount = reportMapper.updateSupportStation(id, supportStation, state);
+        return updateCount > 0;
+    }
 }
