@@ -27,8 +27,8 @@ body {
         border: 3px solid rgb(255, 204, 0);
         padding: 10px;
         background: rgb(245, 247, 250);
-        width: 610px;
-        height: 650px;
+        width: 520px;
+        height: 580px;
     }
     
     .currentPosition {
@@ -55,7 +55,7 @@ body {
         left: 50%;
         transform: translateX(-50%);
         z-index: 1;
-        font-size: 14px;
+        font-size: 12px;
         margin: 5px;
     }
 
@@ -112,7 +112,7 @@ body {
   display: flex;
   gap: 10px;
   align-items: stretch;
-  height: 820px; /* 필요에 따라 조절 */
+  height: 700px; /* 필요에 따라 조절 */
   box-sizing: border-box;
   width:100%;
 }
@@ -148,7 +148,7 @@ body {
 /* } */
 
 #one {
-  height: 25%; 
+  height: 9.7%; 
   display: flex;
   align-items: center;
   justify-content: center;
@@ -171,7 +171,7 @@ body {
 
 #one div {
   font-weight: bold;
-  font-size: 25px;
+  font-size: 24px;
   letter-spacing: 1px;
   font-family: 'Segoe UI', sans-serif;
 }
@@ -195,8 +195,8 @@ body {
 /*   padding: 10px; */
   box-sizing: border-box;
 /*   background: rgb(245, 247, 250); */
-  height: 67%;
-  width: 95%;
+  height: 65%;
+  width: 70%;
 }
 
 .right .box {
@@ -207,7 +207,11 @@ body {
   align-items: center;
   gap: 20px;
   overflow: visible;
-  height: 95%;
+  height: 70%;
+  padding-right: 20px;
+  padding-left: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .right .list {
@@ -291,25 +295,27 @@ body {
 
     /* 도넛 차트 */
     #donutChart1 {
-        width: 450px !important;
-        height: 400px !important;
-        margin-left: 35px; 
-    }
+        width: 400px !important;
+        height: 370px !important;
+/*         margin-left: 35px; 
+ */    }
     #donutChart{
-        width: 450px !important;
-        height: 400px !important;
+        width: 400px !important;
+        height: 370px !important;
         padding: 0;
+/*         margin-left: 35px; 
+ */        
     }
     
 
     /* 막대 차트 */
     #barChart1 {
-        width: 650px !important;
-        height: 380px !important;
+        width: 600px !important;
+        height: 350px !important;
     }
 	#barChart{
-        width: 670px !important;
-        height: 400px !important;
+        width: 600px !important;
+        height: 350px !important;
 	}
 
     /* 예측 차트 */
@@ -321,8 +327,8 @@ body {
 
 	/*  시간/요일 차트  */
 	#time-multi-charts canvas {
-	  max-width: 340px;
-	  max-height: 350px;
+	  max-width: 300px;
+	  max-height: 330px;
 	  width: 340px;
 	  height: 350px;
 	}
@@ -444,7 +450,7 @@ body {
         left: 50%;
         transform: translateX(-50%);
         z-index: 1;
-        font-size: 14px;
+        font-size: 12px;
         margin: 5px;
     }
 
@@ -483,7 +489,7 @@ body {
     left: 50%;
     transform: translateX(-50%);
     z-index: 1;
-    font-size: 14px;
+    font-size: 12px;
     margin: 5px;
 	}
     

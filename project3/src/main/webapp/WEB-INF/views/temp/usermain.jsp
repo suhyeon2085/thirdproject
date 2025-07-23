@@ -113,7 +113,7 @@
 <div id="one">
   <a href="/receipt" 
      style="text-decoration: none; color: white; display: flex; align-items: center; gap: 10px;">
-    <div>도움이 필요하신가요? 여기로 신고해 주세요</div>
+    <div>도움이 필요하신가요? 여기로 신고하세요</div>
     <img src="/resources/img/sos.png" alt="신고하기" style="height: 24px; width: auto;">
   </a>
 </div>

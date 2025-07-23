@@ -355,7 +355,7 @@
 	Chart.register(ChartDataLabels);
 	
 	//------------------ 전국 차트 ------------------ //
-	const crimes = ["살인", "강간 강제추행", "상해 및 폭행", "교통범죄", "강도 및 절도"];
+	const crimes = ["살인", "강간 및 추행", "상해 및 폭행", "교통범죄", "강도 및 절도"];
 	const donutColors = [
 	 'rgba(255, 206, 86, 0.9)',
 	 'rgba(255, 99, 132, 0.9)',
@@ -406,20 +406,20 @@
 	         cutout: '50%',
 	         plugins: {
 	             legend: {
-	                 position: 'bottom',
+	                 position: 'right',
 	                 labels: {
 	                     color: 'black',
-	                     font: { size: 16, weight: 'bold' },
-	                     padding: 15,
-	                     boxWidth: 20
+	                     font: { size: 14 },
+
 	                 }
 	             },
 	             title: {
 	                 display: true,
 	                 text: '연도별 5대 범죄 발생 비율 (%)',
 	                 color: 'rgb(0, 51, 153)',
-	                 font: { size: 19, weight: 'bold' },
-	                 padding: { top: 10, bottom: 20 }
+	                 font: { size: 16, weight: 'bold' },
+	                 align: 'start',
+	                 padding: { top: 20, bottom: 5 }
 	             },
 	             datalabels: { display: false }
 	         },
@@ -503,7 +503,7 @@
 	                 display: true,
 	                 text: title,
 	                 color: 'rgb(0, 51, 153)',
-	                 font: { size: 19, weight: 'bold' },
+	                 font: { size: 16, weight: 'bold' },
 	                 padding: { top: 15, bottom: 2 }
 	             },
 	             datalabels: {
@@ -605,14 +605,14 @@
 	                 position: 'right',
 	                 labels: {
 	                     color: 'black',
-	                     font: { size: 14, weight: 'bold' }
+	                     font: { size: 14 }
 	                 }
 	             },
 	             title: {
 	                 display: true,
 	                 text: region + '5대 범죄 발생 비율 (%)',
 	                 color: 'rgb(0, 51, 153)',
-	                 font: { size: 20, weight: 'bold' },
+	                 font: { size: 16, weight: 'bold' },
 	                 align: 'start',
 	                 padding: { top: 20, bottom: 5 }
 	             },
