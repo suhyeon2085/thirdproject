@@ -197,7 +197,7 @@
 	         width: 280px; height: 280px; 
 	         border-radius: 50%; background-color: rgba(0, 123, 255,0.9); 
 	         color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; 
-	         font-weight: bold; font-size: 20px; font-size: 22px;
+	         font-size: 20px; font-size: 22px;
 	         user-select: none;  text-align: center;
 	         box-shadow: 0 0 30px rgba(0, 123, 255,0.9);
 	         ">

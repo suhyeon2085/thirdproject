@@ -403,13 +403,14 @@
 	     },
 	     options: {
 	         responsive: true,
+			 devicePixelRatio: 2,
 	         cutout: '50%',
 	         plugins: {
 	             legend: {
 	                 position: 'right',
 	                 labels: {
 	                     color: 'black',
-	                     font: { size: 14 },
+	                     font: { size: 14, family: 'GongGothicMedium' },
 
 	                 }
 	             },
@@ -477,6 +478,7 @@
 	     },
 	     options: {
 	         responsive: true,
+			 devicePixelRatio: 2,
 	         animation: {
 	             duration: 1000,
 	             easing: 'easeOutBounce'
@@ -486,14 +488,14 @@
 	                 beginAtZero: true,
 	                 ticks: {
 	                     color: 'rgb(0, 51, 153)',
-	                     font: { size: 17, weight: 'bold' },
+	                     font: { size: 17, family: 'GongGothicMedium' },
 	                     callback: val => val.toLocaleString()
 	                 }
 	             },
 	             x: {
 	                 ticks: {
 	                     color: 'rgb(0, 51, 153)',
-	                     font: { size: 17, weight: 'bold' }
+	                     font: { size: 17, family: 'GongGothicMedium' }
 	                 }
 	             }
 	         },
@@ -503,14 +505,14 @@
 	                 display: true,
 	                 text: title,
 	                 color: 'rgb(0, 51, 153)',
-	                 font: { size: 16, weight: 'bold' },
+	                 font: { size: 16, family: 'GongGothicMedium' },
 	                 padding: { top: 15, bottom: 2 }
 	             },
 	             datalabels: {
 	                 color: 'rgb(0, 51, 153)',
 	                 anchor: 'end',
 	                 align: 'top',
-	                 font: { weight: 'bold', size: 15 },
+	                 font: { family: 'GongGothicMedium', size: 15 },
 	                 formatter: val => val.toLocaleString()
 	             }
 	         }
@@ -595,6 +597,8 @@
 	         }]
 	     },
 	     options: {
+	     	 responsive: true,
+  			 devicePixelRatio: 2,
 	         cutout: '50%',
 	         animation: {
 	             duration: 1500,
@@ -605,20 +609,20 @@
 	                 position: 'right',
 	                 labels: {
 	                     color: 'black',
-	                     font: { size: 14 }
+	                     font: { size: 14, family: 'GongGothicMedium' }
 	                 }
 	             },
 	             title: {
 	                 display: true,
 	                 text: region + '5대 범죄 발생 비율 (%)',
 	                 color: 'rgb(0, 51, 153)',
-	                 font: { size: 16, weight: 'bold' },
+	                 font: { size: 16, family: 'GongGothicMedium', weight: 'normal' },
 	                 align: 'start',
 	                 padding: { top: 30 }
 	             },
 	             datalabels: {
 	                 color: 'black',
-	                 font: { weight: 'bold', size: 16 },
+	                 font: { family: 'GongGothicMedium', size: 16 },
 	                 formatter: val => val + '%',
 	                 anchor: 'end',
 	                 align: 'start'
@@ -647,6 +651,8 @@
 	         }]
 	     },
 	     options: {
+	     	 responsive: true,
+  			 devicePixelRatio: 2,
 	         animation: {
 	             duration: 1200,
 	             easing: 'easeOutQuart'
@@ -657,13 +663,13 @@
 	                 max: maxBarValue < 2 ? 2 : Math.ceil(maxBarValue),
 	                 ticks: {
 	                     color: 'rgb(0, 51, 153)',
-	                     font: { size: 16, weight: 'bold' }
+	                     font: { size: 16, family: 'GongGothicMedium' }
 	                 }
 	             },
 	             x: {
 	                 ticks: {
 	                     color: 'rgb(0, 51, 153)',
-	                     font: { size: 14, weight: 'bold' }
+	                     font: { size: 14, family: 'GongGothicMedium' }
 	                 }
 	             }
 	         },
@@ -671,16 +677,16 @@
 	             legend: { display: false },
 	             title: {
 	                 display: true,
-	                 text: region + '범죄별 검거율(요일 평균)',
+	                 text: region + '범죄별 검거율',
 	                 color: 'rgb(0, 51, 153)',
-	                 font: { size: 20, weight: 'bold' },
+	                 font: { size: 20, family: 'GongGothicMedium', weight: 'normal' },
 	                 padding: { top: 0, bottom: 20 }
 	             },
 	             datalabels: {
 	                 anchor: 'end',
 	                 align: 'top',
 	                 color: 'rgb(0, 51, 153)',
-	                 font: { weight: 'bold', size: 14 },
+	                 font: { family: 'GongGothicMedium', size: 14 },
 	                 formatter: v => v + '%'
 	             }
 	         }
@@ -742,14 +748,14 @@
               title: {
                 display: true,
                 text: `5대 범죄 발생건수 추세 및 예측`,
-                font: { size: 20, weight: 'bold' },
+                font: { size: 20, family: 'GongGothicMedium', weight: 'normal' },
                 color: 'rgb(0, 51, 153)',
                 padding: { top: 15, bottom: 15 }
               },
               legend: {
                 labels: {
                   color: 'black',
-                  font: { size: 14, weight: 'bold' }
+                  font: { size: 14, family: 'GongGothicMedium' }
                 }
               },
               tooltip: { enabled: true },
@@ -760,7 +766,7 @@
                 type: 'logarithmic',
                 ticks: {
                   color: 'black',
-                  font: { size: 14, weight: 'bold' }
+                  font: { size: 14, family: 'GongGothicMedium' }
                 }
               },
               x: {
@@ -768,7 +774,7 @@
                 ticks: {
                   callback: val => val.toString(),
                   color: 'black',
-                  font: { size: 14, weight: 'bold' }
+                  font: { size: 14, family: 'GongGothicMedium' }
                 }
               }
             }
@@ -858,14 +864,14 @@ function initForecastChart() {
               title: {
                 display: true,
                 text: `5대 범죄 발생건수 추세 및 예측`,
-                font: { size: 20, weight: 'bold' },
+                font: { size: 20, family: 'GongGothicMedium' },
                 color: 'rgb(0, 51, 153)',
                 padding: { top: 15, bottom: 15 }
               },
               legend: {
                 labels: {
                   color: 'black',
-                  font: { size: 14, weight: 'bold' }
+                  font: { size: 14, family: 'GongGothicMedium' }
                 }
               },
               tooltip: { enabled: true },
@@ -876,7 +882,7 @@ function initForecastChart() {
                 type: 'logarithmic',
                 ticks: {
                   color: 'black',
-                  font: { size: 14, weight: 'bold' }
+                  font: { size: 14, family: 'GongGothicMedium' }
                 }
               },
               x: {
@@ -884,7 +890,7 @@ function initForecastChart() {
                 ticks: {
                   callback: val => val.toString(),
                   color: 'black',
-                  font: { size: 14, weight: 'bold' }
+                  font: { size: 14, family: 'GongGothicMedium' }
                 }
               }
             }
@@ -992,13 +998,14 @@ document.addEventListener('DOMContentLoaded', () => {
           },
           options: {
             responsive: true,
+			devicePixelRatio: 2,
             maintainAspectRatio: false,
             plugins: {
               title: {
                 display: true,
                 text: crime2 ,
 
-                font: { size: 20, weight: 'bold' },
+                font: { size: 20, family: 'GongGothicMedium', weight: 'normal' },
                 color: 'rgb(0, 51, 153)',
                 padding: { top: 5, bottom: 15 }
               },
@@ -1017,7 +1024,7 @@ document.addEventListener('DOMContentLoaded', () => {
             	    beginAtZero: true,
             	    ticks: {
             	      color: 'black',
-            	      font: { size: 15, weight: 'bold' }
+            	      font: { size: 15, family: 'GongGothicMedium' }
             	    },
             	    grid: {
             	      color: '#adadad'  // y축 격자선 색상 (연한 검정)
@@ -1026,7 +1033,7 @@ document.addEventListener('DOMContentLoaded', () => {
             	  x: {
             	    ticks: {
             	      color: 'black',
-            	      font: { size: 15, weight: 'bold' }
+            	      font: { size: 15, family: 'GongGothicMedium' }
             	    },
             	    grid: {
             	      color: '#adadad'  // x축 격자선 색상
@@ -1118,8 +1125,8 @@ function createStackedBarChart() {
           color: '#333',
           font: {
             size: 20,
-            weight: 'bold',
-            family: "'Noto Sans KR', sans-serif"
+            family: 'GongGothicMedium',
+            weight: 'normal'
           },
           padding: { top: 25, bottom: 10 },
           backgroundColor: 'rgba(255, 204, 0, 0.2)',
@@ -1135,8 +1142,7 @@ function createStackedBarChart() {
             color: 'black',
             font: {
               size: 13,
-              weight: 'bold',
-              family: "'Arial', sans-serif"
+              family: 'GongGothicMedium'
             },
             generateLabels(chart) {
               const datasets = chart.data.datasets;
@@ -1160,8 +1166,7 @@ function createStackedBarChart() {
           ticks: {
             font: {
               size: 15,
-              weight: '600',
-              family: "'Noto Sans KR', sans-serif"
+              family: 'GongGothicMedium'
             },
             maxRotation: 0,
             autoSkip: true,
@@ -1178,8 +1183,7 @@ function createStackedBarChart() {
             color: '#555',
             font: {
               size: 14,
-              weight: '600',
-              family: "'Noto Sans KR', sans-serif"
+              family: 'GongGothicMedium'
             },
             callback: value => value.toLocaleString(),
             maxTicksLimit: 7
@@ -1257,8 +1261,7 @@ fetch("resources/data/radar_chart_crime6.json")
         	        color: '#444444',           // 범례 글자 색
         	        font: {
         	          size: 14,                 // 글자 크기
-        	          weight: '600',            // 글자 굵기
-        	          family: "'Noto Sans KR', sans-serif"  // 폰트
+        	          family: 'GongGothicMedium'
         	        },
         	        padding: 15,                // 범례 글자 좌우 여백
         	        boxWidth: 18,               // 범례 색상 박스 크기
@@ -1271,8 +1274,8 @@ fetch("resources/data/radar_chart_crime6.json")
         	        color: '#333', // 글자 색
         	        font: {
         	          size: 20,     // 글자 크기
-        	          weight: 'bold',
-        	          family: "'Noto Sans KR', sans-serif"
+        	          family: 'GongGothicMedium',
+        	          weight: 'normal'
         	        },
         	        padding: {
         	          top: 10,
@@ -1295,14 +1298,14 @@ fetch("resources/data/radar_chart_crime6.json")
         	        color: '#555',  // x축 제목 글자색
         	        font: {
         	          size: 14,
-        	          weight: 'bold'
+        	          family: 'GongGothicMedium'
         	        }
         	      },
         	      ticks: {
         	        color: '#555',  // x축 눈금 글자색 (빨강 예시)
         	        font: {
         	          size: 14,
-        	          weight: 'bold'
+        	          family: 'GongGothicMedium'
         	        }
         	      }
         	    },
@@ -1312,7 +1315,7 @@ fetch("resources/data/radar_chart_crime6.json")
         	        color: '#555',  // y축 눈금 글자색 (초록 예시)
         	        font: {
         	          size: 14,
-        	          weight: 'bold'
+        	          family: 'GongGothicMedium'
         	        }
         	      },
         	      title: {
@@ -1396,7 +1399,7 @@ fetch('resources/data/Predicted.json')
                 color: 'black',           
                 font: {
                   size: 14,               
-                  weight: 'bold'          
+                  family: 'GongGothicMedium'          
                 }
               }
             },
@@ -1405,7 +1408,7 @@ fetch('resources/data/Predicted.json')
                 color: 'black',
                 font: {
                   size: 14,
-                  weight: 'bold'
+                  family: 'GongGothicMedium'
                 }
               }
             }
@@ -1425,7 +1428,8 @@ fetch('resources/data/Predicted.json')
                 text: '📞\u00A0112 신고접수 추세와 예측', 
                 font: {
                   size: 25,
-                  weight: 'bold'
+                  family: 'GongGothicMedium',
+                  weight: 'normal'
                 },
                 padding: {
                   top: 10,
