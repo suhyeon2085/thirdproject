@@ -429,7 +429,7 @@ $(document).ready(function(){
            
             success: function(response){
                 updateState(newState); // 화면에도 반영
-                alert('상태가 변경되었습니다.');
+               // alert('상태가 변경되었습니다.');
             },
             error: function(){
                 alert('상태 변경에 실패했습니다.');

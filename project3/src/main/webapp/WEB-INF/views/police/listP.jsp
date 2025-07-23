@@ -579,6 +579,11 @@ $(document).ready(function() {
     $gu.add($('#crimeType')).on('change', function() {
         searchReports();
     });
+    
+    $('#searchFrm').on('submit', function(e) {
+        e.preventDefault(); // 폼 submit 막기 (페이지 새로고침 방지)
+        searchReports(1);   // 검색어 포함해서 1페이지부터 다시 조회
+    });
 
     // 초기 세팅
     updateGu();
@@ -588,12 +593,15 @@ $(document).ready(function() {
         const si = $si.val();
         const gu = $gu.val();
         const crimeType = $('#crimeType').val();
+        
+        const search = $('#search').val();  // 추가: 파출소 검색어 값 가져오기
+        
         const size = 10;
 
         $.ajax({
             url: '${pageContext.request.contextPath}/police/reportList',
             type: 'get',
-            data: { si, gu, crimeType, page, size },
+            data: { si, gu, crimeType, search, page, size },
             dataType: 'json',
             success: function(response) {
             	console.log('전체 응답:', response);

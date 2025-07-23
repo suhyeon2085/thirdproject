@@ -64,6 +64,7 @@ public class policeController {
 			@RequestParam(required = false) String si,
 	        @RequestParam(required = false) String gu,
 	        @RequestParam(required = false) String crimeType,
+	        @RequestParam(value = "search", required = false) String search,
 	        @RequestParam(defaultValue = "1") int page,
 	        @RequestParam(defaultValue = "10") int size
 	) {
@@ -72,8 +73,8 @@ public class policeController {
 	    // 여기에 상태 조건 추가
 	    List<String> states = Arrays.asList("배정", "출동", "지원 요청", "지원 완료", "상황 종료");
 
-	    List<ReportDTO> reports = reportService.findByFilterWithStates(si, gu, crimeType, states, offset, size);
-	    int totalCount = reportService.getTotalCountWithStates(si, gu, crimeType, states);
+	    List<ReportDTO> reports = reportService.findByFilterWithStates(si, gu, crimeType, states, search, offset, size);
+	    int totalCount = reportService.getTotalCountWithStates(si, gu, crimeType, states, search);
 
 	    Map<String, Object> result = new HashMap<>();
 	    result.put("data", reports);

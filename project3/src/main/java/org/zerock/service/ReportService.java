@@ -118,23 +118,25 @@ public class ReportService {
         return reportMapper.getTotalCount(params);
     }
     
-    public List<ReportDTO> findByFilterWithStates(String si, String gu, String crimeType, List<String> states, int offset, int size) {
+    public List<ReportDTO> findByFilterWithStates(String si, String gu, String crimeType, List<String> states, String search, int offset, int size) {
         Map<String, Object> params = new HashMap<>();
         params.put("si", si);
         params.put("gu", gu);
         params.put("crimeType", crimeType);
         params.put("states", states);
+        params.put("search", search);
         params.put("offset", offset);
         params.put("size", size);
         return reportMapper.findByFilterWithStates(params);
     }
 
-    public int getTotalCountWithStates(String si, String gu, String crimeType, List<String> states) {
+    public int getTotalCountWithStates(String si, String gu, String crimeType, List<String> states, String search) {
         Map<String, Object> params = new HashMap<>();
         params.put("si", si);
         params.put("gu", gu);
         params.put("crimeType", crimeType);
         params.put("states", states);
+        params.put("search", search);
         return reportMapper.getTotalCountWithStates(params);
     }
     
