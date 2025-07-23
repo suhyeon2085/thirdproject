@@ -379,7 +379,7 @@
 		let gu = 'none';
 		let crimeType = 'none';
 		let page = 1;
-		let size = 5;
+		let size = 9;
 		 
 		$.ajax({
 		    url: '/temp/list',
@@ -482,6 +482,8 @@
 	         }]
 	     },
 	     options: {
+	     	responsive: true,
+  			devicePixelRatio: 2,
 	         cutout: '50%',
 	         animation: {
 	             duration: 1500,
@@ -492,20 +494,20 @@
 	                 position: 'right',
 	                 labels: {
 	                     color: 'black',
-	                     font: { size: 14, weight: 'bold' }
+	                     font: { family: 'GongGothicMedium', size: 14 }
 	                 }
 	             },
 	             title: {
 	                 display: true,
 	                 text: region + '5대 범죄 발생 비율 (%)',
 	                 color: 'rgb(0, 51, 153)',
-	                 font: { size: 20, weight: 'bold' },
+	                 font: { family: 'GongGothicMedium', size: 20 },
 	                 align: 'start',
-	                 padding: { top: 20, bottom: 5 }
+	                 padding: { top: 50, bottom: 5 }
 	             },
 	             datalabels: {
 	                 color: 'black',
-	                 font: { weight: 'bold', size: 16 },
+	                 font: { family: 'GongGothicMedium', size: 16 },
 	                 formatter: val => val + '%',
 	                 anchor: 'end',
 	                 align: 'start'
@@ -544,13 +546,13 @@
 	                 max: maxBarValue < 2 ? 2 : Math.ceil(maxBarValue),
 	                 ticks: {
 	                     color: 'rgb(0, 51, 153)',
-	                     font: { size: 16, weight: 'bold' }
+	                     font: { size: 16, family: 'GongGothicMedium' }
 	                 }
 	             },
 	             x: {
 	                 ticks: {
 	                     color: 'rgb(0, 51, 153)',
-	                     font: { size: 14, weight: 'bold' }
+	                     font: { size: 14, family: 'GongGothicMedium' }
 	                 }
 	             }
 	         },
@@ -560,14 +562,14 @@
 	                 display: true,
 	                 text: region + '범죄별 검거율(요일 평균)',
 	                 color: 'rgb(0, 51, 153)',
-	                 font: { size: 20, weight: 'bold' },
+	                 font: { size: 20, family: 'GongGothicMedium' },
 	                 padding: { top: 0, bottom: 20 }
 	             },
 	             datalabels: {
 	                 anchor: 'end',
 	                 align: 'top',
 	                 color: 'rgb(0, 51, 153)',
-	                 font: { weight: 'bold', size: 14 },
+	                 font: { family: 'GongGothicMedium', size: 14 },
 	                 formatter: v => v + '%'
 	             }
 	         }
