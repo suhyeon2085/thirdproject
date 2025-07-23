@@ -202,7 +202,6 @@
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8630523bb26c1a45d2753088246f3a05"></script>
 </head>
 <body>
-	<jsp:include page="/WEB-INF/views/menu.jsp" />
     <div id="wrap">
         <div id="row1">
             <p id="pageTitle">범죄 신고 접수</p>
@@ -231,7 +230,7 @@
                     <p class="red" id="nameErrMsg"></p>
                 </div>
                 <div class="infowrap">
-                    <p class="cate">전화번호<span class="redStar">*</span></p>
+                    <p class="cate">연락처<span class="redStar">*</span></p>
                     <input class="inp" type="text" id="phone" name="phone">
                     <p class="red" id="phoneErrMsg"></p>
                     <p class="blue">
@@ -325,6 +324,7 @@
                         <input type="file" id="filePath" name="files" style="display: none;" multiple>
                         <button type="button" id="addFileBtn">추가</button>
                     </div>
+                    <p class="blue">첨부파일 최대 개수는 5개이며 첨부 가능 용량은 전체 90MB입니다.(개별 제한은 없음)</p>
                     <div id="files"></div>
                 </div>
                 <div id="submitBtn">
@@ -804,6 +804,23 @@ navigator.geolocation.getCurrentPosition(function(position) {
                     selectedFiles.push(file);
                 }
             }
+            
+         	// 파일 개수 제한 (최대 5개)
+            if (selectedFiles.length > 5) {
+                alert("첨부파일은 최대 5개까지만 선택할 수 있습니다.");
+                selectedFiles = selectedFiles.slice(0, 5); // 첫 5개만 유지
+            }
+
+            // 전체 용량 제한 (90MB)
+            let totalSize = selectedFiles.reduce((acc, file) => acc + file.size, 0);
+            if (totalSize > 94371840) {
+                alert("전체 첨부파일 용량은 90MB를 초과할 수 없습니다.");
+                // 방금 추가한 파일들을 제거 (뒤에서부터 pop)
+                while (totalSize > 94371840 && selectedFiles.length > 0) {
+                    selectedFiles.pop();
+                    totalSize = selectedFiles.reduce((acc, file) => acc + file.size, 0);
+                }
+            }
 
             renderFileList();
             $("#filePath").val(""); // 동일 파일 다시 선택 가능하도록 초기화
@@ -813,6 +830,8 @@ navigator.geolocation.getCurrentPosition(function(position) {
             // filename: 마지막 선택된 파일 이름
             if (selectedFiles.length > 0) {
                 $("#filename").text(selectedFiles[selectedFiles.length - 1].name);
+            } else {
+                $("#filename").text("");
             }
 
             // files: 전체 목록 출력
@@ -821,7 +840,7 @@ navigator.geolocation.getCurrentPosition(function(position) {
                 $("#files").append(`
                     <div class="file-item">
                         \${file.name}
-                        <i class="bi bi-x-square file-remove" data-index="${index}" style="cursor:pointer; margin-left:10px;"></i>
+                        <i class="bi bi-x-square file-remove" data-name="\${file.name}" style="cursor:pointer; margin-left:10px;"></i>
                     </div>
                 `);
             });
@@ -829,8 +848,8 @@ navigator.geolocation.getCurrentPosition(function(position) {
 
         // x 버튼 클릭 시 파일 제거
         $(document).on("click", ".file-remove", function () {
-            const index = $(this).data("index");
-            selectedFiles.splice(index, 1);
+            const name = $(this).data("name");
+            selectedFiles = selectedFiles.filter(file => file.name !== name);
             renderFileList();
         });
         
@@ -986,7 +1005,7 @@ navigator.geolocation.getCurrentPosition(function(position) {
                 	// 제출 성공 시 localStorage 데이터 삭제
                     localStorage.removeItem("reportFormData");
                     alert("신고 접수가 완료되었습니다.");
-                    window.location.href = "/";  // 필요 시 다른 페이지로 변경
+                    window.location.href = "/crime";  // 필요 시 다른 페이지로 변경
                 },
                 error: function () {
                     alert("제출에 실패했습니다. 관리자에게 문의하세요.");

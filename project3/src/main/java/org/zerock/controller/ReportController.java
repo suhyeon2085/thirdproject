@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -62,6 +63,17 @@ public class ReportController {
             dto.setLocation(null);
             dto.setSi(null);
             dto.setGu(null);
+        }
+        
+    	// 파일 개수 제한
+        if (files.length > 5) {
+            return Map.of("error", "첨부파일은 최대 5개까지만 업로드할 수 있습니다.");
+        }
+
+        // 전체 용량 제한 (90MB)
+        long totalSize = Arrays.stream(files).mapToLong(MultipartFile::getSize).sum();
+        if (totalSize > 94371840L) {
+            return Map.of("error", "전체 첨부파일 용량은 90MB를 초과할 수 없습니다.");
         }
 
         String uploadDir = "\\\\Des67\\02-공유폴더\\20250223KDT반\\LiveAir\\image\\";

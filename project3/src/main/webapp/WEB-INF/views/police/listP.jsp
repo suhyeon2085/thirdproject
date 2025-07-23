@@ -34,6 +34,7 @@
             white-space: normal; /* 기본 줄바꿈 허용 */
             overflow-wrap: break-word; /* 긴 단어가 있으면 자동 줄바꿈 */
             font-size: 25px;
+            margin-top: 0;
         }
 
         #search{
@@ -89,9 +90,6 @@
             white-space: normal; /* 기본 줄바꿈 허용 */
             overflow-wrap: break-word; /* 긴 단어가 있으면 자동 줄바꿈 */
         }
-        #datetime{
-            	font-size: 14px;
-            } 
         .red{
             color: red;
             font-size: 14px;

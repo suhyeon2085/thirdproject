@@ -114,7 +114,6 @@
         }
     </style>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="resources/css/menu.css">
 </head>
 <body>
 <!-- 로그인 실패 시 alert 출력 -->
@@ -124,7 +123,6 @@
         </script>
     </c:if>
     
-	<jsp:include page="/WEB-INF/views/menu.jsp" />
     <div id="wrap">
         <div id="row1">
             <p id="pageTitle">관리자 로그인</p>

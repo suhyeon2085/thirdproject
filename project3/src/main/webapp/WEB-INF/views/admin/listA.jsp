@@ -25,6 +25,7 @@
             padding-bottom: 10px;
             font-size: 25px;
             margin-bottom: 30px;
+            margin-top: 0;
         }
         #sltWrap{
             display: flex;
