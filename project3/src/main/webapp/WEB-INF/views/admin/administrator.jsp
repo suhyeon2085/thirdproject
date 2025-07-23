@@ -20,6 +20,9 @@
 		color: black;
     	text-decoration: none;
 	}
+	#thead{
+		background-color: rgb(231, 231, 231);
+	}
 </style>
 </head>
 <body>
@@ -142,10 +145,10 @@
 
     <div class="list">
       <table class="reportList" id="reportList">
-      	<tr>
-      		<th class="type">범죄유형</th>
-      		<th class="state">진행상태</th>
-      		<th class="time">접수 시각</th>
+      	<tr id="thead">
+      		<td class="type">범죄유형</td>
+      		<td class="state">진행상태</td>
+      		<td class="time">접수 시각</td>
       	</tr>
       </table>
     </div>
