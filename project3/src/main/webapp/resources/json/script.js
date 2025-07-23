@@ -417,7 +417,7 @@
 	                 display: true,
 	                 text: '연도별 5대 범죄 발생 비율 (%)',
 	                 color: 'rgb(0, 51, 153)',
-	                 font: { size: 16, weight: 'bold' },
+	                 font: { size: 16, weight: 'normal', family: 'GongGothicMedium' },
 	                 align: 'start',
 	                 padding: { top: 20, bottom: 5 }
 	             },
@@ -614,7 +614,7 @@
 	                 color: 'rgb(0, 51, 153)',
 	                 font: { size: 16, weight: 'bold' },
 	                 align: 'start',
-	                 padding: { top: 20, bottom: 5 }
+	                 padding: { top: 30 }
 	             },
 	             datalabels: {
 	                 color: 'black',

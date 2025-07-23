@@ -501,7 +501,7 @@
 	                 color: 'rgb(0, 51, 153)',
 	                 font: { size: 20, weight: 'bold' },
 	                 align: 'start',
-	                 padding: { top: 20, bottom: 5 }
+	                 padding: { top: 5, bottom: 5 }
 	             },
 	             datalabels: {
 	                 color: 'black',
