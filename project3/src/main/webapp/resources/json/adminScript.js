@@ -249,7 +249,8 @@
 	document.addEventListener('DOMContentLoaded', mapLoad);
 
 	async function mapLoad() {
-		const { lat, lon } = await getUserLocation();
+		const lat = 37.5588159;
+		const lon = 127.0048761;
 		const map = createMap(lat, lon);
 		const currentLocation = new kakao.maps.LatLng(lat, lon);
 
@@ -269,6 +270,8 @@
 		renderCurrentLocationMarker(map, lat, lon);
 		renderNearestStations(map, position, station, currentLocation);	
 		setupIdleTracking(map, position, station, currentLocation);
+
+		reportListView();
 
 	}
 
@@ -355,7 +358,7 @@
 	Chart.register(ChartDataLabels);
 	
 	//------------------ 전국 차트 ------------------ //
-	const crimes = ["살인", "강간 및 추행", "상해 및 폭행", "교통범죄", "강도 및 절도"];
+	const crimes = ["살인", "강간 강제추행", "상해 및 폭행", "교통범죄", "강도 및 절도"];
 	const donutColors = [
 	 'rgba(255, 206, 86, 0.9)',
 	 'rgba(255, 99, 132, 0.9)',
@@ -368,167 +371,51 @@
 	let donutChart;
 	let barChart;
 	
-	fetch('/resources/data/nationwide.json')
-	.then(res => res.json())
-	.then(data => {
-	 rawData = data;
-	 const years = Object.keys(rawData).sort();
-	 const latestYear = years[years.length - 1];
-	
-	 let donutRawData = crimes.map(c => rawData[latestYear]?.[c] ?? 0);
-	 donutRawData = donutRawData.map((v, i) => (crimes[i] === "살인" && v < 10000) ? 10000 : v);
-	
-	 const total = donutRawData.reduce((a, b) => a + b, 0);
-	 const donutData = donutRawData.map(v => parseFloat(((v / total) * 100).toFixed(1)));
-	
-	 createDonutChart(crimes, donutData);
-	 const initialBarData = getBarData("전체");
-	 createBarChart(initialBarData, "5대 범죄 전체 합계");
-	});
-	
-	function createDonutChart(labels, data) {
-	 const ctx = document.getElementById('donutChart').getContext('2d');
-	 if (donutChart) donutChart.destroy();
-	 donutChart = new Chart(ctx, {
-	     type: 'doughnut',
-	     data: {
-	         labels,
-	         datasets: [{
-	             data,
-	             backgroundColor: donutColors,
-	             borderColor: '#222',
-	             borderWidth: 2,
-	             hoverOffset: 15
-	         }]
-	     },
-	     options: {
-	         responsive: true,
-	         cutout: '50%',
-	         plugins: {
-	             legend: {
-	                 position: 'right',
-	                 labels: {
-	                     color: 'black',
-	                     font: { size: 14 },
+	function reportListView()
+	{
+		let table = document.getElementById('reportList');
 
-	                 }
-	             },
-	             title: {
-	                 display: true,
-	                 text: '연도별 5대 범죄 발생 비율 (%)',
-	                 color: 'rgb(0, 51, 153)',
-	                 font: { size: 16, weight: 'bold' },
-	                 align: 'start',
-	                 padding: { top: 20, bottom: 5 }
-	             },
-	             datalabels: { display: false }
-	         },
-	         onClick: (evt, elements) => {
-	             if (elements.length) {
-	                 const idx = elements[0].index;
-	                 const selectedCrime = crimes[idx];
-	                 const barData = getBarData(selectedCrime);
-	                 updateBarChart(barData, selectedCrime);
-	             }
-	         }
-	     },
-	     plugins: [ChartDataLabels]
-	 });
+		let si = 'none';
+		let gu = 'none';
+		let crimeType = 'none';
+		let page = 1;
+		let size = 5;
+		 
+		$.ajax({
+		    url: '/temp/list',
+		    type: 'get',
+		    data: { si, gu, crimeType, page, size },
+		    dataType: 'json',
+		    success: function(response) {
+		        $.each(response.data, function(index, value) {
+		            let row = document.createElement('tr');
+		            let type = document.createElement('td');
+		
+		            let link = document.createElement('a');
+		            link.href = `${contextPath}/admin/viewA?id=${encodeURIComponent(value.id)}`;
+		            link.textContent = value.crimeType;
+		            link.className = 'type-link';
+		
+		            type.appendChild(link);
+		            row.appendChild(type);
+		
+		            let state = document.createElement('td');
+		            state.textContent = value.state;
+		            row.appendChild(state);
+		
+		            let time = document.createElement('td');
+		            let date = new Date(value.createdAt.replace(" ", "T"));
+		            let hours = String(date.getHours()).padStart(2, '0');
+		            let minutes = String(date.getMinutes()).padStart(2, '0');
+		            time.textContent = `${hours}:${minutes}`;
+		            row.appendChild(time);
+		
+		            table.appendChild(row);
+		        });
+		    }
+		});
+
 	}
-	
-	function getBarData(selectedCrime) {
-	 const years = Object.keys(rawData).sort();
-	 if (selectedCrime === "전체") {
-	     return years.map(y => ({
-	         year: y,
-	         count: crimes.reduce((sum, c) => sum + (rawData[y]?.[c] || 0), 0)
-	     }));
-	 } else {
-	     return years.map(y => ({
-	         year: y,
-	         count: rawData[y]?.[selectedCrime] || 0
-	     }));
-	 }
-	}
-	
-	function createBarChart(data, title) {
-	 const ctx = document.getElementById('barChart').getContext('2d');
-	 const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-	 gradient.addColorStop(0, 'rgba(54, 162, 235, 1)');
-	 gradient.addColorStop(1, 'rgba(54, 162, 235, 0.3)');
-	
-	 const labels = data.map(d => d.year);
-	 const values = data.map(d => d.count);
-	
-	 if (barChart) barChart.destroy();
-	
-	 barChart = new Chart(ctx, {
-	     type: 'bar',
-	     data: {
-	         labels,
-	         datasets: [{
-	             label: title,
-	             data: values,
-	             backgroundColor: gradient,
-	             borderColor: 'rgba(54, 162, 235, 1)',
-	             borderWidth: 1,
-	             borderRadius: 6
-	         }]
-	     },
-	     options: {
-	         responsive: true,
-	         animation: {
-	             duration: 1000,
-	             easing: 'easeOutBounce'
-	         },
-	         scales: {
-	             y: {
-	                 beginAtZero: true,
-	                 ticks: {
-	                     color: 'rgb(0, 51, 153)',
-	                     font: { size: 17, weight: 'bold' },
-	                     callback: val => val.toLocaleString()
-	                 }
-	             },
-	             x: {
-	                 ticks: {
-	                     color: 'rgb(0, 51, 153)',
-	                     font: { size: 17, weight: 'bold' }
-	                 }
-	             }
-	         },
-	         plugins: {
-	             legend: { display: false },
-	             title: {
-	                 display: true,
-	                 text: title,
-	                 color: 'rgb(0, 51, 153)',
-	                 font: { size: 16, weight: 'bold' },
-	                 padding: { top: 15, bottom: 2 }
-	             },
-	             datalabels: {
-	                 color: 'rgb(0, 51, 153)',
-	                 anchor: 'end',
-	                 align: 'top',
-	                 font: { weight: 'bold', size: 15 },
-	                 formatter: val => val.toLocaleString()
-	             }
-	         }
-	     },
-	     plugins: [ChartDataLabels]
-	 });
-	}
-	
-	function updateBarChart(data, crimeName) {
-	 if (!barChart) return;
-	 barChart.data.labels = data.map(d => d.year);
-	 barChart.data.datasets[0].data = data.map(d => d.count);
-	 barChart.data.datasets[0].label = crimeName + " 연도별 발생건수";
-	 barChart.options.plugins.title.text = crimeName + " 연도별 발생건수";
-	 barChart.update();
-	}
-	
-	
 
 	//------------------ 현위치 차트 ------------------ //
 	const crimesLocal = ["살인", "강간 및 추행", "상해 및 폭행", "교통범죄", "강도 및 절도"];
@@ -536,7 +423,7 @@
 	
 	let donutChart1;
 	let barChart1;
- 
+
     function regionChart(position, region) {
 	    const filtered = position.filter(d => d["지역"] == region);
 	
@@ -605,14 +492,14 @@
 	                 position: 'right',
 	                 labels: {
 	                     color: 'black',
-	                     font: { size: 14 }
+	                     font: { size: 14, weight: 'bold' }
 	                 }
 	             },
 	             title: {
 	                 display: true,
 	                 text: region + '5대 범죄 발생 비율 (%)',
 	                 color: 'rgb(0, 51, 153)',
-	                 font: { size: 16, weight: 'bold' },
+	                 font: { size: 20, weight: 'bold' },
 	                 align: 'start',
 	                 padding: { top: 20, bottom: 5 }
 	             },
@@ -691,7 +578,7 @@
 
 	
 	//------------------ 예측 차트 ------------------ //
-	fetch("/resources/data/crime_forecast.json")
+	fetch("../resources/data/crime_forecast.json")
 	.then(res => res.json())
     .then(data => {
       const ctx = document.getElementById('forecastChart').getContext('2d');
@@ -800,6 +687,7 @@
       // 초기 표시: 교통 범죄
       updateChart('교통 범죄');
     });
+
 //------------------ 예측 차트 ------------------ //
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -807,7 +695,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initForecastChart() {
-  fetch('/resources/data/crime_forecast.json')
+  fetch('../resources/data/crime_forecast.json')
     .then(res => res.json())
     .then(data => {
       const ctx = document.getElementById('forecastChart').getContext('2d');
@@ -938,7 +826,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const charts = {};
 
-  fetch('/resources/data/crime_time_day.json')
+  fetch('../resources/data/crime_time_day.json')
     .then(res => res.json())
     .then(data => {
       crimes2.forEach((crime2, idx) => {
@@ -1059,7 +947,7 @@ const activeCharts = [];
 // JSON 데이터 로드
 async function loadDataFromJSON() {
   try {
-    const stackedRes = await fetch('resources/data/stacked_bar_chart2.json');
+    const stackedRes = await fetch('../resources/data/stacked_bar_chart2.json');
     if (!stackedRes.ok) throw new Error('stacked_bar_chart2.json 로드 실패');
     stackedBarData = await stackedRes.json();
     console.log('✅ stacked_bar_chart2.json 로드 완료');
@@ -1210,7 +1098,7 @@ window.addEventListener('resize', () => {
 });
 
 //여기서부터는 장소별 범죄 발생건수 차트 ------------------------------------------------------------------------
-fetch("resources/data/radar_chart_crime6.json")
+fetch("../resources/data/radar_chart_crime6.json")
   .then(res => res.json())
   .then(data => {
     const 장소목록 = Object.keys(data);
@@ -1335,7 +1223,7 @@ fetch("resources/data/radar_chart_crime6.json")
     
     
   // 이제부터는 신고접수 예측과 평균 출동 시간 차트 -------------------------------------------
-fetch('resources/data/Predicted.json')
+fetch('../resources/data/Predicted.json')
   .then(res => res.json())
   .then(data => {
     const years = data.map(d => d.연도);
@@ -1473,7 +1361,7 @@ document.getElementById('city1').addEventListener('change', async function () {
   if (!selectedCity) return;
 
   try {
-    const fileUrl = "/resources/data/" + selectedCity+ ".json";
+    const fileUrl = "../resources/data/" + selectedCity+ ".json";
     const res = await fetch(fileUrl);
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 
@@ -1649,7 +1537,7 @@ document.getElementById('city2').addEventListener('change', async function () {
   if (!selectedCity) return;
 
   try {
-    const fileUrl = "/resources/data/"+selectedCity+"_bell.json"; // 경로는 프로젝트에 맞게 수정
+    const fileUrl = "../resources/data/"+selectedCity+"_bell.json"; // 경로는 프로젝트에 맞게 수정
     const res = await fetch(fileUrl);
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 

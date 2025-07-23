@@ -30,7 +30,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                 redirectUrl = "/police/listP";
                 break;
             } else if (role.equals("ROLE_ADMIN")) {
-                redirectUrl = "/admin/listA";
+                redirectUrl = "/admin/administrator";
                 break;
             }
         }
