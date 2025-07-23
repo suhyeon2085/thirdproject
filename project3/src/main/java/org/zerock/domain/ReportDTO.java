@@ -38,4 +38,6 @@ public class ReportDTO {
     
     private String station;
     private String state;
+    
+    private String supportStation;
 }

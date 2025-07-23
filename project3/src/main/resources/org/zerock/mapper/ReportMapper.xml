@@ -20,6 +20,9 @@
   <result property="lat"      column="lat"/>
   <result property="lon"      column="lon"/>
   <result property="myLoc2"      column="myLoc2"/>
+  
+  <result property="supportStation" column="support_station"/>
+  
 </resultMap>
 
   <!-- 1) INSERT -->
@@ -77,11 +80,18 @@
 </update>
 
 <update id="updateStateAndStation">
-    UPDATE reports
+    UPDATE report
     SET state = #{state}
     <if test="station != null and station != ''">
         , station = #{station}
     </if>
+    WHERE id = #{id}
+</update>
+
+<update id="updateSupportStation">
+    UPDATE report
+    SET support_station = #{supportStation},
+        state = #{state}
     WHERE id = #{id}
 </update>
 
