@@ -42,7 +42,15 @@ public interface ReportMapper {
     List<ReportDTO> findByFilterWithStates(Map<String, Object> params);
     int getTotalCountWithStates(Map<String, Object> params);
     
-    void updateState(@Param("id") int id, @Param("state") String state);
+//    void updateState(@Param("id") int id, @Param("state") String state);
+    
+    void updateState(@Param("id") int id, @Param("state") String state, @Param("station") String station);
+    
+    void updateStateAndStation(@Param("id") int id,
+            @Param("state") String state,
+            @Param("station") String station);
+    
+    
     
     
 }

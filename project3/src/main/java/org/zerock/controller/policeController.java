@@ -83,9 +83,13 @@ public class policeController {
 	
 	@PostMapping("/police/updateState")
 	@ResponseBody
-	public String updateState(@RequestParam("id") int id, @RequestParam("state") String state) {
+	public String updateState(
+			@RequestParam("id") int id, 
+			@RequestParam("state") String state,
+			@RequestParam(value = "station", required = false) String station
+			) {
 	    try {
-	        reportService.updateState(id, state);
+	    	reportService.updateState(id, state, station);
 	        return "success";
 	    } catch (Exception e) {
 	        e.printStackTrace();

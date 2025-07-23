@@ -41,6 +41,9 @@
             border: none;
             font-family: 'GongGothicMedium';
             font-size: 18px;
+            
+            min-width: 300px;
+            
         }
         table{
             border: 1px solid black;
@@ -171,6 +174,7 @@
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../resources/css/menu.css">
+    
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/menu.jsp" />
@@ -324,6 +328,14 @@
 			</button>
         </div>
     </div> 
+    
+        <script>
+        const si = '${fn:escapeXml(report.si)}';
+        const gu = '${fn:escapeXml(report.gu)}';
+    </script>
+    
+    <script src="${pageContext.request.contextPath}/resources/json/script2.js"></script>
+    
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 	// 전화번호 형식
@@ -397,11 +409,16 @@ $(document).ready(function(){
 
     function changeStateOnServer(newState){
         const reportId = "${report.id}";  // 서버에서 렌더링된 id 값
+        const station = $("#station").val();
 
         $.ajax({
             type: "POST", // 또는 PATCH, PUT 등
             url: "/admin/updateState", // 서버에 만든 상태 변경 API 엔드포인트
-            data: { id: reportId, state: newState },
+           data: { 
+        	   id: reportId, 
+        	   state: newState, 
+        	   station: $("#station").val() },
+           
             success: function(response){
                 updateState(newState); // 화면에도 반영
                 alert('상태가 변경되었습니다.');

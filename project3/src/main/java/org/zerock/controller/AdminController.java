@@ -9,10 +9,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.zerock.domain.ReportDTO;
+import org.zerock.mapper.ReportMapper;
 import org.zerock.service.ReportService;
 
 @Controller
@@ -20,6 +22,8 @@ import org.zerock.service.ReportService;
 public class AdminController {
 	@Autowired
     private ReportService reportService;
+	@Autowired
+	private ReportMapper reportMapper;
 	
 	@GetMapping("/mainA")
     public String redirectAdminMainGet() {
@@ -78,18 +82,38 @@ public class AdminController {
         return "admin/viewA";
     }
     
-    @PostMapping("/admin/updateState")
+  @PostMapping("/admin/updateState")
 	@ResponseBody
-	public String updateState(@RequestParam("id") int id, @RequestParam("state") String state) {
+	public String updateState(
+			@RequestParam("id") int id, 
+			@RequestParam("state") String state,
+			@RequestParam(value = "station", required = false) String station
+			) {
 	    try {
-	        reportService.updateState(id, state);
+	    	reportService.updateState(id, state, station);
 	        return "success";
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	        return "fail";
 	    }
 	}
-	
+    
+//    @PostMapping("/admin/updateState")
+//    @ResponseBody
+//    public String updateState(
+//    		@RequestParam("id") int id,
+//            @RequestParam("state") String state,
+//            @RequestParam(value = "station", required = false) String station) {
+//        try {
+//            reportService.updateStateAndStation(id, state, station); // 서비스 호출
+//            return "success";
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return "fail";
+//        }
+//    }
+    
+
 	
 	/*@PostMapping("/updateState")
 	@ResponseBody

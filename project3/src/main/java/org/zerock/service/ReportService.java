@@ -138,7 +138,15 @@ public class ReportService {
         return reportMapper.getTotalCountWithStates(params);
     }
     
-    public void updateState(int id, String state) {
-        reportMapper.updateState(id, state);
+//    public void updateState(int id, String state) {
+//        reportMapper.updateState(id, state);
+//    }
+    
+    public void updateState(int id, String state, String station) {
+        reportMapper.updateState(id, state, station);
+    }
+    
+    public void updateStateAndStation(int id, String state, String station) {
+    	reportMapper.updateStateAndStation(id, state, station);
     }
 }

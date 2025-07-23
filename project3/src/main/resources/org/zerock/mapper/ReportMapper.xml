@@ -59,9 +59,29 @@
     WHERE id = #{id}
 </update>
 
+<!--  
 <update id="updateState">
     UPDATE report
     SET state = #{state}
+    WHERE id = #{id}
+</update>
+ -->
+ 
+<update id="updateState">
+    UPDATE report
+    SET state = #{state}
+    <if test="station != null and station != ''">
+        , station = #{station}
+    </if>
+    WHERE id = #{id}
+</update>
+
+<update id="updateStateAndStation">
+    UPDATE reports
+    SET state = #{state}
+    <if test="station != null and station != ''">
+        , station = #{station}
+    </if>
     WHERE id = #{id}
 </update>
 
