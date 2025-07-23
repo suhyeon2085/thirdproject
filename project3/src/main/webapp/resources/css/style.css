@@ -117,7 +117,7 @@ body {
   display: flex;
   gap: 10px;
   align-items: stretch;
-  height: 700px; /* 필요에 따라 조절 */
+  height: 686px; /* 필요에 따라 조절 */
   box-sizing: border-box;
   width:100%;
 }
@@ -153,7 +153,7 @@ body {
 /* } */
 
 #one {
-  height: 9.7%; 
+  height: 9.5%; 
   display: flex;
   align-items: center;
   justify-content: center;
@@ -225,9 +225,9 @@ body {
   background: rgb(245, 247, 250);
   display: flex;
   align-items: center;
-  width: 100%;
+  width: 99.4%;
 }
-
+ 
 	#location {
 	  display: flex;
 	  justify-content: space-between;;
