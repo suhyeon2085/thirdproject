@@ -380,7 +380,7 @@
 		let crimeType = 'none';
 		let page = 1;
 		let size = 5;
-		
+		 
 		$.ajax({
 		    url: '/temp/list',
 	        type: 'get',

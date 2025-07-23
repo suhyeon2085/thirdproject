@@ -536,7 +536,7 @@
 	
 	let donutChart1;
 	let barChart1;
-
+ 
     function regionChart(position, region) {
 	    const filtered = position.filter(d => d["지역"] == region);
 	

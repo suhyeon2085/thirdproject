@@ -23,7 +23,7 @@ import org.zerock.service.ReportService;
 import lombok.extern.log4j.Log4j;
 
 @Log4j
-@Controller
+@Controller 
 public class HomeController {
 	
 	@Autowired
