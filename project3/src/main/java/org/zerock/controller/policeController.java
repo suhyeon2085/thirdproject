@@ -73,8 +73,14 @@ public class policeController {
 	    // 여기에 상태 조건 추가
 	    List<String> states = Arrays.asList("배정", "출동", "지원 요청", "지원 완료", "상황 종료");
 
-	    List<ReportDTO> reports = reportService.findByFilterWithStates(si, gu, crimeType, states, search, offset, size);
-	    int totalCount = reportService.getTotalCountWithStates(si, gu, crimeType, states, search);
+	 // si 정규식 변환
+	    String siRegex = si;
+	    if ("울산".equals(si) || "울산광역시".equals(si)) {
+	        siRegex = "울산|울산광역시";
+	    }
+	    
+	    List<ReportDTO> reports = reportService.findByFilterWithStates(siRegex, gu, crimeType, states, search, offset, size);
+	    int totalCount = reportService.getTotalCountWithStates(siRegex, gu, crimeType, states, search);
 
 	    Map<String, Object> result = new HashMap<>();
 	    result.put("data", reports);

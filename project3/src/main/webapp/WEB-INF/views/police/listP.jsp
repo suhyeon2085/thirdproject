@@ -727,6 +727,8 @@ $(document).ready(function() {
         $pagination.append($nextBtn);
     }
     
+    
+    
 });
 </script>
 </body>

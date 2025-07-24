@@ -144,84 +144,161 @@
     ORDER BY created_at DESC
 </select>
 
-  	<select id="findByFilterWithPaging" parameterType="map" resultMap="reportMap">
-        SELECT *
-        FROM report
-        WHERE 1 = 1
-        <if test="si != null and si != 'none'">
-            AND si = #{si}
-        </if>
-        <if test="gu != null and gu != 'none'">
-            AND gu = #{gu}
-        </if>
-        <if test="crimeType != null and crimeType != 'none'">
-            AND crime_Type = #{crimeType}
-        </if>
-        ORDER BY created_At DESC
-        LIMIT #{size} OFFSET #{offset}
-    </select>
+<select id="findByFilterWithPaging" parameterType="map" resultMap="reportMap">
+  SELECT *
+  FROM report
+  WHERE 1=1
 
-    <select id="getTotalCount" parameterType="map" resultType="int">
-        SELECT COUNT(*) 
-        FROM report
-        WHERE 1 = 1
-        <if test="si != null and si != 'none'">
-            AND si = #{si}
-        </if>
-        <if test="gu != null and gu != 'none'">
-            AND gu = #{gu}
-        </if>
-        <if test="crimeType != null and crimeType != 'none'">
-            AND crime_Type = #{crimeType}
-        </if>
-    </select> 
-    
+  <if test="si != null and si != 'none' and gu != null and gu != 'none'">
+    AND (
+      (si = #{si} AND gu = #{gu})
+      OR
+      (myLoc1 REGEXP #{si} AND myLoc1 LIKE CONCAT('%', #{gu}, '%'))
+    )
+  </if>
+
+  <if test="si != null and si != 'none' and (gu == null or gu == 'none')">
+    AND (
+      si = #{si}
+      OR myLoc1 REGEXP #{si}
+    )
+  </if>
+
+  <if test="gu != null and gu != 'none' and (si == null or si == 'none')">
+    AND (
+      gu = #{gu}
+      OR myLoc1 LIKE CONCAT('%', #{gu}, '%')
+    )
+  </if>
+
+  <if test="crimeType != null and crimeType != 'none'">
+    AND crime_Type = #{crimeType}
+  </if>
+
+  ORDER BY created_At DESC
+  LIMIT #{size} OFFSET #{offset}
+</select>
+
+<select id="getTotalCount" parameterType="map" resultType="int">
+  SELECT COUNT(*)
+  FROM report
+  WHERE 1=1
+
+  <if test="si != null and si != 'none' and gu != null and gu != 'none'">
+    AND (
+      (si = #{si} AND gu = #{gu})
+      OR
+      (myLoc1 REGEXP #{si} AND myLoc1 LIKE CONCAT('%', #{gu}, '%'))
+    )
+  </if>
+
+  <if test="si != null and si != 'none' and (gu == null or gu == 'none')">
+    AND (
+      si = #{si}
+      OR myLoc1 REGEXP #{si}
+    )
+  </if>
+
+  <if test="gu != null and gu != 'none' and (si == null or si == 'none')">
+    AND (
+      gu = #{gu}
+      OR myLoc1 LIKE CONCAT('%', #{gu}, '%')
+    )
+  </if>
+
+  <if test="crimeType != null and crimeType != 'none'">
+    AND crime_Type = #{crimeType}
+  </if>
+</select>
     
     <select id="findByFilterWithStates" parameterType="map" resultMap="reportMap">
-        SELECT *
-        FROM report
-        WHERE 1 = 1
-        <if test="si != null and si != 'none'">
-            AND si = #{si}
-        </if>
-        <if test="gu != null and gu != 'none'">
-            AND gu = #{gu}
-        </if>
-        <if test="crimeType != null and crimeType != 'none'">
-            AND crime_Type = #{crimeType}
-        </if>
-        <if test="search != null and search != ''">
-        AND station LIKE CONCAT('%', #{search}, '%')
-    	</if>
-        AND state IN
-    	<foreach collection="states" item="state" open="(" separator="," close=")">
-        #{state}
-    	</foreach>	
-        ORDER BY created_At DESC
-        LIMIT #{size} OFFSET #{offset}
-    </select>
+  SELECT *
+  FROM report
+  WHERE 1=1
+
+  <if test="si != null and si != 'none' and gu != null and gu != 'none'">
+    AND (
+      (si REGEXP #{si} AND gu = #{gu})
+      OR
+      (myLoc1 REGEXP #{si} AND myLoc1 LIKE CONCAT('%', #{gu}, '%'))
+    )
+  </if>
+
+  <if test="si != null and si != 'none' and (gu == null or gu == 'none')">
+    AND (
+      si REGEXP #{si}
+      OR myLoc1 REGEXP #{si}
+    )
+  </if>
+
+  <if test="gu != null and gu != 'none' and (si == null or si == 'none')">
+    AND (
+      gu = #{gu}
+      OR myLoc1 LIKE CONCAT('%', #{gu}, '%')
+    )
+  </if>
+
+  <if test="crimeType != null and crimeType != 'none'">
+    AND crime_Type = #{crimeType}
+  </if>
+
+  <if test="states != null and states.size() > 0">
+    AND state IN
+    <foreach collection="states" item="state" open="(" separator="," close=")">
+      #{state}
+    </foreach>
+  </if>
+
+  <if test="search != null and search != ''">
+    AND (station LIKE CONCAT('%', #{search}, '%') OR myLoc1 LIKE CONCAT('%', #{search}, '%'))
+  </if>
+
+  ORDER BY created_At DESC
+  LIMIT #{size} OFFSET #{offset}
+</select>
 
     <select id="getTotalCountWithStates" parameterType="map" resultType="int">
-        SELECT COUNT(*) 
-        FROM report
-        WHERE 1 = 1
-        <if test="si != null and si != 'none'">
-            AND si = #{si}
-        </if>
-        <if test="gu != null and gu != 'none'">
-            AND gu = #{gu}
-        </if>
-        <if test="crimeType != null and crimeType != 'none'">
-            AND crime_Type = #{crimeType}
-        </if>
-        <if test="search != null and search != ''">
-        AND station LIKE CONCAT('%', #{search}, '%')
-    </if>
-        AND state IN
-    	<foreach collection="states" item="state" open="(" separator="," close=")">
-        #{state}
-    	</foreach>
-    </select>
+  SELECT COUNT(*)
+  FROM report
+  WHERE 1=1
+
+  <if test="si != null and si != 'none' and gu != null and gu != 'none'">
+    AND (
+      (si REGEXP #{si} AND gu = #{gu})
+      OR
+      (myLoc1 REGEXP #{si} AND myLoc1 LIKE CONCAT('%', #{gu}, '%'))
+    )
+  </if>
+
+  <if test="si != null and si != 'none' and (gu == null or gu == 'none')">
+    AND (
+      si REGEXP #{si}
+      OR myLoc1 REGEXP #{si}
+    )
+  </if>
+
+  <if test="gu != null and gu != 'none' and (si == null or si == 'none')">
+    AND (
+      gu = #{gu}
+      OR myLoc1 LIKE CONCAT('%', #{gu}, '%')
+    )
+  </if>
+
+  <if test="crimeType != null and crimeType != 'none'">
+    AND crime_Type = #{crimeType}
+  </if>
+
+  <if test="states != null and states.size() > 0">
+    AND state IN
+    <foreach collection="states" item="state" open="(" separator="," close=")">
+      #{state}
+    </foreach>
+  </if>
+
+  <if test="search != null and search != ''">
+    AND (station LIKE CONCAT('%', #{search}, '%') OR myLoc1 LIKE CONCAT('%', #{search}, '%'))
+  </if>
+</select>
     
     
 

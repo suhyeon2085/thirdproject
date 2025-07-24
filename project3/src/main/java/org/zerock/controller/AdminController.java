@@ -47,9 +47,15 @@ public class AdminController {
 	        @RequestParam(defaultValue = "10") int size) {
 
 	    int offset = (page - 1) * size;
+	    
+	 // si 정규식 변환
+	    String siRegex = si;
+	    if ("울산".equals(si) || "울산광역시".equals(si)) {
+	        siRegex = "울산|울산광역시";
+	    }
 
-	    List<ReportDTO> reportList = reportService.findByFilterWithPaging(si, gu, crimeType, offset, size);
-	    int totalCount = reportService.getTotalCount(si, gu, crimeType);
+	    List<ReportDTO> reportList = reportService.findByFilterWithPaging(siRegex, gu, crimeType, offset, size);
+	    int totalCount = reportService.getTotalCount(siRegex, gu, crimeType);
 
 	    Map<String, Object> result = new HashMap<>();
 	    result.put("data", reportList);
