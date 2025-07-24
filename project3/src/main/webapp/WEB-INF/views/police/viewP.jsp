@@ -153,6 +153,9 @@
 		    #nowWrap, #row2, #row3{
             	margin-bottom: 30px;
         	}
+        	.thumb {
+			    flex: 0 0 100%;
+			}
         }
         @media screen and (max-width: 480px){
 		    #wrap{
@@ -164,6 +167,9 @@
             #datetime{
             	margin-top: 10px; 
             }
+            .thumb {
+		        flex: 0 0 calc(100% - 10px); /* gap만큼 빼주기 */
+		    }
 		}
 		
 				.btn:disabled {
