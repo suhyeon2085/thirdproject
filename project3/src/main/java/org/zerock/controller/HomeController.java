@@ -41,6 +41,12 @@ public class HomeController {
 		return "/admin/administrator";
 	}
 	
+	@RequestMapping(value = "/police/policebox")
+	public String policebox()
+	{
+		return "/police/policebox";
+	}
+	
 	@GetMapping(value = "/temp/list")
 	@ResponseBody
 	public Map<String, Object> callList(
