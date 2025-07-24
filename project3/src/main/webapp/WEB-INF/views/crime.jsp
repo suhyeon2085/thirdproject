@@ -2502,7 +2502,7 @@ fetch('resources/data/Predicted.json')
             		  return '예측값 : ' + value.toLocaleString() + '건';
             	  }
               }
-            }
+            } 
           },
           datalabels: {
         	  display: false
