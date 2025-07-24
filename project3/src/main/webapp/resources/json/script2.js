@@ -14,9 +14,12 @@ $(document).ready(function() {
                 background:#fff; border:1px solid #ccc; padding:20px; max-height:400px; overflow-y:auto; z-index:9999;
                 box-shadow: 0 4px 8px rgba(0,0,0,0.2);
             ">
-                <h3>파출소 선택</h3>
+                <h3 style="font-weight: normal;">파출소 선택</h3>
                 <ul id="stationList" style="list-style:none; padding:0; margin:0;"></ul>
-                <button id="closeStationList">닫기</button>
+                <button id="closeStationList" style="
+                	padding: 5px; font-family: 'GongGothicMedium'; font-size: 12px; background-color: rgb(231, 231, 231);
+        			border: 1px solid black; margin-top:7px;
+               	">닫기</button>
             </div>
         `);
     }
@@ -125,8 +128,8 @@ $(document).ready(function() {
             const addr = st.주소;
             const $li = $(`
                 <li style="padding:5px; border-bottom:1px solid #ddd; cursor:pointer;">
-                    <strong>${stationName}</strong><br/>
-                    <small>${addr}</small>
+                    <strong style="font-weight: normal;">${stationName}</strong><br/>
+                    <small style="font-weight: normal;">${addr}</small>
                 </li>
             `);
             $li.on("click", function() {
