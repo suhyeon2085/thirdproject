@@ -379,7 +379,7 @@
 		let gu = 'none';
 		let crimeType = 'none';
 		let page = 1;
-		let size = 9;
+		let size = 11; /* 사이즈조절 */
 		 
 		$.ajax({
 		    url: '/temp/list',
@@ -388,42 +388,47 @@
 		    dataType: 'json',
 		    success: function(response) {
 		        $.each(response.data, function(index, value) {
-		            let row = document.createElement('tr');
-		            let type = document.createElement('td');
+		        
+		        	if (value.state != '미확인') {
+			            let row = document.createElement('tr');
+			            let type = document.createElement('td');
+			
+			            let link = document.createElement('a');
+			            link.href = `${contextPath}/admin/viewA?id=${encodeURIComponent(value.id)}`;
+			            link.textContent = value.crimeType;
+			            link.className = 'type-link';
+			
+			            type.appendChild(link);
+			            row.appendChild(type);
+			
+			            let state = document.createElement('td');
+			            state.className = 'state';
+			            state.textContent = value.state;
+			            
+			            // 상태에 따라 색상 지정
+					    let color = 'red';
+					    if (value.state === '배정') color = 'green';
+					    else if (value.state === '출동') color = 'orange';
+					    else if (value.state === '지원 요청') color = 'purple';
+					    else if (value.state === '지원 완료') color = 'blue';
+					    else if (value.state === '상황 종료') color = 'gray';
+					
+					    // 색상 적용
+					    state.style.color = color;
+			            
+			            row.appendChild(state);
+			
+			            let time = document.createElement('td');
+			            let date = new Date(value.createdAt.replace(" ", "T"));
+			            let hours = String(date.getHours()).padStart(2, '0');
+			            let minutes = String(date.getMinutes()).padStart(2, '0');
+			            time.textContent = `${hours}:${minutes}`;
+			            row.appendChild(time);
+			            
+			            table.appendChild(row);
+			            
+			        }
 		
-		            let link = document.createElement('a');
-		            link.href = `${contextPath}/admin/viewA?id=${encodeURIComponent(value.id)}`;
-		            link.textContent = value.crimeType;
-		            link.className = 'type-link';
-		
-		            type.appendChild(link);
-		            row.appendChild(type);
-		
-		            let state = document.createElement('td');
-		            state.className = 'state';
-		            state.textContent = value.state;
-		            
-		            // 상태에 따라 색상 지정
-				    let color = 'red';
-				    if (value.state === '배정') color = 'green';
-				    else if (value.state === '출동') color = 'orange';
-				    else if (value.state === '지원 요청') color = 'purple';
-				    else if (value.state === '지원 완료') color = 'blue';
-				    else if (value.state === '상황 종료') color = 'gray';
-				
-				    // 색상 적용
-				    state.style.color = color;
-		            
-		            row.appendChild(state);
-		
-		            let time = document.createElement('td');
-		            let date = new Date(value.createdAt.replace(" ", "T"));
-		            let hours = String(date.getHours()).padStart(2, '0');
-		            let minutes = String(date.getMinutes()).padStart(2, '0');
-		            time.textContent = `${hours}:${minutes}`;
-		            row.appendChild(time);
-		
-		            table.appendChild(row);
 		        });
 		    }
 		});
