@@ -296,7 +296,7 @@
 
 					            <c:choose>
 					                <%-- 이미지 파일 --%>
-					                <c:when test="${ext eq 'jpg' or ext eq 'jpeg' or ext eq 'png' or ext eq 'gif'}">
+					                <c:when test="${ext eq 'jpg' or ext eq 'jpeg' or ext eq 'png' or ext eq 'gif' or ext eq 'jfif'}">
 					                    <a href="${downloadUrl}" download title="${orig}" class="thumb">
 					                        <img class="fileimg" src="/image/${uuid}"
 					                             onerror="this.style.display='none';" alt="${orig}" />
