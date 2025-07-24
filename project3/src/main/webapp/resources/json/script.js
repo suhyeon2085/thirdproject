@@ -614,7 +614,7 @@
 	             },
 	             title: {
 	                 display: true,
-	                 text: region + '5대 범죄 발생 비율 (%)',
+	                 text: region + ' 5대 범죄 발생 비율 (%)',
 	                 color: 'rgb(0, 51, 153)',
 	                 font: { size: 16, family: 'GongGothicMedium', weight: 'normal' },
 	                 align: 'start',
@@ -677,7 +677,7 @@
 	             legend: { display: false },
 	             title: {
 	                 display: true,
-	                 text: region + '범죄별 검거율',
+	                 text: region + ' 범죄별 검거율',
 	                 color: 'rgb(0, 51, 153)',
 	                 font: { size: 20, family: 'GongGothicMedium', weight: 'normal' },
 	                 padding: { top: 0, bottom: 20 }
