@@ -9,16 +9,19 @@
 <title>범죄 예측 페이지</title>
 <!-- 지도 api 자바스크립트 -->
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8630523bb26c1a45d2753088246f3a05"></script>
-
-
-
 <style>
+@font-face {
+            font-family: 'GongGothicMedium';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicMedium.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
 
 body {
   margin: 0;
   padding: 10px;
   background-color: rgb(0, 51, 153);
-  font-family: 'Segoe UI', sans-serif;
+  font-family: 'GongGothicMedium';
   color: black;
   overflow-x: hidden; /* ★ 추가해보세요 */
 }
@@ -71,7 +74,7 @@ body {
   font-weight: bold;
   font-size: 22px;
   letter-spacing: 1px;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: 'GongGothicMedium';
   
 }
 
@@ -83,8 +86,8 @@ body {
 
 .tooltip-container {
   position: absolute;
-  top: 100%;   /* 필요 시 조정 */
-  right: 0px;   /* 오른쪽 정렬 (필요시 center도 가능) */
+  top: 30px;        /* donutChart1 제목과 정렬되는 y위치 */
+  left: 38%;        /* donutChart1 기준 오른쪽에 위치하도록 조절 */
   z-index: 10;
 }
 
@@ -111,6 +114,12 @@ body {
 .tooltip-container:hover .tooltiptext {
   visibility: visible;
 }
+/*현위치 제목 옆에 있는 아이콘 이미지 크기*/
+    .info-icon {
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+    }
 /* 왼쪽 그룹: 지도, 신고 버튼 등 */
 .left-group {
   display: flex;
@@ -168,24 +177,24 @@ body {
 
 /* 현위치 차트 (도넛) */
 #donutChart1 {
-  width: 380px !important;       /* 💡 가로 확대 */
-  height: 370px !important;      /* 💡 세로 확대 */
-  margin-left: 20px;
+  width: 400px !important;       /* 💡 가로 확대 */
+  height: 350px !important;      /* 💡 세로 확대 */
+/*   margin-left: 20px; */
 }
 #donutChart {
-  width: 380px !important;
-  height: 370px !important;
+  width: 400px !important;
+  height: 350px !important;
   padding: 0;
 }
 
 /* 연도별 검거율 차트 (막대) */
 #barChart1 {
-  width: 380px !important;       /* 💡 더 넓게 */
-  height: 420px !important;      /* 💡 더 높게 */
+  width: 500px !important;       /* 💡 더 넓게 */
+  height: 325px !important;      /* 💡 더 높게 */
 }
 #barChart {
-  width: 380px !important;
-  height: 420px !important;
+  width: 500px !important;
+  height: 325px !important;
 }
 
 
@@ -258,42 +267,12 @@ body {
         height: 500px !important;
 	}
 
-/*     /* 도넛 차트 */ */
-/*     #donutChart1 { */
-/*         width: 300px !important; */
-/*         height: 320px !important; */
-/*         margin-left: 35px;  */
-/*     } */
-/*     #donutChart{ */
-/*         width: 300px !important; */
-/*         height: 320px !important; */
-/*         padding: 0; */
-/*     } */
-    
-
-/*     /* 막대 차트 */ */
-/*     #barChart1 { */
-/*         width: 520px !important; */
-/*         height: 320px !important; */
-/*     } */
-/* 	#barChart{ */
-/*         width: 530px !important; */
-/*         height: 320px !important; */
-/* 	} */
-
-    /* 예측 차트 */
-    #forecastChart {
-        background: rgb(245, 247, 250, 0.9);
-        width: 900px;  /* 또는 원하는 값으로 조절 */
-    	height: 600px;
-    }
-
 	/*  시간/요일 차트  */
 	#time-multi-charts canvas {
 	  max-width: 300px;
-	  max-height: 360px;
+	  max-height: 390px;
 	  width: 100%;
-	  height: 290px;
+	  height: 300px;
 	}
 
     /* 시간 / 요일 / 예측 영역 */
@@ -316,13 +295,13 @@ body {
 	  top: 15px;                    /* 위쪽 여백 살짝 늘림 */
 	  left: 50%;                   /* 가로 중앙 */
 	  transform: translateX(-50%);
-	  font-weight: 700;
+	  font-weight: 500;
 	  font-size: 28px;
 	  color: rgb(0, 51, 153);
 	  padding: 6px 20px;
 	  border: 3px solid rgb(255, 204, 0);
 	  box-sizing: border-box;
-	  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	  font-family: 'GongGothicMedium';
 	  z-index: 10;
 	}
 
@@ -341,7 +320,6 @@ body {
 	  background-repeat: repeat;
 	  background-position: center center;
 	  background-size: calc(100% / 3) 650px;
-	  background-blend-mode: lighten;  /* or overlay */
 	  border: 3px solid rgb(255, 204, 0);
 	  box-sizing: border-box;
 	  flex-direction: column;
@@ -353,6 +331,13 @@ body {
 	  flex-direction: column;
 	  align-items: center;
 	}
+	
+    /* 예측 차트 */
+    #forecastChart {
+        background: rgb(245, 247, 250, 0.9);
+        width: 900px;  /* 또는 원하는 값으로 조절 */
+    	height: 600px;
+    }
 	
 	.tab-bar {
 	  display: flex;
@@ -389,13 +374,6 @@ body {
 	.crime-tab.active {
 	  border-bottom: 3px solid rgb(255, 204, 0);
 	}
-	
-    
-    .info-icon {
-        width: 30px;
-        height: 30px;
-        cursor: pointer;
-    }
     
     
     .info-icon2{
@@ -471,7 +449,7 @@ body {
 .dropdown-row label {
   display: flex;
   align-items: center;       /* 수직 중앙 정렬 */
-  font-size: 14px;           /* 글자 작게 */
+  font-size: 16px;           /* 글자 작게 */
   margin-right: 6px;         /* select와 간격 */
   white-space: nowrap;       /* 줄바꿈 방지 */
   height: 32px;              /* select와 높이 맞춤 */
@@ -943,7 +921,7 @@ function drawMap(locations) {
   }
 
   kakao.maps.load(function () {
-    const container = document.getElementById('map');
+    const container = document.getElementById('map2');
     container.innerHTML = "";
 
     const centerLat = locations[0].latitude;
@@ -1126,7 +1104,7 @@ function drawBellMap(locations) {
   }
 
   kakao.maps.load(function () {
-    const container = document.getElementById('map');
+    const container = document.getElementById('map2');
     container.innerHTML = "";
 
     const centerLat = locations[0].latitude;
@@ -1162,6 +1140,7 @@ function drawBellMap(locations) {
     });
   });
 }
+ 
 
 
 
@@ -1585,13 +1564,14 @@ let regionMap = {
 	     },
 	     options: {
 	         responsive: true,
+			 devicePixelRatio: 2,
 	         cutout: '50%',
 	         plugins: {
 	             legend: {
 	                 position: 'right',
 	                 labels: {
 	                     color: 'black',
-	                     font: { size: 14 },
+	                     font: { size: 14, family: 'GongGothicMedium' },
 
 	                 }
 	             },
@@ -1599,7 +1579,7 @@ let regionMap = {
 	                 display: true,
 	                 text: '연도별 5대 범죄 발생 비율 (%)',
 	                 color: 'rgb(0, 51, 153)',
-	                 font: { size: 16, weight: 'bold' },
+	                 font: { size: 20, weight: 'normal', family: 'GongGothicMedium' },
 	                 align: 'start',
 	                 padding: { top: 20, bottom: 5 }
 	             },
@@ -1659,6 +1639,7 @@ let regionMap = {
 	     },
 	     options: {
 	         responsive: true,
+			 devicePixelRatio: 2,
 	         animation: {
 	             duration: 1000,
 	             easing: 'easeOutBounce'
@@ -1668,14 +1649,14 @@ let regionMap = {
 	                 beginAtZero: true,
 	                 ticks: {
 	                     color: 'rgb(0, 51, 153)',
-	                     font: { size: 17, weight: 'bold' },
+	                     font: { size: 17, family: 'GongGothicMedium' },
 	                     callback: val => val.toLocaleString()
 	                 }
 	             },
 	             x: {
 	                 ticks: {
 	                     color: 'rgb(0, 51, 153)',
-	                     font: { size: 17, weight: 'bold' }
+	                     font: { size: 17, family: 'GongGothicMedium' }
 	                 }
 	             }
 	         },
@@ -1685,14 +1666,14 @@ let regionMap = {
 	                 display: true,
 	                 text: title,
 	                 color: 'rgb(0, 51, 153)',
-	                 font: { size: 16, weight: 'bold' },
-	                 padding: { top: 15, bottom: 2 }
+	                 font: { size: 20, family: 'GongGothicMedium' },
+	                 padding: { top: 5, bottom: 10 }
 	             },
 	             datalabels: {
 	                 color: 'rgb(0, 51, 153)',
 	                 anchor: 'end',
 	                 align: 'top',
-	                 font: { weight: 'bold', size: 15 },
+	                 font: { family: 'GongGothicMedium', size: 15 },
 	                 formatter: val => val.toLocaleString()
 	             }
 	         }
@@ -1777,6 +1758,8 @@ let regionMap = {
 	         }]
 	     },
 	     options: {
+	     	 responsive: true,
+  			 devicePixelRatio: 2,
 	         cutout: '50%',
 	         animation: {
 	             duration: 1500,
@@ -1787,20 +1770,20 @@ let regionMap = {
 	                 position: 'right',
 	                 labels: {
 	                     color: 'black',
-	                     font: { size: 14 }
+	                     font: { size: 14, family: 'GongGothicMedium' }
 	                 }
 	             },
 	             title: {
 	                 display: true,
 	                 text: region + '5대 범죄 발생 비율 (%)',
 	                 color: 'rgb(0, 51, 153)',
-	                 font: { size: 16, weight: 'bold' },
+	                 font: { size: 20, family: 'GongGothicMedium', weight: 'normal' },
 	                 align: 'start',
-	                 padding: { top: 20, bottom: 5 }
+	                 padding: { top: 30 }
 	             },
 	             datalabels: {
 	                 color: 'black',
-	                 font: { weight: 'bold', size: 16 },
+	                 font: { family: 'GongGothicMedium', size: 16 },
 	                 formatter: val => val + '%',
 	                 anchor: 'end',
 	                 align: 'start'
@@ -1814,6 +1797,10 @@ let regionMap = {
 	function createBarChartLocal(labels, data, region) {
 	 const maxBarValue = Math.max(...data);
 	 const ctx = document.getElementById('barChart1').getContext('2d');
+	    const formattedRegion = region
+        .replace(/([가-힣]+)(구|군)/, '$1 $2')   // '울산남구' -> '울산 남구'
+        .replace('5대', '5대 '); 
+
 	 if (barChart1) barChart1.destroy();
 	
 	 barChart1 = new Chart(ctx, {
@@ -1829,6 +1816,8 @@ let regionMap = {
 	         }]
 	     },
 	     options: {
+	     	 responsive: true,
+  			 devicePixelRatio: 2,
 	         animation: {
 	             duration: 1200,
 	             easing: 'easeOutQuart'
@@ -1839,13 +1828,13 @@ let regionMap = {
 	                 max: maxBarValue < 2 ? 2 : Math.ceil(maxBarValue),
 	                 ticks: {
 	                     color: 'rgb(0, 51, 153)',
-	                     font: { size: 16, weight: 'bold' }
+	                     font: { size: 16, family: 'GongGothicMedium' }
 	                 }
 	             },
 	             x: {
 	                 ticks: {
 	                     color: 'rgb(0, 51, 153)',
-	                     font: { size: 14, weight: 'bold' }
+	                     font: { size: 14, family: 'GongGothicMedium' }
 	                 }
 	             }
 	         },
@@ -1853,16 +1842,16 @@ let regionMap = {
 	             legend: { display: false },
 	             title: {
 	                 display: true,
-	                 text: region + '범죄별 검거율(요일 평균)',
+	                 text: region + '범죄별 검거율',
 	                 color: 'rgb(0, 51, 153)',
-	                 font: { size: 20, weight: 'bold' },
-	                 padding: { top: 0, bottom: 20 }
+	                 font: { size: 20, family: 'GongGothicMedium'},
+	                 padding: { top: 0, bottom: 30 }
 	             },
 	             datalabels: {
 	                 anchor: 'end',
 	                 align: 'top',
 	                 color: 'rgb(0, 51, 153)',
-	                 font: { weight: 'bold', size: 14 },
+	                 font: { family: 'GongGothicMedium', size: 14 },
 	                 formatter: v => v + '%'
 	             }
 	         }
@@ -1870,16 +1859,15 @@ let regionMap = {
 	     plugins: [ChartDataLabels]
 	 });
 	}
-
-
 //------------------ 예측 차트 ------------------ //
+
 
 document.addEventListener('DOMContentLoaded', () => {
   initForecastChart();
 });
 
 function initForecastChart() {
-  fetch('<c:url value="/resources/data/crime_forecast.json"/>')
+  fetch('/resources/data/crime_forecast.json')
     .then(res => res.json())
     .then(data => {
       const ctx = document.getElementById('forecastChart').getContext('2d');
@@ -1930,14 +1918,14 @@ function initForecastChart() {
               title: {
                 display: true,
                 text: `5대 범죄 발생건수 추세 및 예측`,
-                font: { size: 20, weight: 'bold' },
+                font: { size: 20, family: 'GongGothicMedium'},
                 color: 'rgb(0, 51, 153)',
                 padding: { top: 15, bottom: 15 }
               },
               legend: {
                 labels: {
                   color: 'black',
-                  font: { size: 14, weight: 'bold' }
+                  font: { size: 14, family: 'GongGothicMedium' }
                 }
               },
               tooltip: { enabled: true },
@@ -1948,7 +1936,7 @@ function initForecastChart() {
                 type: 'logarithmic',
                 ticks: {
                   color: 'black',
-                  font: { size: 14, weight: 'bold' }
+                  font: { size: 14, family: 'GongGothicMedium' }
                 }
               },
               x: {
@@ -1956,7 +1944,7 @@ function initForecastChart() {
                 ticks: {
                   callback: val => val.toString(),
                   color: 'black',
-                  font: { size: 14, weight: 'bold' }
+                  font: { size: 14, family: 'GongGothicMedium' }
                 }
               }
             }
@@ -1991,8 +1979,8 @@ function initForecastChart() {
 }
 
 
-
 //------------------ 시간/요일 선형 차트 ------------------ //
+
 
 
 
@@ -2010,7 +1998,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const charts = {};
 
-  fetch('<c:url value="/resources/data/crime_time_day.json"/>')
+  fetch('/resources/data/crime_time_day.json')
     .then(res => res.json())
     .then(data => {
       crimes2.forEach((crime2, idx) => {
@@ -2064,17 +2052,18 @@ document.addEventListener('DOMContentLoaded', () => {
           },
           options: {
             responsive: true,
+			devicePixelRatio: 2,
             maintainAspectRatio: false,
             plugins: {
               title: {
                 display: true,
                 text: crime2 ,
 
-                font: { size: 20, weight: 'bold' },
+                font: { size: 20, family: 'GongGothicMedium', weight: 'normal' },
                 color: 'rgb(0, 51, 153)',
                 padding: { top: 5, bottom: 15 }
               },
-              legend: { display: true },
+              legend: { display: false },
               tooltip: {
             	  enabled: true,
 
@@ -2089,7 +2078,7 @@ document.addEventListener('DOMContentLoaded', () => {
             	    beginAtZero: true,
             	    ticks: {
             	      color: 'black',
-            	      font: { size: 15, weight: 'bold' }
+            	      font: { size: 15, family: 'GongGothicMedium' }
             	    },
             	    grid: {
             	      color: '#adadad'  // y축 격자선 색상 (연한 검정)
@@ -2098,7 +2087,7 @@ document.addEventListener('DOMContentLoaded', () => {
             	  x: {
             	    ticks: {
             	      color: 'black',
-            	      font: { size: 15, weight: 'bold' }
+            	      font: { size: 15, family: 'GongGothicMedium' }
             	    },
             	    grid: {
             	      color: '#adadad'  // x축 격자선 색상
@@ -2190,8 +2179,8 @@ function createStackedBarChart() {
           color: '#333',
           font: {
             size: 20,
-            weight: 'bold',
-            family: "'Noto Sans KR', sans-serif"
+            family: 'GongGothicMedium',
+            weight: 'normal'
           },
           padding: { top: 25, bottom: 10 },
           backgroundColor: 'rgba(255, 204, 0, 0.2)',
@@ -2207,8 +2196,7 @@ function createStackedBarChart() {
             color: 'black',
             font: {
               size: 13,
-              weight: 'bold',
-              family: "'Arial', sans-serif"
+              family: 'GongGothicMedium'
             },
             generateLabels(chart) {
               const datasets = chart.data.datasets;
@@ -2232,8 +2220,7 @@ function createStackedBarChart() {
           ticks: {
             font: {
               size: 15,
-              weight: '600',
-              family: "'Noto Sans KR', sans-serif"
+              family: 'GongGothicMedium'
             },
             maxRotation: 0,
             autoSkip: true,
@@ -2250,8 +2237,7 @@ function createStackedBarChart() {
             color: '#555',
             font: {
               size: 14,
-              weight: '600',
-              family: "'Noto Sans KR', sans-serif"
+              family: 'GongGothicMedium'
             },
             callback: value => value.toLocaleString(),
             maxTicksLimit: 7
@@ -2329,8 +2315,7 @@ fetch("resources/data/radar_chart_crime6.json")
         	        color: '#444444',           // 범례 글자 색
         	        font: {
         	          size: 14,                 // 글자 크기
-        	          weight: '600',            // 글자 굵기
-        	          family: "'Noto Sans KR', sans-serif"  // 폰트
+        	          family: 'GongGothicMedium'
         	        },
         	        padding: 15,                // 범례 글자 좌우 여백
         	        boxWidth: 18,               // 범례 색상 박스 크기
@@ -2343,8 +2328,8 @@ fetch("resources/data/radar_chart_crime6.json")
         	        color: '#333', // 글자 색
         	        font: {
         	          size: 20,     // 글자 크기
-        	          weight: 'bold',
-        	          family: "'Noto Sans KR', sans-serif"
+        	          family: 'GongGothicMedium',
+        	          weight: 'normal'
         	        },
         	        padding: {
         	          top: 10,
@@ -2367,14 +2352,14 @@ fetch("resources/data/radar_chart_crime6.json")
         	        color: '#555',  // x축 제목 글자색
         	        font: {
         	          size: 14,
-        	          weight: 'bold'
+        	          family: 'GongGothicMedium'
         	        }
         	      },
         	      ticks: {
         	        color: '#555',  // x축 눈금 글자색 (빨강 예시)
         	        font: {
         	          size: 14,
-        	          weight: 'bold'
+        	          family: 'GongGothicMedium'
         	        }
         	      }
         	    },
@@ -2384,7 +2369,7 @@ fetch("resources/data/radar_chart_crime6.json")
         	        color: '#555',  // y축 눈금 글자색 (초록 예시)
         	        font: {
         	          size: 14,
-        	          weight: 'bold'
+        	          family: 'GongGothicMedium'
         	        }
         	      },
         	      title: {
@@ -2404,8 +2389,6 @@ fetch("resources/data/radar_chart_crime6.json")
         plugins: [ChartDataLabels]  // 플러그인 등록 필수!
       });
     });
-    
-    
   // 이제부터는 신고접수 예측과 평균 출동 시간 차트 -------------------------------------------
 fetch('resources/data/Predicted.json')
   .then(res => res.json())
@@ -2492,12 +2475,13 @@ fetch('resources/data/Predicted.json')
           }
         },
         plugins: {
-            title: {
+        	title: {
                 display: true,
                 text: '📞\u00A0112 신고접수 추세와 예측', 
                 font: {
                   size: 25,
-                  weight: 'bold'
+                  family: 'GongGothicMedium',
+                  weight: 'normal'
                 },
                 padding: {
                   top: 10,
