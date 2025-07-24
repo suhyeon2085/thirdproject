@@ -87554,8 +87554,8 @@
     {
         "id": 259678,
         "sido": "울산",
-        "sigungu": "광역시",
-        "eupmyeondong": "북구",
+        "sigungu": "북구",
+        "eupmyeondong": "신천동",
         "address": "울산 광역시 북구 신천동 827-16",
         "purpose": "교통단속",
         "latitude": 35.63573,
@@ -87566,8 +87566,8 @@
     {
         "id": 259679,
         "sido": "울산",
-        "sigungu": "광역시",
-        "eupmyeondong": "북구",
+        "sigungu": "북구",
+        "eupmyeondong": "신천동",
         "address": "울산 광역시 북구 신천동 811-8",
         "purpose": "교통단속",
         "latitude": 35.63632,
