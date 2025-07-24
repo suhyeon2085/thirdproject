@@ -22,7 +22,7 @@
 	<!-- CCTV와 비상벨 위치정보 영역 -->
 	<div class="header-bar">
 	  <!-- CCTV div -->
-	  <div class="dropdown-row">
+	  <div class="dropdown-row"> 
 	    <label for="city1">CCTV 확인하기</label>
 	    	<select name="city1" id="city1">
 			  <option value="">시/도 선택</option>

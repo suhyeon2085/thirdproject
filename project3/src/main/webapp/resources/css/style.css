@@ -530,7 +530,7 @@ body {
     gap: 5px;
     margin: 10px;
     height: 32px;
-}
+} 
 
 select {
   appearance: none;           /* 기본 화살표 제거 */
