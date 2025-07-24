@@ -18,7 +18,7 @@
 <!-- 로고빼고 전체 div -->
 <div class="container">
 	<!-- 홈페이지 로고 -->
-<img src="resources/img/crimelogo.png" id="police">
+<img src="resources/img/crimelogo.png" id="police"> 
 	<!-- CCTV와 비상벨 위치정보 영역 -->
 	<div class="header-bar">
 	  <!-- CCTV div -->

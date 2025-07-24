@@ -25,7 +25,7 @@
 	}
 </style>
 </head>
-<body>
+<body> 
 
 <!-- 로고빼고 전체 div -->
 <div class="container">
