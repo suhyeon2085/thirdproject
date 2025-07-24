@@ -313,7 +313,7 @@ public class ReportController {
         ReportDTO dto = reportService.getReport(id);
         if (dto == null) {
             rttr.addFlashAttribute("msg", "존재하지 않는 글입니다.");
-            return "redirect:/list";
+            return "redirect:admin/listA";
         }
 
         // 2) DB 삭제
@@ -331,6 +331,6 @@ public class ReportController {
             rttr.addFlashAttribute("msg", "삭제 실패!");
         }
 
-        return "redirect:/list";
+        return "redirect:/admin/listA";
     }
 }
