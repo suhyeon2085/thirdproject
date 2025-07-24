@@ -389,7 +389,7 @@
 		    success: function(response) {
 		        $.each(response.data, function(index, value) {
 		        
-		        	if (value.state != '미확인') {
+		        	if (value.state != '미확인') { 
 			            let row = document.createElement('tr');
 			            let type = document.createElement('td');
 			
