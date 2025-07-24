@@ -165,6 +165,13 @@
             	margin-top: 10px; 
             }
 		}
+		
+				.btn:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+    color: #666;
+}
+
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../resources/css/menu.css">
@@ -321,9 +328,9 @@
             </table>
         </div>
         <div id="bottomBtn">
-            <button class="btn" id="move">출동</button>
-            <button class="btn" id="need_support">지원 요청</button>
-            <button class="btn" id="end">상황 종료</button>
+            <button class="btn" id="move" ${report.state == '상황 종료' ? 'disabled' : ''}>출동</button>
+            <button class="btn" id="need_support" ${report.state == '상황 종료' ? 'disabled' : ''}>지원 요청</button>
+            <button class="btn" id="end" ${report.state == '상황 종료' ? 'disabled' : ''}>상황 종료</button>
             <button class="btn" id="redirectList">
 				<a href="${pageContext.request.contextPath}/police/listP">목록</a>
 			</button>

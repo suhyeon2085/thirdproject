@@ -171,6 +171,14 @@
 		    }
             
 		}
+		
+		.btn:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+    color: #666;
+}
+
+
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../resources/css/menu.css">
@@ -325,8 +333,8 @@
             </table>
         </div>
         <div id="bottomBtn">
-            <button class="btn" id="assign">배정</button>
-            <button class="btn" id="support_completed">지원 완료</button>
+            <button class="btn" id="assign" ${report.state == '상황 종료' ? 'disabled' : ''}>배정</button>
+			<button class="btn" id="support_completed" ${report.state == '상황 종료' ? 'disabled' : ''}>지원</button>
             <form action="/delete" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?')">
 			  <input type="hidden" name="id" value="${report.id}" />
 			  <button class="btn" id="delete">삭제</button>
