@@ -262,8 +262,8 @@ function assignSupportStationAndUpdateState(supportStationName, callback) {
                 const addr = st.주소;
                 const $li = $(`
                     <li style="padding:5px; border-bottom:1px solid #ddd; cursor:pointer;">
-                        <strong>${supportStationName}</strong><br/>
-                        <small>${addr}</small>
+                        <strong style="font-weight: normal;">${supportStationName}</strong><br/>
+                        <small style="font-weight: normal;">${addr}</small>
                     </li>
                 `);
                 $li.on("click", function() {
