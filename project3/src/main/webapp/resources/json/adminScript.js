@@ -400,7 +400,20 @@
 		            row.appendChild(type);
 		
 		            let state = document.createElement('td');
+		            state.className = 'state';
 		            state.textContent = value.state;
+		            
+		            // 상태에 따라 색상 지정
+				    let color = 'red';
+				    if (value.state === '배정') color = 'green';
+				    else if (value.state === '출동') color = 'orange';
+				    else if (value.state === '지원 요청') color = 'purple';
+				    else if (value.state === '지원 완료') color = 'blue';
+				    else if (value.state === '상황 종료') color = 'gray';
+				
+				    // 색상 적용
+				    state.style.color = color;
+		            
 		            row.appendChild(state);
 		
 		            let time = document.createElement('td');
