@@ -249,8 +249,8 @@
 	document.addEventListener('DOMContentLoaded', mapLoad);
 
 	async function mapLoad() {
-		const lat = 37.563406;
-		const lon = 126.967558;
+		const lat = 35.5420747;
+		const lon = 129.3413943;
 		const map = createMap(lat, lon);
 		const currentLocation = new kakao.maps.LatLng(lat, lon);
 

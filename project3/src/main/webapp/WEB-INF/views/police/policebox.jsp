@@ -231,7 +231,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@1.1.0/dist/chartjs-chart-matrix.min.js"></script>
-<script type="text/javascript" src="../resources/json/adminScript.js"></script>
+<script type="text/javascript" src="../resources/json/policeboxScript.js"></script>
 
 </body>
 </html>
