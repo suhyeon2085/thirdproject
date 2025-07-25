@@ -234,6 +234,26 @@
         </div>
     </div>
 <script>
+function splitStationName() {
+    let stations = document.querySelectorAll('.station');
+    stations.forEach(td => {
+        let original = td.getAttribute('data-original') || td.innerText;
+        td.setAttribute('data-original', original);
+        if (window.innerWidth <= 480) {
+            td.innerHTML = original.replace('지구대', '<br>지구대')
+                                   .replace('파출소', '<br>파출소');
+        } else {
+            td.innerText = original;
+        }
+    });
+}
+
+window.addEventListener('DOMContentLoaded', splitStationName);
+window.addEventListener('resize', splitStationName);
+
+
+
+
 $(document).ready(function() {
     const $si = $('#si');
     const $gu = $('#gu');
@@ -616,7 +636,7 @@ $(document).ready(function() {
                             "<td>" + report.id + "</td>" +
                             "<td><a href='${pageContext.request.contextPath}/admin/viewA?id=" + report.id + "'>" + report.crimeType + "</a></td>" +
                             "<td style='color:" + color + "'>" + report.state + "</td>" + // 색상 적용
-                            "<td>" + report.station + "</td>" +
+                            "<td class='station'>" + report.station + "</td>" +
                             "<td id='datetime'>" + createdDate + "</td>" +
                         "</tr>";
                     $tbody.append(row);

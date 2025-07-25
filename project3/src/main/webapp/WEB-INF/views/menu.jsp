@@ -8,7 +8,7 @@
 		    <a href="${pageContext.request.contextPath}/admin/administrator"><img id="logo" src="/resources/img/crimelogo.png" alt="로고"></a>
 		</sec:authorize>
 		<sec:authorize access="hasRole('ROLE_POLICE')">
-		    <a href="${pageContext.request.contextPath}/police/administrator2"><img id="logo" src="/resources/img/crimelogo.png" alt="로고"></a>
+		    <a href="${pageContext.request.contextPath}/police/policebox"><img id="logo" src="/resources/img/crimelogo.png" alt="로고"></a>
 		</sec:authorize>
         
         <!-- '범죄 예측' 메뉴 -->
